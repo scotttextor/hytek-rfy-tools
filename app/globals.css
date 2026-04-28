@@ -1,0 +1,12 @@
+@import "tailwindcss";
+
+:root {
+  --hytek-yellow: #FFCB05;
+  --hytek-black: #231F20;
+}
+
+body {
+  background: var(--hytek-black);
+  color: white;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
