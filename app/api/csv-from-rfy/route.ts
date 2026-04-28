@@ -1,5 +1,6 @@
-// RFY → CSV. Decodes RFY → document, then emits CSV(s).
-// If multiple plans exist, returns a ZIP archive; otherwise returns the single CSV.
+// RFY → Plain Text (.txt). Decodes RFY → document, then emits one human-readable
+// text file containing the rollformer CSV for each plan, separated by headers.
+// Output is a .txt file (not .csv) so Windows opens it in Notepad by default.
 import { NextResponse } from "next/server";
 import { decode, documentToCsvs } from "@hytek/rfy-codec";
 
@@ -16,27 +17,26 @@ export async function POST(req: Request) {
 
     const baseName = filename.replace(/\.rfy$/i, "");
 
+    let text = "";
+    text += `# HYTEK RFY Tools — decoded ${filename}\n`;
+    text += `# Plans in this file: ${entries.map(([n]) => n).join(", ")}\n`;
+    text += `# Edit any value below in Notepad, then re-upload via "Plain Text → RFY".\n`;
+    text += `#\n\n`;
+
     if (entries.length === 1) {
       const [name, content] = entries[0];
-      return new NextResponse(content, {
-        status: 200,
-        headers: {
-          "content-type": "text/csv; charset=utf-8",
-          "content-disposition": `attachment; filename="${baseName}_${name}.csv"`,
-        },
-      });
+      text += `# === ${name} ===\n${content}\n`;
+    } else {
+      for (const [name, content] of entries) {
+        text += `# === ${name} ===\n${content}\n\n`;
+      }
     }
 
-    // Multi-plan: return as plain text concatenated with separators (lightweight, no zip dep needed)
-    let combined = "";
-    for (const [name, content] of entries) {
-      combined += `# === ${name} ===\n${content}\n\n`;
-    }
-    return new NextResponse(combined, {
+    return new NextResponse(text, {
       status: 200,
       headers: {
         "content-type": "text/plain; charset=utf-8",
-        "content-disposition": `attachment; filename="${baseName}_all.txt"`,
+        "content-disposition": `attachment; filename="${baseName}.txt"`,
       },
     });
   } catch (e) {

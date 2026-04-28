@@ -2,36 +2,22 @@
 
 import { useState } from "react";
 
-type Mode = "rfy-to-text" | "text-to-rfy" | "rfy-to-csv" | "csv-to-rfy";
+type Mode = "decode-bundle" | "encode-auto";
 
-const MODE_LABELS: Record<Mode, { title: string; from: string; to: string; accept: string; endpoint: string }> = {
-  "rfy-to-text": {
-    title: "RFY → Plain Text (XML)",
+const MODE_LABELS: Record<Mode, { title: string; subtitle: string; from: string; accept: string; endpoint: string }> = {
+  "decode-bundle": {
+    title: "RFY → Plain Text + XML",
+    subtitle: "Upload an .rfy → download a ZIP with both .txt (Notepad-friendly CSV) and .xml. Edit either one.",
     from: ".rfy",
-    to: ".xml",
     accept: ".rfy",
-    endpoint: "/api/decode",
+    endpoint: "/api/decode-bundle",
   },
-  "text-to-rfy": {
-    title: "Plain Text (XML) → RFY",
-    from: ".xml / .txt",
-    to: ".rfy",
-    accept: ".xml,.txt",
-    endpoint: "/api/encode",
-  },
-  "rfy-to-csv": {
-    title: "RFY → CSV",
-    from: ".rfy",
-    to: ".csv",
-    accept: ".rfy",
-    endpoint: "/api/csv-from-rfy",
-  },
-  "csv-to-rfy": {
-    title: "CSV → RFY",
-    from: ".csv",
-    to: ".rfy",
-    accept: ".csv",
-    endpoint: "/api/rfy-from-csv",
+  "encode-auto": {
+    title: "Plain Text or XML → RFY",
+    subtitle: "Upload your edited .txt OR .xml → get a fresh .rfy. The app auto-detects which format you sent.",
+    from: ".txt / .xml / .csv",
+    accept: ".txt,.xml,.csv",
+    endpoint: "/api/encode-auto",
   },
 };
 
@@ -62,14 +48,16 @@ function ConverterCard({ mode }: { mode: Mode }) {
       const blob = await res.blob();
       const dispo = res.headers.get("content-disposition") ?? "";
       const m = dispo.match(/filename="([^"]+)"/);
-      const outName = m ? m[1] : `output${cfg.to}`;
+      const outName = m ? m[1] : "output";
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
       a.download = outName;
       a.click();
       URL.revokeObjectURL(url);
-      setResult(`Downloaded ${outName} (${(blob.size / 1024).toFixed(1)} KB)`);
+      const detected = res.headers.get("x-detected-format");
+      const detectedNote = detected ? ` — detected format: ${detected}` : "";
+      setResult(`Downloaded ${outName} (${(blob.size / 1024).toFixed(1)} KB)${detectedNote}`);
     } catch (e) {
       setError(String(e instanceof Error ? e.message : e));
     } finally {
@@ -78,16 +66,14 @@ function ConverterCard({ mode }: { mode: Mode }) {
   }
 
   return (
-    <div className="border border-yellow-400/30 bg-zinc-900/60 rounded-2xl p-6 flex flex-col gap-4">
+    <div className="rounded-2xl p-6 flex flex-col gap-4 border-2 border-yellow-400 bg-zinc-900">
       <div>
         <h2 className="text-xl font-semibold text-yellow-400">{cfg.title}</h2>
-        <p className="text-sm text-zinc-400">
-          Drop a {cfg.from} file → get {cfg.to}
-        </p>
+        <p className="text-sm text-zinc-400 mt-1">{cfg.subtitle}</p>
       </div>
       <label
-        className={`block border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition ${
-          busy ? "border-zinc-700 bg-zinc-900 cursor-wait" : "border-yellow-400/40 hover:border-yellow-400 hover:bg-zinc-900"
+        className={`block border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition ${
+          busy ? "border-zinc-700 bg-zinc-900 cursor-wait" : "border-yellow-400/60 hover:border-yellow-400 hover:bg-zinc-800"
         }`}
       >
         <input
@@ -120,14 +106,33 @@ export default function Page() {
         <p className="text-zinc-400 mt-1">
           Decode, edit, and re-encode FrameCAD <code className="text-yellow-400">.rfy</code> files.
         </p>
+        <p className="text-zinc-500 text-sm mt-3">
+          <strong className="text-zinc-300">Workflow:</strong>{" "}
+          (1) Decode → get <code>.txt</code> + <code>.xml</code> bundle ·{" "}
+          (2) Open either in Notepad → edit ·{" "}
+          (3) Upload the edited file back → get a new <code>.rfy</code>.
+        </p>
       </header>
 
       <div className="grid sm:grid-cols-2 gap-6">
-        <ConverterCard mode="rfy-to-text" />
-        <ConverterCard mode="text-to-rfy" />
-        <ConverterCard mode="rfy-to-csv" />
-        <ConverterCard mode="csv-to-rfy" />
+        <ConverterCard mode="decode-bundle" />
+        <ConverterCard mode="encode-auto" />
       </div>
+
+      <section className="mt-10 rounded-xl border border-zinc-700 bg-zinc-900/50 p-5 text-sm text-zinc-400">
+        <h3 className="font-semibold text-zinc-200 mb-2">Which format should I edit?</h3>
+        <ul className="space-y-2">
+          <li>
+            <strong className="text-yellow-400">.txt</strong> — Plain-text rollformer CSV. Easiest to edit:
+            change positions, op locations, lengths. Round-trip strips graphics/3D from the RFY.
+          </li>
+          <li>
+            <strong className="text-yellow-400">.xml</strong> — Full FrameCAD schedule with everything,
+            including 3D mesh and design GUIDs. Edit when you need to preserve every detail.
+            Re-encrypted byte-for-byte back to a valid RFY.
+          </li>
+        </ul>
+      </section>
 
       <footer className="mt-10 text-xs text-zinc-500">
         Powered by{" "}
