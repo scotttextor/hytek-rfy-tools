@@ -2,26 +2,40 @@
 
 import { useState } from "react";
 
-type Mode = "decode-bundle" | "encode-auto";
+type Mode = "decode-bundle" | "encode-auto" | "rfy-to-csv" | "csv-to-rfy";
 
 const MODE_LABELS: Record<Mode, { title: string; subtitle: string; from: string; accept: string; endpoint: string }> = {
   "decode-bundle": {
     title: "RFY → Plain Text + XML",
-    subtitle: "Upload an .rfy → download a ZIP with both .txt (Notepad-friendly CSV) and .xml. Edit either one.",
+    subtitle: "Upload an .rfy → ZIP with both .txt (Notepad-friendly) and .xml. Edit either one.",
     from: ".rfy",
     accept: ".rfy",
     endpoint: "/api/decode-bundle",
   },
   "encode-auto": {
     title: "Plain Text or XML → RFY",
-    subtitle: "Upload your edited .txt OR .xml → get a fresh .rfy. The app auto-detects which format you sent.",
+    subtitle: "Upload edited .txt or .xml → fresh .rfy. App auto-detects the format.",
     from: ".txt / .xml / .csv",
     accept: ".txt,.xml,.csv",
     endpoint: "/api/encode-auto",
   },
+  "rfy-to-csv": {
+    title: "RFY → CSV",
+    subtitle: "Just the rollformer CSV, no headers. For tools/scripts that want raw CSV.",
+    from: ".rfy",
+    accept: ".rfy",
+    endpoint: "/api/csv-from-rfy",
+  },
+  "csv-to-rfy": {
+    title: "CSV → RFY",
+    subtitle: "Synthesize an RFY directly from a single-plan rollformer CSV.",
+    from: ".csv",
+    accept: ".csv",
+    endpoint: "/api/rfy-from-csv",
+  },
 };
 
-function ConverterCard({ mode }: { mode: Mode }) {
+function ConverterCard({ mode, primary = false }: { mode: Mode; primary?: boolean }) {
   const cfg = MODE_LABELS[mode];
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -56,7 +70,7 @@ function ConverterCard({ mode }: { mode: Mode }) {
       a.click();
       URL.revokeObjectURL(url);
       const detected = res.headers.get("x-detected-format");
-      const detectedNote = detected ? ` — detected format: ${detected}` : "";
+      const detectedNote = detected ? ` — detected: ${detected}` : "";
       setResult(`Downloaded ${outName} (${(blob.size / 1024).toFixed(1)} KB)${detectedNote}`);
     } catch (e) {
       setError(String(e instanceof Error ? e.message : e));
@@ -66,14 +80,24 @@ function ConverterCard({ mode }: { mode: Mode }) {
   }
 
   return (
-    <div className="rounded-2xl p-6 flex flex-col gap-4 border-2 border-yellow-400 bg-zinc-900">
+    <div
+      className={`rounded-2xl p-6 flex flex-col gap-4 ${
+        primary
+          ? "border-2 border-yellow-400 bg-zinc-900"
+          : "border border-zinc-700 bg-zinc-900/40"
+      }`}
+    >
       <div>
-        <h2 className="text-xl font-semibold text-yellow-400">{cfg.title}</h2>
+        <h2 className={`text-xl font-semibold ${primary ? "text-yellow-400" : "text-zinc-300"}`}>{cfg.title}</h2>
         <p className="text-sm text-zinc-400 mt-1">{cfg.subtitle}</p>
       </div>
       <label
-        className={`block border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition ${
-          busy ? "border-zinc-700 bg-zinc-900 cursor-wait" : "border-yellow-400/60 hover:border-yellow-400 hover:bg-zinc-800"
+        className={`block border-2 border-dashed rounded-xl p-${primary ? "8" : "6"} text-center cursor-pointer transition ${
+          busy
+            ? "border-zinc-700 bg-zinc-900 cursor-wait"
+            : primary
+              ? "border-yellow-400/60 hover:border-yellow-400 hover:bg-zinc-800"
+              : "border-zinc-600 hover:border-zinc-400 hover:bg-zinc-800"
         }`}
       >
         <input
@@ -107,29 +131,39 @@ export default function Page() {
           Decode, edit, and re-encode FrameCAD <code className="text-yellow-400">.rfy</code> files.
         </p>
         <p className="text-zinc-500 text-sm mt-3">
-          <strong className="text-zinc-300">Workflow:</strong>{" "}
+          <strong className="text-zinc-300">Standard workflow:</strong>{" "}
           (1) Decode → get <code>.txt</code> + <code>.xml</code> bundle ·{" "}
           (2) Open either in Notepad → edit ·{" "}
-          (3) Upload the edited file back → get a new <code>.rfy</code>.
+          (3) Upload the edited file → get a new <code>.rfy</code>.
         </p>
       </header>
 
+      <h3 className="text-xs uppercase tracking-wider text-yellow-400 mb-3">Standard — both formats at once</h3>
       <div className="grid sm:grid-cols-2 gap-6">
-        <ConverterCard mode="decode-bundle" />
-        <ConverterCard mode="encode-auto" />
+        <ConverterCard mode="decode-bundle" primary />
+        <ConverterCard mode="encode-auto" primary />
+      </div>
+
+      <h3 className="text-xs uppercase tracking-wider text-zinc-500 mt-10 mb-3">CSV only — for scripts / tools</h3>
+      <div className="grid sm:grid-cols-2 gap-6">
+        <ConverterCard mode="rfy-to-csv" />
+        <ConverterCard mode="csv-to-rfy" />
       </div>
 
       <section className="mt-10 rounded-xl border border-zinc-700 bg-zinc-900/50 p-5 text-sm text-zinc-400">
         <h3 className="font-semibold text-zinc-200 mb-2">Which format should I edit?</h3>
         <ul className="space-y-2">
           <li>
-            <strong className="text-yellow-400">.txt</strong> — Plain-text rollformer CSV. Easiest to edit:
-            change positions, op locations, lengths. Round-trip strips graphics/3D from the RFY.
+            <strong className="text-yellow-400">.txt</strong> (from the standard decode) — plain-text rollformer
+            CSV with helpful headers/comments. Easiest in Notepad. Round-trip strips graphics/3D.
           </li>
           <li>
-            <strong className="text-yellow-400">.xml</strong> — Full FrameCAD schedule with everything,
-            including 3D mesh and design GUIDs. Edit when you need to preserve every detail.
-            Re-encrypted byte-for-byte back to a valid RFY.
+            <strong className="text-yellow-400">.xml</strong> — full FrameCAD schedule with everything
+            (3D mesh, design GUIDs). Edit when fidelity matters. Re-encrypted byte-for-byte back to RFY.
+          </li>
+          <li>
+            <strong className="text-yellow-400">.csv</strong> (from the CSV-only buttons) — single-plan
+            CSV without any wrapping. For external tools / scripts that consume raw CSV.
           </li>
         </ul>
       </section>

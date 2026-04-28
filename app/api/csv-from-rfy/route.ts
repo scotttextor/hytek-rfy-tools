@@ -1,6 +1,5 @@
-// RFY → Plain Text (.txt). Decodes RFY → document, then emits one human-readable
-// text file containing the rollformer CSV for each plan, separated by headers.
-// Output is a .txt file (not .csv) so Windows opens it in Notepad by default.
+// RFY → CSV. Emits the plain-text rollformer CSV file as .csv.
+// (For .txt + headers/comments output, use /api/decode-bundle.)
 import { NextResponse } from "next/server";
 import { decode, documentToCsvs } from "@hytek/rfy-codec";
 
@@ -17,26 +16,26 @@ export async function POST(req: Request) {
 
     const baseName = filename.replace(/\.rfy$/i, "");
 
-    let text = "";
-    text += `# HYTEK RFY Tools — decoded ${filename}\n`;
-    text += `# Plans in this file: ${entries.map(([n]) => n).join(", ")}\n`;
-    text += `# Edit any value below in Notepad, then re-upload via "Plain Text → RFY".\n`;
-    text += `#\n\n`;
-
     if (entries.length === 1) {
       const [name, content] = entries[0];
-      text += `# === ${name} ===\n${content}\n`;
-    } else {
-      for (const [name, content] of entries) {
-        text += `# === ${name} ===\n${content}\n\n`;
-      }
+      return new NextResponse(content, {
+        status: 200,
+        headers: {
+          "content-type": "text/csv; charset=utf-8",
+          "content-disposition": `attachment; filename="${baseName}_${name}.csv"`,
+        },
+      });
     }
 
-    return new NextResponse(text, {
+    // Multi-plan: concat into a single CSV (no comments, no `# ===` headers).
+    // For human-readable multi-plan with separators, use /api/decode-bundle.
+    let combined = "";
+    for (const [, content] of entries) combined += content + "\n";
+    return new NextResponse(combined, {
       status: 200,
       headers: {
-        "content-type": "text/plain; charset=utf-8",
-        "content-disposition": `attachment; filename="${baseName}.txt"`,
+        "content-type": "text/csv; charset=utf-8",
+        "content-disposition": `attachment; filename="${baseName}.csv"`,
       },
     });
   } catch (e) {
