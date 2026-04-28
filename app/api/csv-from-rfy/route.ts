@@ -2,13 +2,14 @@
 // (For .txt + headers/comments output, use /api/decode-bundle.)
 import { NextResponse } from "next/server";
 import { decode, documentToCsvs } from "@hytek/rfy-codec";
+import { readBody } from "@/lib/read-body";
 
 export const runtime = "nodejs";
 
 export async function POST(req: Request) {
   try {
     const filename = decodeURIComponent(req.headers.get("x-filename") ?? "input.rfy");
-    const buf = Buffer.from(await req.arrayBuffer());
+    const buf = await readBody(req);
     const doc = decode(buf);
     const csvs = documentToCsvs(doc);
     const entries = Object.entries(csvs);

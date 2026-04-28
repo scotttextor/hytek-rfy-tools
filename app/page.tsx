@@ -46,14 +46,27 @@ function ConverterCard({ mode, primary = false }: { mode: Mode; primary?: boolea
     setError(null);
     setResult(null);
     try {
-      const buf = await file.arrayBuffer();
+      const rawBuf = await file.arrayBuffer();
+
+      // Vercel functions cap request bodies at 4.5MB. XML files inflate ~16x
+      // when decoded from RFY, so gzip them in the browser before upload.
+      // Server-side handlers detect Content-Encoding: gzip and inflate.
+      let body: ArrayBuffer | Uint8Array = rawBuf;
+      const headers: Record<string, string> = {
+        "x-filename": encodeURIComponent(file.name),
+        "content-type": "application/octet-stream",
+      };
+      if (rawBuf.byteLength > 1_000_000 && typeof CompressionStream !== "undefined") {
+        const stream = new Blob([rawBuf]).stream().pipeThrough(new CompressionStream("gzip"));
+        const compressed = await new Response(stream).arrayBuffer();
+        body = compressed;
+        headers["content-encoding"] = "gzip";
+      }
+
       const res = await fetch(cfg.endpoint, {
         method: "POST",
-        headers: {
-          "x-filename": encodeURIComponent(file.name),
-          "content-type": "application/octet-stream",
-        },
-        body: buf,
+        headers,
+        body,
       });
       if (!res.ok) {
         const msg = await res.text();

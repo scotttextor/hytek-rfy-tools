@@ -3,13 +3,14 @@
 import { NextResponse } from "next/server";
 import { decode, decryptRfy, documentToCsvs } from "@hytek/rfy-codec";
 import JSZip from "jszip";
+import { readBody } from "@/lib/read-body";
 
 export const runtime = "nodejs";
 
 export async function POST(req: Request) {
   try {
     const filename = decodeURIComponent(req.headers.get("x-filename") ?? "input.rfy");
-    const buf = Buffer.from(await req.arrayBuffer());
+    const buf = await readBody(req);
     const baseName = filename.replace(/\.rfy$/i, "");
 
     // Format 1 — full XML (decrypt only, no parsing)

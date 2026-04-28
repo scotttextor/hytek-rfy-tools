@@ -3,13 +3,14 @@
 // Strips any non-CSV preamble before passing to the codec.
 import { NextResponse } from "next/server";
 import { synthesizeRfyFromCsv } from "@hytek/rfy-codec";
+import { readBodyText } from "@/lib/read-body";
 
 export const runtime = "nodejs";
 
 export async function POST(req: Request) {
   try {
     const filename = decodeURIComponent(req.headers.get("x-filename") ?? "input.txt");
-    const raw = (await req.text()).trim();
+    const raw = (await readBodyText(req)).trim();
     if (!raw) throw new Error("Empty input");
 
     // Drop comment lines (#...) and split on `# === <plan> ===` markers.

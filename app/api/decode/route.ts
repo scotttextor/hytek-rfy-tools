@@ -1,13 +1,14 @@
 // RFY → plain text (XML). Decrypts + decompresses the input bytes.
 import { NextResponse } from "next/server";
 import { decryptRfy } from "@hytek/rfy-codec";
+import { readBody } from "@/lib/read-body";
 
 export const runtime = "nodejs";
 
 export async function POST(req: Request) {
   try {
     const filename = decodeURIComponent(req.headers.get("x-filename") ?? "input.rfy");
-    const buf = Buffer.from(await req.arrayBuffer());
+    const buf = await readBody(req);
     const xml = decryptRfy(buf);
     const outName = filename.replace(/\.rfy$/i, ".xml") || "output.xml";
     return new NextResponse(xml, {
