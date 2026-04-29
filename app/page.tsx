@@ -48,27 +48,17 @@ function ConverterCard({ mode, primary = false }: { mode: Mode; primary?: boolea
     try {
       const rawBuf = await file.arrayBuffer();
 
-      // Vercel functions cap request bodies at 4.5MB. XML files inflate ~16x
-      // when decoded from RFY, so gzip them in the browser before upload.
-      // Server-side handlers detect Content-Encoding: gzip and inflate.
-      let body: ArrayBuffer | Uint8Array = rawBuf;
-      const headers: Record<string, string> = {
-        "x-filename": encodeURIComponent(file.name),
-        "content-type": "application/octet-stream",
-      };
-      if (rawBuf.byteLength > 1_000_000 && typeof CompressionStream !== "undefined") {
-        const stream = new Blob([rawBuf]).stream().pipeThrough(new CompressionStream("gzip"));
-        const compressed = await new Response(stream).arrayBuffer();
-        body = compressed;
-        // Use a CUSTOM header (not the standard Content-Encoding) so Vercel/Next.js
-        // doesn't transparently auto-decompress the body before our handler sees it.
-        headers["x-body-encoding"] = "gzip";
-      }
-
+      // Send the file as raw bytes via Blob — fetch sets the right framing
+      // and Vercel passes the body through to our handler unchanged.
+      // (We previously gzipped large bodies to dodge Vercel's 4.5MB cap, but
+      // that path corrupted bytes via auto-decompression; for now we let
+      // Vercel reject anything over 4.5MB and give the user a clear message.)
       const res = await fetch(cfg.endpoint, {
         method: "POST",
-        headers,
-        body,
+        headers: {
+          "x-filename": encodeURIComponent(file.name),
+        },
+        body: new Blob([rawBuf], { type: "application/octet-stream" }),
       });
       if (!res.ok) {
         const msg = await res.text();

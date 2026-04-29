@@ -9,9 +9,21 @@ import { csvsToHtml } from "@/lib/html-format";
 export const runtime = "nodejs";
 
 export async function POST(req: Request) {
+  let receivedBytes = 0;
+  let bodyEncoding: string | null = null;
   try {
     const filename = decodeURIComponent(req.headers.get("x-filename") ?? "input.rfy");
+    bodyEncoding = req.headers.get("x-body-encoding") ?? req.headers.get("content-encoding");
     const buf = await readBody(req);
+    receivedBytes = buf.length;
+    if (buf.length < 32 || (buf.length - 16) % 16 !== 0) {
+      throw new Error(
+        `Invalid RFY length: got ${buf.length} bytes (encoding=${bodyEncoding ?? "none"}). ` +
+        `RFY format requires 16-byte IV + N×16-byte AES-CBC ciphertext, ` +
+        `so total file size must be ≥32 and ${"`(size-16) % 16 === 0`"}. ` +
+        `Got remainder=${(buf.length - 16) % 16}.`
+      );
+    }
     const baseName = filename.replace(/\.rfy$/i, "");
 
     // Format 1 — full XML (decrypt only, no parsing)
@@ -57,6 +69,7 @@ export async function POST(req: Request) {
       },
     });
   } catch (e) {
-    return new NextResponse(String(e instanceof Error ? e.message : e), { status: 400 });
+    const detail = `received ${receivedBytes} bytes, encoding=${bodyEncoding ?? "none"}`;
+    return new NextResponse(`${e instanceof Error ? e.message : e}\n[debug: ${detail}]`, { status: 400 });
   }
 }
