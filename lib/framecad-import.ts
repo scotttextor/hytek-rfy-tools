@@ -60,10 +60,11 @@ function csvTypeForUsage(usage: string, type: string): string {
   return type.toUpperCase() || "STUD";
 }
 
-/** Build the CSV profile code: 70S39_0.75 = web 70mm, flange ~39 (avg of l/r), gauge 0.75. */
+/** Build the CSV profile code: 70S41_0.75 = web 70mm, flange = max(l,r), gauge 0.75.
+ *  Detailer uses the LARGER flange (the asymmetric C is named after its longer side). */
 function profileCode(web: number, lFlange: number, rFlange: number, gauge: number): string {
-  const avg = Math.round((lFlange + rFlange) / 2);
-  return `${web}S${avg}_${gauge.toFixed(2)}`;
+  const flange = Math.round(Math.max(lFlange, rFlange));
+  return `${web}S${flange}_${gauge.toFixed(2)}`;
 }
 
 function parsePlans(xmlText: string): { jobnum: string; plans: Plan[] } {
