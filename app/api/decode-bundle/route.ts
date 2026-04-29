@@ -16,11 +16,23 @@ export async function POST(req: Request) {
     const buf = await readBody(req);
     receivedBytes = buf.length;
     if (buf.length < 32 || (buf.length - 16) % 16 !== 0) {
+      // Detect common wrong-file-type cases
+      const head = buf.subarray(0, 8).toString("utf-8").trim();
+      let hint = "";
+      if (head.startsWith("<?xml") || head.startsWith("<sched")) {
+        hint = `\nThis looks like a decrypted XML file, not an RFY. Use "Plain Text or XML → RFY" to re-encode it.`;
+      } else if (head.startsWith("DETAILS") || head.startsWith("COMPONENT")) {
+        hint = `\nThis looks like a CSV file, not an RFY. Use "CSV → RFY" or "Plain Text or XML → RFY" to encode it.`;
+      } else if (head.startsWith("# HYTEK") || head.startsWith("#")) {
+        hint = `\nThis looks like the .txt plain-text export. Use "Plain Text or XML → RFY" to re-encode it.`;
+      } else {
+        hint = `\nNot a valid FrameCAD RFY file. Make sure you're uploading an .rfy that came directly from Detailer, or one this app produced after the codec was last fixed.`;
+      }
       throw new Error(
-        `Invalid RFY length: got ${buf.length} bytes (encoding=${bodyEncoding ?? "none"}). ` +
+        `Invalid RFY length: got ${buf.length} bytes. ` +
         `RFY format requires 16-byte IV + N×16-byte AES-CBC ciphertext, ` +
         `so total file size must be ≥32 and ${"`(size-16) % 16 === 0`"}. ` +
-        `Got remainder=${(buf.length - 16) % 16}.`
+        `Got remainder=${(buf.length - 16) % 16}.${hint}`
       );
     }
     const baseName = filename.replace(/\.rfy$/i, "");
