@@ -60,7 +60,9 @@ function ConverterCard({ mode, primary = false }: { mode: Mode; primary?: boolea
         const stream = new Blob([rawBuf]).stream().pipeThrough(new CompressionStream("gzip"));
         const compressed = await new Response(stream).arrayBuffer();
         body = compressed;
-        headers["content-encoding"] = "gzip";
+        // Use a CUSTOM header (not the standard Content-Encoding) so Vercel/Next.js
+        // doesn't transparently auto-decompress the body before our handler sees it.
+        headers["x-body-encoding"] = "gzip";
       }
 
       const res = await fetch(cfg.endpoint, {
