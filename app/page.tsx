@@ -46,6 +46,19 @@ function ConverterCard({ mode, primary = false }: { mode: Mode; primary?: boolea
     setError(null);
     setResult(null);
     try {
+      // Client-side extension check — the file picker's `accept` attribute can be
+      // bypassed by switching to "All files", and uploading the wrong file type
+      // is the #1 user error. Catch it before sending to the server.
+      const allowedExts = cfg.accept.split(",").map(s => s.trim().toLowerCase());
+      const lowerName = file.name.toLowerCase();
+      const okExt = allowedExts.some(ext => lowerName.endsWith(ext));
+      if (!okExt) {
+        throw new Error(
+          `Wrong file type for this card. "${cfg.title}" expects ${cfg.from}, but you picked "${file.name}". ` +
+          `Use the OTHER card if you want to convert this file.`
+        );
+      }
+
       const rawBuf = await file.arrayBuffer();
 
       // Send the file as raw bytes via Blob — fetch sets the right framing
