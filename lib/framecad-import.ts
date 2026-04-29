@@ -87,7 +87,14 @@ function profileCode(web: number, lFlange: number, rFlange: number, gauge: numbe
   return `${web}S${flange}_${gauge.toFixed(2)}`;
 }
 
-function parsePlans(xmlText: string): { jobnum: string; plans: Plan[] } {
+interface ProjectMeta {
+  jobnum: string;
+  projectName: string;
+  client: string;
+  date: string;
+}
+
+function parsePlans(xmlText: string): ProjectMeta & { plans: Plan[] } {
   const parser = new XMLParser({
     ignoreAttributes: false,
     attributeNamePrefix: "@_",
@@ -99,6 +106,12 @@ function parsePlans(xmlText: string): { jobnum: string; plans: Plan[] } {
   const root = doc.framecad_import;
   if (!root) throw new Error("Not a <framecad_import> XML document");
   const jobnum = String(root.jobnum ?? "JOB").replace(/["\s]/g, "");
+  const projectName = String(root["@_name"] ?? jobnum).replace(/^"\s*|\s*"$/g, "").trim();
+  const client = String(root.client ?? "").replace(/["\s]/g, " ").trim();
+  // datedrawn is "DD-MM-YYYY"; FrameCAD output uses "YYYY-MM-DD"
+  const dateRaw = String(root.drawing_info?.datedrawn ?? "").replace(/["\s]/g, "");
+  const dateMatch = dateRaw.match(/(\d{1,2})-(\d{1,2})-(\d{4})/);
+  const date = dateMatch ? `${dateMatch[3]}-${dateMatch[2]!.padStart(2,"0")}-${dateMatch[1]!.padStart(2,"0")}` : new Date().toISOString().slice(0, 10);
 
   const plans: Plan[] = [];
   for (const planNode of root.plan ?? []) {
@@ -131,7 +144,7 @@ function parsePlans(xmlText: string): { jobnum: string; plans: Plan[] } {
     }
     plans.push(plan);
   }
-  return { jobnum, plans };
+  return { jobnum, projectName, client, date, plans };
 }
 
 /** Map a usage attribute to a stick role used by the rules engine. */
@@ -225,8 +238,17 @@ function planToCsv(jobnum: string, plan: Plan): string {
 }
 
 /** Top-level: parse a framecad_import XML and emit a multi-plan CSV. */
-export function framecadImportToCsv(xmlText: string): { csv: string; planCount: number; frameCount: number; stickCount: number } {
-  const { jobnum, plans } = parsePlans(xmlText);
+export function framecadImportToCsv(xmlText: string): {
+  csv: string;
+  planCount: number;
+  frameCount: number;
+  stickCount: number;
+  projectName: string;
+  jobnum: string;
+  client: string;
+  date: string;
+} {
+  const { jobnum, projectName, client, date, plans } = parsePlans(xmlText);
   let frameCount = 0, stickCount = 0;
   const planCsvs: string[] = [];
   for (const plan of plans) {
@@ -234,6 +256,6 @@ export function framecadImportToCsv(xmlText: string): { csv: string; planCount: 
     for (const f of plan.frames) stickCount += f.sticks.length;
     planCsvs.push(planToCsv(jobnum, plan));
   }
-  return { csv: planCsvs.join("\n"), planCount: plans.length, frameCount, stickCount };
+  return { csv: planCsvs.join("\n"), planCount: plans.length, frameCount, stickCount, projectName, jobnum, client, date };
 }
 

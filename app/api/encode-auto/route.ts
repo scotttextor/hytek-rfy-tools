@@ -30,9 +30,9 @@ export async function POST(req: Request) {
       //                            encryptRfy direct (round-trip preserves graphics).
       if (lower.includes("<framecad_import")) {
         detectedFormat = "framecad-import";
-        const { csv, planCount, frameCount, stickCount } = framecadImportToCsv(raw);
+        const { csv, planCount, frameCount, stickCount, projectName, jobnum, client, date } = framecadImportToCsv(raw);
         if (stickCount === 0) throw new Error("No sticks found in <framecad_import> document");
-        const result = synthesizeRfyFromCsv(csv);
+        const result = synthesizeRfyFromCsv(csv, { projectName, jobNum: jobnum, client, date });
         rfy = result.rfy;
       } else if (lower.includes("<schedule")) {
         detectedFormat = "xml-schedule";
