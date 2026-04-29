@@ -4,6 +4,7 @@
 import { NextResponse } from "next/server";
 import { encryptRfy, synthesizeRfyFromCsv } from "@hytek/rfy-codec";
 import { readBodyText } from "@/lib/read-body";
+import { framecadImportToCsv } from "@/lib/framecad-import";
 
 export const runtime = "nodejs";
 
@@ -22,27 +23,27 @@ export async function POST(req: Request) {
     let detectedFormat: string;
 
     if (isXml) {
-      // Reject the WRONG XML schema: <framecad_import> is FrameCAD's CNC INPUT feed,
-      // not the inner <schedule> document stored inside an RFY. Encrypting a
-      // framecad_import would produce an RFY that Detailer refuses to open.
+      // Two XML formats can come through this endpoint:
+      //   1. <framecad_import>  — FrameCAD CNC INPUT feed. We parse it,
+      //                            convert to CSV, then synth an RFY from the CSV.
+      //   2. <schedule>          — Inner XML extracted from an existing RFY.
+      //                            encryptRfy direct (round-trip preserves graphics).
       if (lower.includes("<framecad_import")) {
+        detectedFormat = "framecad-import";
+        const { csv, planCount, frameCount, stickCount } = framecadImportToCsv(raw);
+        if (stickCount === 0) throw new Error("No sticks found in <framecad_import> document");
+        const result = synthesizeRfyFromCsv(csv);
+        rfy = result.rfy;
+      } else if (lower.includes("<schedule")) {
+        detectedFormat = "xml-schedule";
+        rfy = encryptRfy(raw);
+      } else {
         throw new Error(
-          "This is a FrameCAD CNC INPUT XML (<framecad_import>), not the inner <schedule> XML " +
-          "that lives inside an RFY. The two are completely different schemas. " +
-          "To produce an RFY from a framecad_import.xml, open it in FrameCAD Detailer " +
-          "and let Detailer save the .rfy itself — this app can't do that conversion. " +
-          "If you have an .rfy already, decode it via 'RFY → Plain Text + XML' to get the " +
-          "correct <schedule> XML, edit that, then re-upload here."
+          "XML root is not <schedule> or <framecad_import>. " +
+          "Expected either the inner FrameCAD schedule XML (from 'RFY → Plain Text + XML') " +
+          "or a FrameCAD CNC import XML."
         );
       }
-      if (!lower.includes("<schedule")) {
-        throw new Error(
-          "XML root is not <schedule>. encode-auto expects the same XML you get out of " +
-          "'RFY → Plain Text + XML' (the inner FrameCAD schedule document)."
-        );
-      }
-      detectedFormat = "xml";
-      rfy = encryptRfy(raw);
     } else {
       detectedFormat = "plain-text-csv";
       // Strip `# ===` section markers and `#` comments, then synth from first plan.
