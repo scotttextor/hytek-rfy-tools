@@ -17,7 +17,7 @@ export async function POST(req: Request) {
     // Detect format from the first non-whitespace bytes of the body.
     const lower = raw.toLowerCase();
     const isXml = lower.startsWith("<?xml") || lower.startsWith("<schedule");
-    const outName = filename.replace(/\.(txt|csv|xml)$/i, "") + ".rfy";
+    let outName = filename.replace(/\.(txt|csv|xml)$/i, "") + ".rfy";
 
     let rfy: Buffer;
     let detectedFormat: string;
@@ -34,6 +34,14 @@ export async function POST(req: Request) {
         if (stickCount === 0) throw new Error("No sticks found in <framecad_import> document");
         const result = synthesizeRfyFromCsv(csv, { projectName, jobNum: jobnum, client, date });
         rfy = result.rfy;
+        // Name like Detailer: "<jobnum>_<planname>.rfy" — the HYTEK rollformer
+        // parses this filename pattern to display jobs in the "Add Job" UI.
+        // Spaces and special chars must be stripped — the machine's USB reader
+        // shows "Could not read" if the filename has whitespace.
+        const planName = result.xml.match(/<plan name="([^"]+)"/)?.[1] ?? "PLAN";
+        const safeJob = jobnum.replace(/[^A-Za-z0-9]/g, "");
+        const safePlan = planName.replace(/[^A-Za-z0-9._-]/g, "");
+        outName = `${safeJob}_${safePlan}.rfy`;
       } else if (lower.includes("<schedule")) {
         detectedFormat = "xml-schedule";
         rfy = encryptRfy(raw);
