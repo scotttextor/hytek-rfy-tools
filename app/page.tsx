@@ -6,17 +6,17 @@ type Mode = "decode-bundle" | "encode-auto" | "rfy-to-csv" | "csv-to-rfy";
 
 const MODE_LABELS: Record<Mode, { title: string; subtitle: string; from: string; accept: string; endpoint: string }> = {
   "decode-bundle": {
-    title: "RFY → Plain Text + XML",
-    subtitle: "Upload an .rfy → ZIP with both .txt (Notepad-friendly) and .xml. Edit either one.",
+    title: "RFY → Text + XML + HTML",
+    subtitle: "Upload an .rfy → ZIP with .txt (Notepad), .xml (full schedule), and .html (browser table view). Edit any one.",
     from: ".rfy",
     accept: ".rfy",
     endpoint: "/api/decode-bundle",
   },
   "encode-auto": {
-    title: "Plain Text or XML → RFY",
-    subtitle: "Upload edited .txt or .xml → fresh .rfy. App auto-detects the format.",
-    from: ".txt / .xml / .csv",
-    accept: ".txt,.xml,.csv",
+    title: "Text / XML / HTML → RFY",
+    subtitle: "Upload your edited .txt, .xml, or .html → fresh .rfy. App auto-detects the format.",
+    from: ".txt / .xml / .html / .csv",
+    accept: ".txt,.xml,.html,.htm,.csv",
     endpoint: "/api/encode-auto",
   },
   "rfy-to-csv": {
@@ -173,6 +173,10 @@ export default function Page() {
           <li>
             <strong className="text-yellow-400">.xml</strong> — full FrameCAD schedule with everything
             (3D mesh, design GUIDs). Edit when fidelity matters. Re-encrypted byte-for-byte back to RFY.
+          </li>
+          <li>
+            <strong className="text-yellow-400">.html</strong> — same data as <code>.txt</code> but rendered
+            as an editable table in any browser. Click a cell, type, save the page, re-upload.
           </li>
           <li>
             <strong className="text-yellow-400">.csv</strong> (from the CSV-only buttons) — single-plan

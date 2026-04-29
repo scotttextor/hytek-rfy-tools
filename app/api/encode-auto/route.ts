@@ -4,6 +4,7 @@
 import { NextResponse } from "next/server";
 import { encryptRfy, synthesizeRfyFromCsv } from "@hytek/rfy-codec";
 import { readBodyText } from "@/lib/read-body";
+import { htmlToCsv } from "@/lib/html-format";
 
 export const runtime = "nodejs";
 
@@ -13,8 +14,11 @@ export async function POST(req: Request) {
     const raw = (await readBodyText(req)).trim();
     if (!raw) throw new Error("Empty input");
 
-    const isXml = raw.startsWith("<?xml") || raw.startsWith("<schedule");
-    const outName = filename.replace(/\.(txt|csv|xml)$/i, "") + ".rfy";
+    // Detect format from the first non-whitespace bytes of the body.
+    const lower = raw.toLowerCase();
+    const isXml = lower.startsWith("<?xml") || lower.startsWith("<schedule");
+    const isHtml = lower.startsWith("<!doctype html") || lower.startsWith("<html");
+    const outName = filename.replace(/\.(txt|csv|xml|html|htm)$/i, "") + ".rfy";
 
     let rfy: Buffer;
     let detectedFormat: string;
@@ -22,6 +26,11 @@ export async function POST(req: Request) {
     if (isXml) {
       detectedFormat = "xml";
       rfy = encryptRfy(raw);
+    } else if (isHtml) {
+      detectedFormat = "html-table";
+      const csv = htmlToCsv(raw);
+      const result = synthesizeRfyFromCsv(csv);
+      rfy = result.rfy;
     } else {
       detectedFormat = "plain-text-csv";
       // Strip `# ===` section markers and `#` comments, then synth from first plan.

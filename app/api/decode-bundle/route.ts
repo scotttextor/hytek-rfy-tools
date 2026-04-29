@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import { decode, decryptRfy, documentToCsvs } from "@hytek/rfy-codec";
 import JSZip from "jszip";
 import { readBody } from "@/lib/read-body";
+import { csvsToHtml } from "@/lib/html-format";
 
 export const runtime = "nodejs";
 
@@ -29,15 +30,20 @@ export async function POST(req: Request) {
       txt += `# === ${name} ===\n${content}\n\n`;
     }
 
+    // Format 3 — HTML (editable table view, opens in any browser)
+    const html = csvsToHtml(csvs, filename);
+
     const zip = new JSZip();
     zip.file(`${baseName}.txt`, txt);
     zip.file(`${baseName}.xml`, xml);
+    zip.file(`${baseName}.html`, html);
     zip.file(`README.txt`,
       `HYTEK RFY Tools — decoded bundle\n` +
       `=================================\n\n` +
-      `${baseName}.txt   Plain-text rollformer CSV — easiest to edit in Notepad.\n` +
-      `${baseName}.xml   Full FrameCAD XML schedule — more detail, also opens in Notepad.\n\n` +
-      `Edit either file then re-upload via "Plain Text or XML → RFY".\n` +
+      `${baseName}.txt    Plain-text rollformer CSV — easiest to edit in Notepad.\n` +
+      `${baseName}.xml    Full FrameCAD XML schedule — opens in Notepad too.\n` +
+      `${baseName}.html   Editable table view — opens in any browser.\n\n` +
+      `Edit any of the three then re-upload via "Plain Text / XML / HTML → RFY".\n` +
       `The app auto-detects the format by content.\n`,
     );
 
