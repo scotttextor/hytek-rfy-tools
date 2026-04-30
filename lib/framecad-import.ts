@@ -229,6 +229,38 @@ function parsePlans(xmlText: string): ProjectMeta & { plans: RawPlan[] } {
           }
         }
 
+        // Detailer also trims STUDS by 2mm at each end (verified 2026-04-30
+        // against HG260001 + HG260044 references: every Detailer stud has
+        // outline range [4..length-4] for studs that span the full wall
+        // height, so the cut steel is 4mm shorter than the input centerline
+        // span). Without this, every end-anchored op (Swage, Dimple) on every
+        // stud drifts by 4mm — accounts for ~30% of all op-position mismatches
+        // in the diff against reference.
+        //
+        // The 2mm value isn't directly in setup; it's a separate factory
+        // convention (likely related to ToolClearance=2 or B2BStickClearance=2,
+        // both of which equal 2mm for the F325iT 70mm setup).
+        const STUD_END_TRIM_MM = 2.0;
+        const isFullStud = usageLower === "stud" || usageLower === "endstud" ||
+                           usageLower === "jackstud" || usageLower === "trimstud";
+        if (isFullStud) {
+          const dx = end.x - start.x, dy = end.y - start.y, dz = end.z - start.z;
+          const len = Math.sqrt(dx*dx + dy*dy + dz*dz);
+          if (len > STUD_END_TRIM_MM * 2 + 1) {
+            const ux = dx / len, uy = dy / len, uz = dz / len;
+            start = {
+              x: start.x + ux * STUD_END_TRIM_MM,
+              y: start.y + uy * STUD_END_TRIM_MM,
+              z: start.z + uz * STUD_END_TRIM_MM,
+            };
+            end = {
+              x: end.x - ux * STUD_END_TRIM_MM,
+              y: end.y - uy * STUD_END_TRIM_MM,
+              z: end.z - uz * STUD_END_TRIM_MM,
+            };
+          }
+        }
+
         // Detailer Kb stud-end normalisation (verified 2026-04-30):
         //
         //   1. Stud-end always becomes "start" of the stick (swap if needed).
