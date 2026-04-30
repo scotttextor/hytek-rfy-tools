@@ -317,29 +317,48 @@ function parsePlans(xmlText: string): ProjectMeta & { plans: RawPlan[] } {
           }
         }
 
-        // Vertical W truss-web extension: Detailer extends the W's length by
-        // its lip depth (~11mm typical) so the cut steel reaches THROUGH the
-        // chord's inner web face into the chord lip cavity. Verified
-        // 2026-05-02 against HG260044 GF-TIN PC2-1/W3:
-        //   input centerline length 606 → Detailer output length 617
-        //   (= 606 + r_lip 11). End Swage shifts from 567..606 → 578..617.
-        // Diagonal Ws have a different (Kb-style) end-treatment and are NOT
-        // extended this way — only purely vertical Ws (start.x == end.x in
-        // 2D frame projection).
-        if (/^W\d/.test(stickName)) {
+        // W truss-web length adjustment by orientation:
+        //
+        //   VERTICAL W   — extended by lip depth (~11mm) at the chord-end
+        //                  to reach THROUGH the chord's inner web face into
+        //                  the chord lip cavity. Verified 2026-05-02 vs
+        //                  HG260044 GF-TIN PC2-1/W3 (input 606 → output 617
+        //                  = 606 + r_lip 11).
+        //
+        //   DIAGONAL W   — trimmed by 2mm (Kb-style) at the chord-end so the
+        //                  diagonal's bevel-cut end seats cleanly against
+        //                  the chord. Verified 2026-05-02 vs HG260044
+        //                  GF-TIN PC2-1/W4 (input 714.4 → output 712.4).
+        //                  Trim applied at END only (assumes start is the
+        //                  panel-point connection at chord level).
+        // ONLY apply to actual truss webs (usage="Web") — LBW walls also have
+        // sticks named W1/W2 etc. but those are B2B partner studs (usage="Stud")
+        // that should be treated as regular studs, NOT extended into chord lips.
+        if (/^W\d/.test(stickName) && usageLower === "web") {
           const dx = end.x - start.x;
           const dy = end.y - start.y;
           const horizontalDelta = Math.sqrt(dx * dx + dy * dy);
-          // Vertical = no horizontal component (X+Y both unchanged in 3D)
           if (horizontalDelta < 1.0) {
-            // Extend along the W's direction (Z axis) by lip depth.
-            // Use r_lip if available, fall back to 11mm.
+            // VERTICAL W → extend by lip depth
             const lipDepth = profile.r_lip > 0 ? profile.r_lip : 11;
             const dz = end.z - start.z;
             const lenZ = Math.abs(dz);
             if (lenZ > 0.1) {
               const sign = dz > 0 ? 1 : -1;
               end = { x: end.x, y: end.y, z: end.z + sign * lipDepth };
+            }
+          } else {
+            // DIAGONAL W → trim 2mm at end along the W's direction
+            const W_DIAGONAL_TRIM_MM = 2.0;
+            const dz = end.z - start.z;
+            const len = Math.sqrt(dx*dx + dy*dy + dz*dz);
+            if (len > W_DIAGONAL_TRIM_MM * 2) {
+              const ux = dx / len, uy = dy / len, uz = dz / len;
+              end = {
+                x: end.x - ux * W_DIAGONAL_TRIM_MM,
+                y: end.y - uy * W_DIAGONAL_TRIM_MM,
+                z: end.z - uz * W_DIAGONAL_TRIM_MM,
+              };
             }
           }
         }
