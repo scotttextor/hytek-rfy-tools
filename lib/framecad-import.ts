@@ -153,6 +153,11 @@ function parsePlans(xmlText: string): ProjectMeta & { plans: RawPlan[] } {
         envelope,
         sticks: [],
       };
+      // Frame z range — used to detect plate-end vs stud-end of Kb braces.
+      const envZs = envelopeRaw.map(v => v.z);
+      const frameZmin = envZs.length ? Math.min(...envZs) : 0;
+      const frameZmax = envZs.length ? Math.max(...envZs) : 0;
+
       for (const stickNode of frameNode.stick ?? []) {
         const profileAttrs = (stickNode.profile && (stickNode.profile.$ ?? stickNode.profile)) ?? {};
         const profile = {
@@ -177,13 +182,49 @@ function parsePlans(xmlText: string): ProjectMeta & { plans: RawPlan[] } {
         //   All other prefixes (B/H/L/N/S/T): 0 mismatches (preserve input)
         const isDiagonalBrace = /^(Kb|W)\d/.test(stickName);
         const flipped = isDiagonalBrace ? false : inputFlipped;
+
+        let start = parseTriple(String(stickNode.start ?? "0,0,0"));
+        let end = parseTriple(String(stickNode.end ?? "0,0,0"));
+
+        // Detailer Kb stud-end trim (verified 2026-04-30): for Kb cripple/knee
+        // braces, Detailer shortens the stick by 2mm along the diagonal at the
+        // end that attaches to a stud (the end farther from the top/bottom
+        // plates of the frame). Without this trim, the stick's outline corner
+        // pokes ~2mm past the stud's outer face on screen — visible to
+        // operators reviewing the frame layout and a 2mm overcut on the
+        // physical steel.
+        //
+        // Detection: stud-end = whichever endpoint has the LARGER distance
+        // from both frame Z-min and Z-max. Plate-end = whichever is closer.
+        //
+        // Applied to Kb only (not W) — W truss-web sticks have a different
+        // trim profile that hasn't been characterised yet.
+        const KB_STUD_END_TRIM_MM = 2.0;
+        if (/^Kb\d/.test(stickName) && envZs.length === 4) {
+          const startBoundaryDist = Math.min(start.z - frameZmin, frameZmax - start.z);
+          const endBoundaryDist = Math.min(end.z - frameZmin, frameZmax - end.z);
+          // direction unit vector (start → end)
+          const dx = end.x - start.x, dy = end.y - start.y, dz = end.z - start.z;
+          const len = Math.sqrt(dx*dx + dy*dy + dz*dz);
+          if (len > KB_STUD_END_TRIM_MM * 2) {  // sanity guard
+            const ux = dx / len, uy = dy / len, uz = dz / len;
+            if (startBoundaryDist > endBoundaryDist) {
+              // Stud-end is start — pull start toward end
+              start = { x: start.x + ux * KB_STUD_END_TRIM_MM, y: start.y + uy * KB_STUD_END_TRIM_MM, z: start.z + uz * KB_STUD_END_TRIM_MM };
+            } else {
+              // Stud-end is end — pull end toward start
+              end = { x: end.x - ux * KB_STUD_END_TRIM_MM, y: end.y - uy * KB_STUD_END_TRIM_MM, z: end.z - uz * KB_STUD_END_TRIM_MM };
+            }
+          }
+        }
+
         const stick: RawStick = {
           name: stickName,
           type: String(stickNode["@_type"] ?? ""),
           usage: String(stickNode["@_usage"] ?? ""),
           gauge: Number(stickNode["@_gauge"] ?? 0),
-          start: parseTriple(String(stickNode.start ?? "0,0,0")),
-          end: parseTriple(String(stickNode.end ?? "0,0,0")),
+          start,
+          end,
           profile,
           flipped,
         };
