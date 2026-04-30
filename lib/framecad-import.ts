@@ -243,23 +243,28 @@ function parsePlans(xmlText: string): ProjectMeta & { plans: RawPlan[] } {
         // The 2mm value isn't directly in setup; it's a separate factory
         // convention (likely related to ToolClearance=2 or B2BStickClearance=2,
         // both of which equal 2mm for the F325iT 70mm setup).
-        const STUD_END_TRIM_MM = 2.0;
         const isFullStud = usageLower === "stud" || usageLower === "endstud" ||
                            usageLower === "jackstud" || usageLower === "trimstud";
-        if (isFullStud) {
+        // Headers (H prefix) also get end-trim, but ONLY 1mm/end (not 2mm
+        // like studs). Verified 2026-05-01: input H length 3106 → Detailer
+        // emits length 3104 (2mm total = 1mm/end), vs studs which trim 4mm
+        // total (2mm/end).
+        const isHeader = /^H\d/.test(String(stickNode["@_name"] ?? ""));
+        const trimAmount = isFullStud ? 2.0 : isHeader ? 1.0 : 0;
+        if (trimAmount > 0) {
           const dx = end.x - start.x, dy = end.y - start.y, dz = end.z - start.z;
           const len = Math.sqrt(dx*dx + dy*dy + dz*dz);
-          if (len > STUD_END_TRIM_MM * 2 + 1) {
+          if (len > trimAmount * 2 + 1) {
             const ux = dx / len, uy = dy / len, uz = dz / len;
             start = {
-              x: start.x + ux * STUD_END_TRIM_MM,
-              y: start.y + uy * STUD_END_TRIM_MM,
-              z: start.z + uz * STUD_END_TRIM_MM,
+              x: start.x + ux * trimAmount,
+              y: start.y + uy * trimAmount,
+              z: start.z + uz * trimAmount,
             };
             end = {
-              x: end.x - ux * STUD_END_TRIM_MM,
-              y: end.y - uy * STUD_END_TRIM_MM,
-              z: end.z - uz * STUD_END_TRIM_MM,
+              x: end.x - ux * trimAmount,
+              y: end.y - uy * trimAmount,
+              z: end.z - uz * trimAmount,
             };
           }
         }
@@ -409,6 +414,12 @@ function generateStickTooling(stick: RawStick, plan: RawPlan, frame: RawFrame, b
       ops.push({ kind: "end", type: "Chamfer" });
     }
   }
+
+  // Nog InnerService: position varies by stick context (not just midpoint).
+  // Data shows short nogs (<1000mm) often have 1 hole at midpoint, but
+  // intermediate sizes have offset positions, and long nogs have multiple
+  // holes at standard service-hole heights translated along the nog.
+  // Predicate not yet derived — skip.
 
   // Kb-specific: add an InnerService hole at the midpoint of each Kb brace.
   // Detailer's actual algorithm is height-based (1 hole on top diagonals,
