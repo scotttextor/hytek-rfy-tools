@@ -213,7 +213,12 @@ function parsePlans(xmlText: string): ProjectMeta & { plans: RawPlan[] } {
         // are a different `usage` even though they share `type="Plate"` in
         // the input XML — Detailer doesn't trim nogs).
         const usageLower = String(stickNode["@_usage"] ?? "").toLowerCase();
-        const isFullWidthPlate = usageLower === "topplate" || usageLower === "bottomplate";
+        // Truss chords (TopChord/BottomChord) get the same EndClearance trim
+        // as wall plates. Verified 2026-05-01 against HG260044 GF-TIN PC7-1/B1:
+        // input length 2640 → Detailer emits length 2632 (= 8mm trim total =
+        // 4mm/end, matching the F325iT 70mm setup's EndClearance=4).
+        const isFullWidthPlate = usageLower === "topplate" || usageLower === "bottomplate"
+                              || usageLower === "topchord" || usageLower === "bottomchord";
         if (isFullWidthPlate && endClearance > 0) {
           const dx = end.x - start.x, dy = end.y - start.y, dz = end.z - start.z;
           const len = Math.sqrt(dx*dx + dy*dy + dz*dz);
