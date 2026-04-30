@@ -142,9 +142,17 @@ export default function Page() {
   return (
     <main className="min-h-screen p-8 max-w-5xl mx-auto">
       <header className="mb-8">
-        <h1 className="text-3xl font-bold">
-          <span className="text-yellow-400">HYTEK</span> RFY Tools
-        </h1>
+        <div className="flex items-baseline justify-between gap-4">
+          <h1 className="text-3xl font-bold">
+            <span className="text-yellow-400">HYTEK</span> RFY Tools
+          </h1>
+          <a
+            href="/rules"
+            className="text-sm px-3 py-1.5 rounded border border-zinc-700 hover:border-yellow-400 hover:text-yellow-400 text-zinc-300 transition"
+          >
+            Rules Manager →
+          </a>
+        </div>
         <p className="text-zinc-400 mt-1">
           Decode, edit, and re-encode FrameCAD <code className="text-yellow-400">.rfy</code> files.
         </p>

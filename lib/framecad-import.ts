@@ -332,6 +332,24 @@ function generateStickTooling(stick: RawStick, plan: RawPlan, frame: RawFrame): 
     usage: stick.usage,
   };
   const ops = generateTooling(ctx);
+
+  // Kb-specific: add an InnerService hole at the midpoint of each Kb brace.
+  // Detailer's actual algorithm is height-based (1 hole on top diagonals,
+  // 3 holes on bottom diagonals — positioned where the diagonal crosses
+  // configured service-hole heights in the wall). We don't have the wall's
+  // service-hole height list in the input XML, so for a reasonable starter
+  // we emit a single mid-stick hole. This matches Detailer's count for
+  // top-diagonal Kb sticks (Kb1/Kb3) and gives bottom-diagonal Kb sticks
+  // (Kb2/Kb4) at least one hole instead of zero. Refine when we extract
+  // the per-frame-type service-hole heights from the .sups data.
+  if (/^Kb\d/.test(stick.name) && length > 100) {
+    ops.push({
+      kind: "point",
+      type: "InnerService",
+      pos: Math.round((length / 2) * 10) / 10,
+    });
+  }
+
   return ops.slice().sort((a, b) => {
     const pa = a.kind === "spanned" ? a.startPos : (a.kind === "point" ? a.pos : (a.kind === "start" ? 0 : length));
     const pb = b.kind === "spanned" ? b.startPos : (b.kind === "point" ? b.pos : (b.kind === "start" ? 0 : length));
