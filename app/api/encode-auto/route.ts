@@ -4,7 +4,7 @@
 import { NextResponse } from "next/server";
 import { encryptRfy, synthesizeRfyFromCsv } from "@hytek/rfy-codec";
 import { readBodyText } from "@/lib/read-body";
-import { framecadImportToCsv } from "@/lib/framecad-import";
+import { framecadImportToRfy } from "@/lib/framecad-import";
 
 export const runtime = "nodejs";
 
@@ -30,16 +30,18 @@ export async function POST(req: Request) {
       //                            encryptRfy direct (round-trip preserves graphics).
       if (lower.includes("<framecad_import")) {
         detectedFormat = "framecad-import";
-        const { csv, planCount, frameCount, stickCount, projectName, jobnum, client, date } = framecadImportToCsv(raw);
-        if (stickCount === 0) throw new Error("No sticks found in <framecad_import> document");
-        const result = synthesizeRfyFromCsv(csv, { projectName, jobNum: jobnum, client, date });
+        // Direct path: framecad_import XML → ParsedProject → synthesizeRfyFromPlans.
+        // Carries 3D <envelope> + stick <start>/<end> through to the codec so
+        // elevation-graphics renders correctly on the rollformer.
+        const result = framecadImportToRfy(raw);
+        if (result.stickCount === 0) throw new Error("No sticks found in <framecad_import> document");
         rfy = result.rfy;
         // Name like Detailer: "<jobnum>_<planname>.rfy" — the HYTEK rollformer
         // parses this filename pattern to display jobs in the "Add Job" UI.
         // Spaces and special chars must be stripped — the machine's USB reader
         // shows "Could not read" if the filename has whitespace.
         const planName = result.xml.match(/<plan name="([^"]+)"/)?.[1] ?? "PLAN";
-        const safeJob = jobnum.replace(/[^A-Za-z0-9]/g, "");
+        const safeJob = result.jobnum.replace(/[^A-Za-z0-9]/g, "");
         const safePlan = planName.replace(/[^A-Za-z0-9._-]/g, "");
         outName = `${safeJob}_${safePlan}.rfy`;
       } else if (lower.includes("<schedule")) {
