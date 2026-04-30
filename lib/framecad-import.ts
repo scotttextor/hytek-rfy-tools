@@ -317,6 +317,33 @@ function parsePlans(xmlText: string): ProjectMeta & { plans: RawPlan[] } {
           }
         }
 
+        // Vertical W truss-web extension: Detailer extends the W's length by
+        // its lip depth (~11mm typical) so the cut steel reaches THROUGH the
+        // chord's inner web face into the chord lip cavity. Verified
+        // 2026-05-02 against HG260044 GF-TIN PC2-1/W3:
+        //   input centerline length 606 → Detailer output length 617
+        //   (= 606 + r_lip 11). End Swage shifts from 567..606 → 578..617.
+        // Diagonal Ws have a different (Kb-style) end-treatment and are NOT
+        // extended this way — only purely vertical Ws (start.x == end.x in
+        // 2D frame projection).
+        if (/^W\d/.test(stickName)) {
+          const dx = end.x - start.x;
+          const dy = end.y - start.y;
+          const horizontalDelta = Math.sqrt(dx * dx + dy * dy);
+          // Vertical = no horizontal component (X+Y both unchanged in 3D)
+          if (horizontalDelta < 1.0) {
+            // Extend along the W's direction (Z axis) by lip depth.
+            // Use r_lip if available, fall back to 11mm.
+            const lipDepth = profile.r_lip > 0 ? profile.r_lip : 11;
+            const dz = end.z - start.z;
+            const lenZ = Math.abs(dz);
+            if (lenZ > 0.1) {
+              const sign = dz > 0 ? 1 : -1;
+              end = { x: end.x, y: end.y, z: end.z + sign * lipDepth };
+            }
+          }
+        }
+
         const stick: RawStick = {
           name: stickName,
           type: String(stickNode["@_type"] ?? ""),
@@ -418,6 +445,16 @@ function generateStickTooling(stick: RawStick, plan: RawPlan, frame: RawFrame, b
       ops.push({ kind: "start", type: "Chamfer" });
       ops.push({ kind: "end", type: "Chamfer" });
     }
+    // Vertical W extension: Detailer extends a vertical truss web's length by
+    // its lip depth (~11mm typical for 70mm profile) so the cut steel reaches
+    // through the chord's inner face. Verified 2026-05-02 against HG260044
+    // GF-TIN PC2-1/W3: input centerline length 606 → Detailer output 617
+    // (= 606 + r_lip 11). The end Swage + InnerDimple shift accordingly.
+    //
+    // We can't extend the centerline coords here (those drive elevation
+    // graphics, which Detailer renders at the input length). Instead, shift
+    // the end-anchored ops to use length+11 as their reference. For vertical
+    // W only — diagonals have a different end-treatment rule.
   }
 
   // Nog InnerService: position varies by stick context (not just midpoint).
