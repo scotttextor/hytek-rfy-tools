@@ -186,16 +186,23 @@ function parsePlans(xmlText: string): ProjectMeta & { plans: RawPlan[] } {
         let start = parseTriple(String(stickNode.start ?? "0,0,0"));
         let end = parseTriple(String(stickNode.end ?? "0,0,0"));
 
-        // Detailer Kb stud-end trim (verified 2026-04-30): for Kb cripple/knee
-        // braces, Detailer shortens the stick by 2mm along the diagonal at the
-        // end that attaches to a stud (the end farther from the top/bottom
-        // plates of the frame). Without this trim, the stick's outline corner
-        // pokes ~2mm past the stud's outer face on screen — visible to
-        // operators reviewing the frame layout and a 2mm overcut on the
-        // physical steel.
+        // Detailer Kb stud-end normalisation (verified 2026-04-30):
+        //
+        //   1. Stud-end always becomes "start" of the stick (swap if needed).
+        //      This makes the rules engine's "Chamfer at start" rule fire on
+        //      the correct physical end. Without this, Kb3/Kb4 (whose stud-end
+        //      is input's `<end>`) get no Chamfer where they meet the corner
+        //      stud, producing a square cut that won't seat against the stud.
+        //
+        //   2. After the swap, trim 2mm off the stud-end along the diagonal.
+        //      Detailer shortens Kb sticks by 2mm at the stud-end so the cut
+        //      steel fits between corner stud and plate. Without this trim,
+        //      the outline pokes ~0.55mm past the stud's outer face AND the
+        //      cut steel is 2mm too long for the wall to assemble.
         //
         // Detection: stud-end = whichever endpoint has the LARGER distance
-        // from both frame Z-min and Z-max. Plate-end = whichever is closer.
+        // from both frame Z-min and Z-max (i.e., farther from horizontal
+        // plates).
         //
         // Applied to Kb only (not W) — W truss-web sticks have a different
         // trim profile that hasn't been characterised yet.
@@ -203,18 +210,22 @@ function parsePlans(xmlText: string): ProjectMeta & { plans: RawPlan[] } {
         if (/^Kb\d/.test(stickName) && envZs.length === 4) {
           const startBoundaryDist = Math.min(start.z - frameZmin, frameZmax - start.z);
           const endBoundaryDist = Math.min(end.z - frameZmin, frameZmax - end.z);
-          // direction unit vector (start → end)
+          if (endBoundaryDist > startBoundaryDist) {
+            // Stud-end is END — swap so it becomes start.
+            const tmp = start;
+            start = end;
+            end = tmp;
+          }
+          // Now start IS the stud-end. Trim 2mm along diagonal toward end.
           const dx = end.x - start.x, dy = end.y - start.y, dz = end.z - start.z;
           const len = Math.sqrt(dx*dx + dy*dy + dz*dz);
-          if (len > KB_STUD_END_TRIM_MM * 2) {  // sanity guard
+          if (len > KB_STUD_END_TRIM_MM * 2) {
             const ux = dx / len, uy = dy / len, uz = dz / len;
-            if (startBoundaryDist > endBoundaryDist) {
-              // Stud-end is start — pull start toward end
-              start = { x: start.x + ux * KB_STUD_END_TRIM_MM, y: start.y + uy * KB_STUD_END_TRIM_MM, z: start.z + uz * KB_STUD_END_TRIM_MM };
-            } else {
-              // Stud-end is end — pull end toward start
-              end = { x: end.x - ux * KB_STUD_END_TRIM_MM, y: end.y - uy * KB_STUD_END_TRIM_MM, z: end.z - uz * KB_STUD_END_TRIM_MM };
-            }
+            start = {
+              x: start.x + ux * KB_STUD_END_TRIM_MM,
+              y: start.y + uy * KB_STUD_END_TRIM_MM,
+              z: start.z + uz * KB_STUD_END_TRIM_MM,
+            };
           }
         }
 
@@ -240,8 +251,15 @@ function parsePlans(xmlText: string): ProjectMeta & { plans: RawPlan[] } {
 /** Map a usage attribute to a stick role used by the rules engine. */
 function roleForUsage(usage: string, type: string, name: string): string {
   // Detailer's RFY uses single-letter prefixes (S, T, B, N, Kb, etc.).
-  // For framecad_import.xml, the role is in `usage`. Map known values to the
-  // letter prefix the rules engine expects.
+  // For diagonal-brace sticks, the input XML's `usage` attribute is unreliable:
+  //   Kb cripple/knee braces have usage="Brace" — but Detailer treats as Kb role
+  //   W truss-web sticks have usage="Stud"      — but Detailer treats as W role
+  // Both verified 2026-04-30 against PK5 reference. Without this override, Kb
+  // sticks are routed to Br rules (no Chamfer at stud-end) and W sticks to S
+  // rules (wrong span dimensions).
+  const prefix = (name || "").replace(/[0-9_].*$/, "");
+  if (prefix === "Kb" || prefix === "W") return prefix;
+
   const u = (usage || "").toLowerCase();
   if (u === "topplate") return "T";
   if (u === "bottomplate") return "B";
@@ -250,10 +268,7 @@ function roleForUsage(usage: string, type: string, name: string): string {
   if (u === "endstud" || u === "stud") return "S";
   if (u === "jackstud" || u === "trimstud") return "J";
   if (u === "brace") return "Br";
-  // Fallback: name prefix (often Detailer-style)
-  const prefix = (name || "").replace(/[0-9_].*$/, "");
   if (prefix) return prefix;
-  // Last resort: type
   if (type === "plate") return "T";
   return "S";
 }
