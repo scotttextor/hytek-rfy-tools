@@ -421,6 +421,7 @@ function generateStickTooling(stick: RawStick, plan: RawPlan, frame: RawFrame, b
     planName: plan.name,
     frameName: frame.name,
     usage: stick.usage,
+    stickName: stick.name,
   };
   const ops = generateTooling(ctx);
 
