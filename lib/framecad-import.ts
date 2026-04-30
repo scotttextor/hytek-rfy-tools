@@ -16,7 +16,10 @@ import { XMLParser } from "fast-xml-parser";
 import {
   generateTooling,
   synthesizeRfyFromPlans,
+  getMachineSetupForProfile,
+  getDefaultMachineSetup,
   type StickContext,
+  type MachineSetup,
   type ParsedProject, type ParsedPlan, type ParsedFrame, type ParsedStick,
   type Vec3,
 } from "@hytek/rfy-codec";
@@ -158,6 +161,17 @@ function parsePlans(xmlText: string): ProjectMeta & { plans: RawPlan[] } {
       const frameZmin = envZs.length ? Math.min(...envZs) : 0;
       const frameZmax = envZs.length ? Math.max(...envZs) : 0;
 
+      // Resolve machine setup ONCE per frame based on first stick's profile web.
+      // All sticks in a frame share the same profile size in HYTEK's workflow.
+      let frameSetup: MachineSetup | undefined = undefined;
+      const firstSticks = frameNode.stick ?? [];
+      if (firstSticks.length > 0) {
+        const firstWeb = Number(firstSticks[0].profile?.["@_web"] ?? 0);
+        if (firstWeb > 0) frameSetup = getMachineSetupForProfile(firstWeb);
+      }
+      if (!frameSetup) frameSetup = getDefaultMachineSetup();
+      const endClearance = frameSetup.endClearance;  // mm — plate trim at each end
+
       for (const stickNode of frameNode.stick ?? []) {
         const profileAttrs = (stickNode.profile && (stickNode.profile.$ ?? stickNode.profile)) ?? {};
         const profile = {
@@ -185,6 +199,35 @@ function parsePlans(xmlText: string): ProjectMeta & { plans: RawPlan[] } {
 
         let start = parseTriple(String(stickNode.start ?? "0,0,0"));
         let end = parseTriple(String(stickNode.end ?? "0,0,0"));
+
+        // Detailer's `EndClearance` rule (machine-setup-driven):
+        // for sticks classified as plates (Top/Bottom plate), trim both ends
+        // by EndClearance mm along the stick's diagonal. Verified empirically:
+        // F325iT 70mm setup has EndClearance=4mm and Detailer's reference
+        // RFY shows plate outlines at x=[4..length-4] vs our untrimmed
+        // x=[0..length]. Without this trim, the cut steel is 8mm too long
+        // for the wall to assemble. The trim does NOT apply to nogs (which
+        // are a different `usage` even though they share `type="Plate"` in
+        // the input XML — Detailer doesn't trim nogs).
+        const usageLower = String(stickNode["@_usage"] ?? "").toLowerCase();
+        const isFullWidthPlate = usageLower === "topplate" || usageLower === "bottomplate";
+        if (isFullWidthPlate && endClearance > 0) {
+          const dx = end.x - start.x, dy = end.y - start.y, dz = end.z - start.z;
+          const len = Math.sqrt(dx*dx + dy*dy + dz*dz);
+          if (len > endClearance * 2 + 1) {
+            const ux = dx / len, uy = dy / len, uz = dz / len;
+            start = {
+              x: start.x + ux * endClearance,
+              y: start.y + uy * endClearance,
+              z: start.z + uz * endClearance,
+            };
+            end = {
+              x: end.x - ux * endClearance,
+              y: end.y - uy * endClearance,
+              z: end.z - uz * endClearance,
+            };
+          }
+        }
 
         // Detailer Kb stud-end normalisation (verified 2026-04-30):
         //
