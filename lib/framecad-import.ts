@@ -18,9 +18,12 @@ import {
   synthesizeRfyFromPlans,
   getMachineSetupForProfile,
   getDefaultMachineSetup,
+  deriveFrameBasis,
+  projectToFrameLocal,
   type StickContext,
   type MachineSetup,
   type ParsedProject, type ParsedPlan, type ParsedFrame, type ParsedStick,
+  type FrameBasis,
   type Vec3,
 } from "@hytek/rfy-codec";
 import type { RfyToolingOp } from "@hytek/rfy-codec";
@@ -349,7 +352,7 @@ function roleForUsage(usage: string, type: string, name: string): string {
 }
 
 /** Generate per-stick tooling ops via the rules engine, sorted by position. */
-function generateStickTooling(stick: RawStick, plan: RawPlan, frame: RawFrame): RfyToolingOp[] {
+function generateStickTooling(stick: RawStick, plan: RawPlan, frame: RawFrame, basis: FrameBasis | null = null): RfyToolingOp[] {
   const length = Math.round(distance3D(stick.start, stick.end) * 10) / 10;
   const profile = profileCode(stick.profile.web, stick.profile.l_flange, stick.profile.r_flange, stick.gauge);
   const role = roleForUsage(stick.usage, stick.type, stick.name);
@@ -364,6 +367,26 @@ function generateStickTooling(stick: RawStick, plan: RawPlan, frame: RawFrame): 
     usage: stick.usage,
   };
   const ops = generateTooling(ctx);
+
+  // Web holes — Detailer's selectivity rule isn't yet derived. Sample data
+  // shows Web ops on ~30% of studs (only S3 and S4 in L2, none in L4 and
+  // others). Could be: boxed-stud partners, jamb studs at openings, or
+  // structural-marker driven. Skipping for now — when we find the predicate,
+  // emit (length - 76) / 446.83 + 1 evenly-spaced Web holes.
+
+  // Truss W chamfer: add Chamfer-start and Chamfer-end on diagonal W members
+  // (any non-zero angle from vertical in elevation). Vertical posts get no
+  // chamfer. Verified 2026-04-30 against HG260044 GF-TIN reference: 100%
+  // correlation between non-zero diagonal angle and Chamfer@start+@end.
+  if (/^W\d/.test(stick.name) && basis) {
+    const startL = projectToFrameLocal(stick.start, basis);
+    const endL = projectToFrameLocal(stick.end, basis);
+    const dxL = Math.abs(endL.x - startL.x);
+    if (dxL > 1.0) {  // any non-zero horizontal component → diagonal → chamfer both ends
+      ops.push({ kind: "start", type: "Chamfer" });
+      ops.push({ kind: "end", type: "Chamfer" });
+    }
+  }
 
   // Kb-specific: add an InnerService hole at the midpoint of each Kb brace.
   // Detailer's actual algorithm is height-based (1 hole on top diagonals,
@@ -407,9 +430,16 @@ export function framecadImportToParsedProject(xmlText: string): ParsedProject {
       if (!frame.envelope) {
         throw new Error(`Frame "${plan.name}/${frame.name}": missing <envelope> (4 vertices required for projection)`);
       }
+      // Derive frame basis once per frame so per-stick rules can use it
+      // (e.g. truss W angle-detection for conditional chamfer).
+      let basis: FrameBasis | null = null;
+      try {
+        basis = deriveFrameBasis(frame.envelope, true /* lenient */);
+      } catch { /* leave null — rules that need basis will skip */ }
+
       const outSticks: ParsedStick[] = [];
       for (const stick of frame.sticks) {
-        const tooling = generateStickTooling(stick, plan, frame);
+        const tooling = generateStickTooling(stick, plan, frame, basis);
         outSticks.push({
           name: stick.name,
           start: stick.start,
