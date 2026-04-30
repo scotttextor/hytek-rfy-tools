@@ -163,15 +163,29 @@ function parsePlans(xmlText: string): ProjectMeta & { plans: RawPlan[] } {
           r_lip: Number(stickNode.profile?.["@_r_lip"] ?? profileAttrs["@_r_lip"] ?? 0),
           shape: String(stickNode.profile?.["@_shape"] ?? profileAttrs["@_shape"] ?? "C"),
         };
+        const stickName = String(stickNode["@_name"] ?? "");
+        const inputFlipped = String(stickNode.flipped ?? "").trim().toLowerCase() === "true";
+        // Detailer normalisation rule (verified 2026-04-30 against
+        // HG260001_PK5-GF-LBW-70.075.rfy reference): for diagonal brace sticks
+        // (Kb = cripple/knee brace, W = truss web member), Detailer always
+        // forces flipped=false in its RFY output regardless of what the input
+        // XML says. Match this behaviour so our `flipped` attribute and the
+        // downstream tooling-rule context agree with Detailer's reference for
+        // every stick of these types.
+        //   Kb: 8/8 mismatched cases all forced to false
+        //   W : 26/26 mismatched cases all forced to false
+        //   All other prefixes (B/H/L/N/S/T): 0 mismatches (preserve input)
+        const isDiagonalBrace = /^(Kb|W)\d/.test(stickName);
+        const flipped = isDiagonalBrace ? false : inputFlipped;
         const stick: RawStick = {
-          name: String(stickNode["@_name"] ?? ""),
+          name: stickName,
           type: String(stickNode["@_type"] ?? ""),
           usage: String(stickNode["@_usage"] ?? ""),
           gauge: Number(stickNode["@_gauge"] ?? 0),
           start: parseTriple(String(stickNode.start ?? "0,0,0")),
           end: parseTriple(String(stickNode.end ?? "0,0,0")),
           profile,
-          flipped: String(stickNode.flipped ?? "").trim().toLowerCase() === "true",
+          flipped,
         };
         frame.sticks.push(stick);
       }
