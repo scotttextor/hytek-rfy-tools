@@ -2,9 +2,16 @@
 
 import { useState } from "react";
 
-type Mode = "decode-bundle" | "encode-auto" | "rfy-to-csv" | "csv-to-rfy";
+type Mode = "encode-bundle" | "decode-bundle" | "encode-auto" | "rfy-to-csv" | "csv-to-rfy";
 
 const MODE_LABELS: Record<Mode, { title: string; subtitle: string; from: string; accept: string; endpoint: string }> = {
+  "encode-bundle": {
+    title: "FrameCAD XML → Production Bundle",
+    subtitle: "Upload <framecad_import>.xml → ZIP with the .rfy + per-plan .csv files. The full Detailer-replacement output.",
+    from: ".xml",
+    accept: ".xml",
+    endpoint: "/api/encode-bundle",
+  },
   "decode-bundle": {
     title: "RFY → Plain Text + XML",
     subtitle: "Upload an .rfy → ZIP with both .txt (Notepad-friendly) and .xml. Edit either one.",
@@ -164,7 +171,12 @@ export default function Page() {
         </p>
       </header>
 
-      <h3 className="text-xs uppercase tracking-wider text-yellow-400 mb-3">Standard — both formats at once</h3>
+      <h3 className="text-xs uppercase tracking-wider text-yellow-400 mb-3">Production pipeline — XML in, full bundle out</h3>
+      <div className="grid sm:grid-cols-1 gap-6">
+        <ConverterCard mode="encode-bundle" primary />
+      </div>
+
+      <h3 className="text-xs uppercase tracking-wider text-yellow-400 mt-10 mb-3">Standard — RFY round-trip</h3>
       <div className="grid sm:grid-cols-2 gap-6">
         <ConverterCard mode="decode-bundle" primary />
         <ConverterCard mode="encode-auto" primary />
