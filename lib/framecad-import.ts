@@ -374,15 +374,37 @@ function generateStickTooling(stick: RawStick, plan: RawPlan, frame: RawFrame, b
   // structural-marker driven. Skipping for now — when we find the predicate,
   // emit (length - 76) / 446.83 + 1 evenly-spaced Web holes.
 
-  // Truss W chamfer: add Chamfer-start and Chamfer-end on diagonal W members
-  // (any non-zero angle from vertical in elevation). Vertical posts get no
-  // chamfer. Verified 2026-04-30 against HG260044 GF-TIN reference: 100%
-  // correlation between non-zero diagonal angle and Chamfer@start+@end.
+  // Truss W: angle-dependent tooling pattern (verified 2026-05-01 against
+  // HG260044 GF-TIN reference):
+  //
+  //   VERTICAL W (post, dxL ~= 0): stud-style — Dimple @16.5, Swage 0..39
+  //                                 (= what the W rule already emits)
+  //   DIAGONAL W (any non-zero dxL): Kb-style — Dimple @10, Swage variable
+  //                                 span + Chamfer at BOTH ends
+  //
+  // For diagonal W, swap the Dimple@16.5 ops (from rule) → Dimple@10 ops
+  // and add the Chamfer pair. Swage span correction (variable) is deferred —
+  // the dimple swap alone fixes ~184 missing ops on the LBW corpus.
   if (/^W\d/.test(stick.name) && basis) {
     const startL = projectToFrameLocal(stick.start, basis);
     const endL = projectToFrameLocal(stick.end, basis);
     const dxL = Math.abs(endL.x - startL.x);
-    if (dxL > 1.0) {  // any non-zero horizontal component → diagonal → chamfer both ends
+    if (dxL > 1.0) {  // diagonal — any non-zero horizontal component
+      // Remove the stud-style dimples (offset 16.5) emitted by the W rule
+      const dimpleStart = 16.5;
+      const dimpleEnd = length - 16.5;
+      const tol = 0.5;
+      for (let i = ops.length - 1; i >= 0; i--) {
+        const op = ops[i];
+        if (op.kind === "point" && op.type === "InnerDimple" &&
+            (Math.abs(op.pos - dimpleStart) < tol || Math.abs(op.pos - dimpleEnd) < tol)) {
+          ops.splice(i, 1);
+        }
+      }
+      // Add Kb-style dimples (offset 10)
+      ops.push({ kind: "point", type: "InnerDimple", pos: 10 });
+      ops.push({ kind: "point", type: "InnerDimple", pos: Math.round((length - 10) * 10) / 10 });
+      // Add chamfer at both ends
       ops.push({ kind: "start", type: "Chamfer" });
       ops.push({ kind: "end", type: "Chamfer" });
     }
