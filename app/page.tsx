@@ -153,12 +153,20 @@ export default function Page() {
           <h1 className="text-3xl font-bold">
             <span className="text-yellow-400">HYTEK</span> RFY Tools
           </h1>
-          <a
-            href="/rules"
-            className="text-sm px-3 py-1.5 rounded border border-zinc-700 hover:border-yellow-400 hover:text-yellow-400 text-zinc-300 transition"
-          >
-            Rules Manager →
-          </a>
+          <div className="flex gap-2">
+            <a
+              href="/rules/tooling"
+              className="text-sm px-3 py-1.5 rounded border border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black transition"
+            >
+              Tooling Rules →
+            </a>
+            <a
+              href="/rules"
+              className="text-sm px-3 py-1.5 rounded border border-zinc-700 hover:border-yellow-400 hover:text-yellow-400 text-zinc-300 transition"
+            >
+              Setups & Frames →
+            </a>
+          </div>
         </div>
         <p className="text-zinc-400 mt-1">
           Decode, edit, and re-encode FrameCAD <code className="text-yellow-400">.rfy</code> files.
