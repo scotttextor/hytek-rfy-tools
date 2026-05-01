@@ -254,8 +254,17 @@ function parsePlans(xmlText: string): ProjectMeta & { plans: RawPlan[] } {
         // like studs). Verified 2026-05-01: input H length 3106 → Detailer
         // emits length 3104 (2mm total = 1mm/end), vs studs which trim 4mm
         // total (2mm/end).
+        // 2026-05-02 — H header trim REMOVED. Earlier note claimed Detailer
+        // trimmed H headers by 1mm/end (verified vs HG260044) but the
+        // rollformer test cut showed every header coming out 2mm short.
+        // Re-checking against HG260001 reference confirms Detailer does NOT
+        // trim H headers — input length 2266 → output length 2266. Headers
+        // span between Kb cripple sides; the Kb's own 2mm trim provides the
+        // assembly clearance. Trimming the header itself causes the cut steel
+        // to be too short to seat against the studs.
         const isHeader = /^H\d/.test(String(stickNode["@_name"] ?? ""));
-        const trimAmount = isFullStud ? 2.0 : isHeader ? 1.0 : 0;
+        const trimAmount = isFullStud ? 2.0 : 0;
+        void isHeader; // kept for diagnostic logging clarity
         if (trimAmount > 0) {
           const dx = end.x - start.x, dy = end.y - start.y, dz = end.z - start.z;
           const len = Math.sqrt(dx*dx + dy*dy + dz*dz);
