@@ -456,23 +456,32 @@ function generateStickTooling(stick: RawStick, plan: RawPlan, frame: RawFrame, b
     const endL = projectToFrameLocal(stick.end, basis);
     const dxL = Math.abs(endL.x - startL.x);
     if (dxL > 1.0) {  // diagonal — any non-zero horizontal component
-      // Remove the stud-style dimples (offset 16.5) emitted by the W rule
-      const dimpleStart = 16.5;
-      const dimpleEnd = length - 16.5;
-      const tol = 0.5;
-      for (let i = ops.length - 1; i >= 0; i--) {
-        const op = ops[i];
-        if (op.kind === "point" && op.type === "InnerDimple" &&
-            (Math.abs(op.pos - dimpleStart) < tol || Math.abs(op.pos - dimpleEnd) < tol)) {
-          ops.splice(i, 1);
-        }
-      }
-      // Add Kb-style dimples (offset 10)
-      ops.push({ kind: "point", type: "InnerDimple", pos: 10 });
-      ops.push({ kind: "point", type: "InnerDimple", pos: Math.round((length - 10) * 10) / 10 });
-      // Add chamfer at both ends
+      // Add chamfer at both ends — applies to ALL diagonal Ws (LBW B2B partners
+      // AND TIN truss webs). Verified vs HG260001 LBW W1 + HG260044 TIN W4.
       ops.push({ kind: "start", type: "Chamfer" });
       ops.push({ kind: "end", type: "Chamfer" });
+      // Dimple-position swap: ONLY for actual truss webs (usage="web"). LBW
+      // walls have W-named sticks with usage="Stud" — those are B2B partner
+      // studs and Detailer keeps their stud-style dimples at @16.5.
+      // 2026-05-02 — verified vs HG260001 LBW: 260 ops were drifting 6.5mm
+      // because we were swapping @16.5 → @10 for LBW W sticks too.
+      const isTrussWeb = String(stick.usage ?? "").toLowerCase() === "web";
+      if (isTrussWeb) {
+        // Remove the stud-style dimples (offset 16.5) emitted by the W rule
+        const dimpleStart = 16.5;
+        const dimpleEnd = length - 16.5;
+        const tol = 0.5;
+        for (let i = ops.length - 1; i >= 0; i--) {
+          const op = ops[i];
+          if (op.kind === "point" && op.type === "InnerDimple" &&
+              (Math.abs(op.pos - dimpleStart) < tol || Math.abs(op.pos - dimpleEnd) < tol)) {
+            ops.splice(i, 1);
+          }
+        }
+        // Add Kb-style dimples (offset 10) — TIN truss diagonal Ws only
+        ops.push({ kind: "point", type: "InnerDimple", pos: 10 });
+        ops.push({ kind: "point", type: "InnerDimple", pos: Math.round((length - 10) * 10) / 10 });
+      }
     }
     // Vertical W extension: Detailer extends a vertical truss web's length by
     // its lip depth (~11mm typical for 70mm profile) so the cut steel reaches
