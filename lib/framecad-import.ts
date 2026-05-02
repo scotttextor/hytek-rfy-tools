@@ -263,8 +263,16 @@ function parsePlans(xmlText: string): ProjectMeta & { plans: RawPlan[] } {
         // assembly clearance. Trimming the header itself causes the cut steel
         // to be too short to seat against the studs.
         const isHeader = /^H\d/.test(String(stickNode["@_name"] ?? ""));
-        const trimAmount = isFullStud ? 2.0 : 0;
-        void isHeader; // kept for diagnostic logging clarity
+        // Iter 2 — Nog 1mm/end (2mm total), Stud 2mm/end (4mm total).
+        // Iter 3 — FJ joist V-prefix webs get 2mm/end trim (NOT W-prefix
+        //   truss webs — those have their own extension/trim logic).
+        //   Verified vs HG260012 TH02-2F-FJ J2201-1/V5: input 356 → ref 352.
+        const isNog = usageLower === "nog" || usageLower === "noggin";
+        const isJoistWeb = /^V\d/.test(stickName) && usageLower === "web";
+        const studTrim = (isFullStud || isJoistWeb) ? 2.0 : 0;
+        const nogTrim = isNog ? 1.0 : 0;
+        const trimAmount = studTrim || nogTrim;
+        void isHeader;
         if (trimAmount > 0) {
           const dx = end.x - start.x, dy = end.y - start.y, dz = end.z - start.z;
           const len = Math.sqrt(dx*dx + dy*dy + dz*dz);
