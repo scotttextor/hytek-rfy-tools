@@ -19,6 +19,7 @@ import {
   getMachineSetupForProfile,
   getDefaultMachineSetup,
   deriveFrameBasis,
+  coerceEnvelopeToRect,
   projectToFrameLocal,
   type StickContext,
   type MachineSetup,
@@ -148,10 +149,25 @@ function parsePlans(xmlText: string): ProjectMeta & { plans: RawPlan[] } {
           envelopeRaw.push(parseTriple(text));
         }
       }
-      const envelope: [Vec3, Vec3, Vec3, Vec3] | null =
-        envelopeRaw.length === 4
-          ? [envelopeRaw[0]!, envelopeRaw[1]!, envelopeRaw[2]!, envelopeRaw[3]!]
-          : null;
+      // Preferred path: 4-vertex envelope from Detailer (rectangle in 3D).
+      // Fallback: N-vertex polygon (e.g. 5/6-vertex roof panels with hips
+      // or gables) → coerce to a 4-vertex bounding rectangle in the polygon's
+      // best-fit (right, up) plane. The rectangle encloses every original
+      // vertex, so stick projection still produces correct 2D positions up
+      // to a constant offset. This is required for RoofPanel frames.
+      let envelope: [Vec3, Vec3, Vec3, Vec3] | null = null;
+      if (envelopeRaw.length === 4) {
+        envelope = [envelopeRaw[0]!, envelopeRaw[1]!, envelopeRaw[2]!, envelopeRaw[3]!];
+      } else if (envelopeRaw.length >= 3) {
+        const coerced = coerceEnvelopeToRect(envelopeRaw);
+        if (coerced) {
+          envelope = coerced;
+          console.warn(
+            `Frame "${frameNode["@_name"] ?? "?"}": ${envelopeRaw.length}-vertex envelope ` +
+            `coerced to 4-vertex bounding rectangle (RoofPanel / non-rectangular polygon)`
+          );
+        }
+      }
 
       const frame: RawFrame = {
         name: String(frameNode["@_name"] ?? "F1"),
@@ -644,7 +660,12 @@ export function framecadImportToRfy(xmlText: string, options: { lenient?: boolea
   date: string;
 } {
   const project = framecadImportToParsedProject(xmlText);
-  const result = synthesizeRfyFromPlans(project, { lenient: options.lenient });
+  // Default to lenient=true: roof panels (RP) and other non-rectangular envelopes
+  // produce trapezoidal 4-vertex shapes that fail the strict parallelogram check.
+  // The Gram-Schmidt path in deriveFrameBasis still produces a usable basis;
+  // we just want a warning, not a hard throw.
+  const lenient = options.lenient ?? true;
+  const result = synthesizeRfyFromPlans(project, { lenient });
   return {
     rfy: result.rfy,
     xml: result.xml,
