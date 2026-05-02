@@ -163,6 +163,12 @@ function parsePlans(xmlText: string): ProjectMeta & { plans: RawPlan[] } {
       const envZs = envelopeRaw.map(v => v.z);
       const frameZmin = envZs.length ? Math.min(...envZs) : 0;
       const frameZmax = envZs.length ? Math.max(...envZs) : 0;
+      // Frame elevation (Z floor) for raised B-plate detection. The
+      // <elevation> child element holds the floor's Z position. Slab B-plates
+      // sit at z = elevation + 20.5 (half-flange above floor); raised B-plates
+      // (above-door rough opening sills) sit at z = elevation + 61.5.
+      const elevText = (frameNode.elevation && typeof frameNode.elevation === "object" ? (frameNode.elevation as { "#text"?: string })["#text"] : frameNode.elevation) ?? "";
+      const frameElevation = Number(String(elevText).trim()) || 0;
 
       // Resolve machine setup ONCE per frame based on first stick's profile web.
       // All sticks in a frame share the same profile size in HYTEK's workflow.
@@ -219,7 +225,25 @@ function parsePlans(xmlText: string): ProjectMeta & { plans: RawPlan[] } {
         // 4mm/end, matching the F325iT 70mm setup's EndClearance=4).
         const isFullWidthPlate = usageLower === "topplate" || usageLower === "bottomplate"
                               || usageLower === "topchord" || usageLower === "bottomchord";
-        if (isFullWidthPlate && endClearance > 0) {
+        // Detect raised 89mm B-plate: z ≈ elevation + 61.5 (above-door sill).
+        // These get 1mm/end trim (not 4mm) and header-style ops (no slab anchors).
+        // Verified vs HG260012 L1001/B2 (z=51861.5, elevation=51800, 61.5 above floor).
+        // 70mm raised B2 plates (HG260001) DON'T use this pattern — only 89mm.
+        const isBottomPlate = usageLower === "bottomplate";
+        const stickZ = (start.z + end.z) / 2;  // average z (sticks are horizontal so start.z ≈ end.z)
+        const isRaised89B = isBottomPlate && profile.web === 89
+                          && Math.abs(stickZ - frameElevation - 61.5) < 1;
+        // Apply 1mm/end trim to raised 89mm B plates (not 4mm)
+        if (isRaised89B) {
+          const dx = end.x - start.x, dy = end.y - start.y, dz = end.z - start.z;
+          const len = Math.sqrt(dx*dx + dy*dy + dz*dz);
+          if (len > 3) {
+            const ux = dx / len, uy = dy / len, uz = dz / len;
+            start = { x: start.x + ux, y: start.y + uy, z: start.z + uz };
+            end = { x: end.x - ux, y: end.y - uy, z: end.z - uz };
+          }
+        }
+        if (isFullWidthPlate && endClearance > 0 && !isRaised89B) {
           const dx = end.x - start.x, dy = end.y - start.y, dz = end.z - start.z;
           const len = Math.sqrt(dx*dx + dy*dy + dz*dz);
           if (len > endClearance * 2 + 1) {
@@ -380,10 +404,15 @@ function parsePlans(xmlText: string): ProjectMeta & { plans: RawPlan[] } {
           }
         }
 
+        // Override usage for raised 89mm B plates to "raisedbottomplate"
+        // so the rules engine emits header-style ops (no Web/Bolts, +InnerNotch).
+        const finalUsage = isRaised89B
+          ? "RaisedBottomPlate"
+          : String(stickNode["@_usage"] ?? "");
         const stick: RawStick = {
           name: stickName,
           type: String(stickNode["@_type"] ?? ""),
-          usage: String(stickNode["@_usage"] ?? ""),
+          usage: finalUsage,
           gauge: Number(stickNode["@_gauge"] ?? 0),
           start,
           end,
@@ -418,6 +447,7 @@ function roleForUsage(usage: string, type: string, name: string): string {
   if (u === "web") return "W";
   if (u === "topplate") return "T";
   if (u === "bottomplate") return "B";
+  if (u === "raisedbottomplate") return "Bh";  // 89mm raised B-plate (header-style ops)
   // FJ joist top/bottom chords use usage="topchord"/"bottomchord" — same
   // role mapping as truss chords (T/B with chord-specific rules).
   if (u === "topchord") return "T";
