@@ -404,8 +404,16 @@ function roleForUsage(usage: string, type: string, name: string): string {
   if (prefix === "Kb" || prefix === "W") return prefix;
 
   const u = (usage || "").toLowerCase();
+  // 2026-05-02: FJ joist V-prefix sticks have usage="Web" — same as truss
+  // webs. Detailer treats them as W role and emits the stud-style end
+  // clearance pattern (Swage 0..39 + Dimple @16.5 + mirror).
+  if (u === "web") return "W";
   if (u === "topplate") return "T";
   if (u === "bottomplate") return "B";
+  // FJ joist top/bottom chords use usage="topchord"/"bottomchord" — same
+  // role mapping as truss chords (T/B with chord-specific rules).
+  if (u === "topchord") return "T";
+  if (u === "bottomchord") return "B";
   if (u === "headplate" || u === "head") return "H";
   if (u === "nog" || u === "noggin") return "N";
   if (u === "endstud" || u === "stud") return "S";
