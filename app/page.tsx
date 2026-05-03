@@ -155,6 +155,12 @@ export default function Page() {
           </h1>
           <div className="flex gap-2">
             <a
+              href="/regression"
+              className="text-sm px-3 py-1.5 rounded border border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black transition"
+            >
+              Regression →
+            </a>
+            <a
               href="/rules/tooling"
               className="text-sm px-3 py-1.5 rounded border border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black transition"
             >
