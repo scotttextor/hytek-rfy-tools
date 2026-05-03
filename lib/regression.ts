@@ -49,11 +49,26 @@ export interface JobDiffFrame {
   extras: number;
 }
 
+/**
+ * CSV-level diff stats. Optional: only present when a paired .csv reference
+ * was found alongside the .xml/.rfy. csv-diff-vs-detailer.mjs reports
+ * three metrics — see scripts/csv-diff-vs-detailer.mjs for definitions.
+ */
+export interface JobCsvStats {
+  /** ours-csv vs Detailer-emitted-csv (what we ship) */
+  fullPipeline: { exact: number; total: number; pct: number; missing: number; extra: number };
+  /** ref-from-rfy-csv vs Detailer-emitted-csv (CSV emission accuracy) */
+  emission:    { exact: number; total: number; pct: number };
+  /** ours-csv vs ref-from-rfy-csv (rule generation accuracy) */
+  ruleGen:     { exact: number; total: number; pct: number };
+}
+
 export interface JobResult {
   project: string;
   plan: string;
   xmlPath: string;
   rfyPath: string;
+  csvPath?: string;
   // From totals (matched is matched, ref is ours+missing, etc.)
   matched: number;
   refOps: number;
@@ -64,6 +79,7 @@ export interface JobResult {
   byOpType: JobDiffByOpType;
   frames: JobDiffFrame[];
   setup: { id: string; name: string } | null;
+  csv?: JobCsvStats;
   error?: string;
 }
 
@@ -73,6 +89,11 @@ export interface CategoryStat {
   matched: number;
   ref: number;
   matchPercent: number;
+  // Optional aggregated CSV stats (across jobs in this category that had
+  // a paired .csv reference). Undefined if no jobs in this category had CSV.
+  csvFullExact?: number;
+  csvFullTotal?: number;
+  csvFullPct?: number;
 }
 
 export interface RegressionSummary {
@@ -86,6 +107,13 @@ export interface RegressionSummary {
   overallMatchPercent: number;
   byCategory: CategoryStat[];
   errors: { project: string; plan: string; error: string }[];
+  // Aggregated CSV stats across all jobs that had a paired .csv reference.
+  csvJobs?: number;
+  csvFullExact?: number;
+  csvFullTotal?: number;
+  csvFullPct?: number;
+  csvEmissionPct?: number;
+  csvRuleGenPct?: number;
 }
 
 export interface RegressionReport {
@@ -108,6 +136,9 @@ export interface CorpusPair {
   plan: string;
   xmlPath: string;
   rfyPath: string;
+  /** Optional paired Detailer-emitted CSV. Absent for older corpus jobs.
+   *  When present, the regression runner also produces CSV-level diff stats. */
+  csvPath?: string;
 }
 
 export function discoverPairs(corpusDir: string): CorpusPair[] {
@@ -139,11 +170,29 @@ export function discoverPairs(corpusDir: string): CorpusPair[] {
       const base = xml.replace(/\.xml$/i, "");
       const rfy = files.find((f) => f === `${base}.rfy`);
       if (!rfy) continue;
+      // Pair detection for the Detailer-emitted CSV. Two layouts seen in
+      // the corpus:
+      //   1) Same base name as the rfy: `<base>.csv`
+      //   2) HG-style: `<job>#1-1_<plan-suffix>.csv` next to a longer
+      //      `<job> <addr>-<plan-suffix>.xml`. Match by suffix
+      //      `GF-...-<gauge>` which is what diff-sweep uses.
+      let csvFile: string | undefined = files.find((f) => f === `${base}.csv`);
+      if (!csvFile) {
+        const m = base.match(/(GF-[A-Z0-9]+(?:-[A-Z0-9]+)?-\d+\.\d+)$/i);
+        if (m) {
+          const sufLower = m[1].toLowerCase();
+          csvFile = files.find((f) =>
+            f.toLowerCase().endsWith(`_${sufLower}.csv`) ||
+            f.toLowerCase().endsWith(`-${sufLower}.csv`),
+          );
+        }
+      }
       pairs.push({
         project,
         plan: base,
         xmlPath: join(dir, xml),
         rfyPath: join(dir, rfy),
+        ...(csvFile ? { csvPath: join(dir, csvFile) } : {}),
       });
     }
   }
@@ -277,6 +326,12 @@ function parseByOpTypeFromTxt(txt: string): JobDiffByOpType {
   return result;
 }
 
+interface CsvDiffJsonReport {
+  fullPipeline: { exact: number; differ: number; missing: number; extra: number; totalTarget: number; totalSource: number };
+  csvEmission:  { exact: number; differ: number; missing: number; extra: number; totalTarget: number; totalSource: number };
+  ruleGeneration: { exact: number; differ: number; missing: number; extra: number; totalTarget: number; totalSource: number };
+}
+
 function runDiffForPair(pair: CorpusPair, codecDir: string): JobResult {
   // Each job gets its own tempdir so the JSON/txt files don't collide.
   const tmp = mkdtempSync(join(tmpdir(), "rfy-diff-"));
@@ -307,6 +362,55 @@ function runDiffForPair(pair: CorpusPair, codecDir: string): JobResult {
     const matched = report.totals.matched;
     const matchPercent = refOps > 0 ? (matched / refOps) * 100 : 0;
 
+    // Optionally run the CSV diff. diff-vs-detailer.mjs writes the
+    // synthesized RFY at `${outPrefix}.ours.rfy` (added 2026-05-03), so we
+    // can hand it to csv-diff-vs-detailer.mjs without re-synthesizing.
+    let csv: JobCsvStats | undefined;
+    if (pair.csvPath && existsSync(`${outPrefix}.ours.rfy`)) {
+      try {
+        execFileSync(
+          process.execPath,
+          [
+            join("scripts", "csv-diff-vs-detailer.mjs"),
+            `${outPrefix}.ours.rfy`,
+            pair.rfyPath,
+            pair.csvPath,
+            `${outPrefix}.csvdiff`,
+          ],
+          {
+            cwd: codecDir,
+            encoding: "utf-8",
+            maxBuffer: 50 * 1024 * 1024,
+            stdio: ["ignore", "pipe", "pipe"],
+          },
+        );
+        const csvJsonPath = `${outPrefix}.csvdiff.json`;
+        if (existsSync(csvJsonPath)) {
+          const cj: CsvDiffJsonReport = JSON.parse(readFileSync(csvJsonPath, "utf-8"));
+          const fp = cj.fullPipeline, ce = cj.csvEmission, rg = cj.ruleGeneration;
+          csv = {
+            fullPipeline: {
+              exact: fp.exact, total: fp.totalTarget,
+              pct: fp.totalTarget > 0 ? (fp.exact / fp.totalTarget) * 100 : 0,
+              missing: fp.missing, extra: fp.extra,
+            },
+            emission: {
+              exact: ce.exact, total: ce.totalTarget,
+              pct: ce.totalTarget > 0 ? (ce.exact / ce.totalTarget) * 100 : 0,
+            },
+            ruleGen: {
+              exact: rg.exact, total: rg.totalTarget,
+              pct: rg.totalTarget > 0 ? (rg.exact / rg.totalTarget) * 100 : 0,
+            },
+          };
+        }
+      } catch {
+        // CSV diff is best-effort — never fail the whole job because
+        // CSV diff broke. The .csv reference may be malformed, missing,
+        // or have a structure the diff doesn't handle.
+      }
+    }
+
     // Frames in `report.byFrame` only include frames that have *gaps*. For
     // the dashboard we surface those. Compute per-frame agg counts.
     const frames: JobDiffFrame[] = report.byFrame.map((fr) => {
@@ -332,6 +436,7 @@ function runDiffForPair(pair: CorpusPair, codecDir: string): JobResult {
       plan: pair.plan,
       xmlPath: pair.xmlPath,
       rfyPath: pair.rfyPath,
+      ...(pair.csvPath ? { csvPath: pair.csvPath } : {}),
       matched,
       refOps,
       oursOps: report.totals.ours,
@@ -341,6 +446,7 @@ function runDiffForPair(pair: CorpusPair, codecDir: string): JobResult {
       byOpType,
       frames,
       setup: report.setup,
+      ...(csv ? { csv } : {}),
     };
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
@@ -349,6 +455,7 @@ function runDiffForPair(pair: CorpusPair, codecDir: string): JobResult {
       plan: pair.plan,
       xmlPath: pair.xmlPath,
       rfyPath: pair.rfyPath,
+      ...(pair.csvPath ? { csvPath: pair.csvPath } : {}),
       matched: 0,
       refOps: 0,
       oursOps: 0,
@@ -377,6 +484,15 @@ function categoriseFromPlan(plan: string): string {
   return m ? `${m[1]}-${m[2]}` : "OTHER";
 }
 
+interface CatAccum {
+  count: number;
+  matched: number;
+  ref: number;
+  csvFullExact: number;
+  csvFullTotal: number;
+  csvJobs: number;
+}
+
 function buildSummary(
   jobs: JobResult[],
   corpusDir: string,
@@ -385,8 +501,17 @@ function buildSummary(
   let totalMatched = 0;
   let totalRef = 0;
   let jobsAt100 = 0;
-  const byCat = new Map<string, { count: number; matched: number; ref: number }>();
+  const byCat = new Map<string, CatAccum>();
   const errors: RegressionSummary["errors"] = [];
+
+  // CSV totals (jobs that had a paired .csv reference).
+  let csvJobs = 0;
+  let csvFullExact = 0;
+  let csvFullTotal = 0;
+  let csvEmissionExact = 0;
+  let csvEmissionTotal = 0;
+  let csvRuleGenExact = 0;
+  let csvRuleGenTotal = 0;
 
   for (const j of jobs) {
     if (j.error) {
@@ -397,10 +522,22 @@ function buildSummary(
     totalRef += j.refOps;
     if (j.matchPercent >= 99.999) jobsAt100++;
     const cat = categoriseFromPlan(j.plan);
-    const s = byCat.get(cat) ?? { count: 0, matched: 0, ref: 0 };
+    const s = byCat.get(cat) ?? { count: 0, matched: 0, ref: 0, csvFullExact: 0, csvFullTotal: 0, csvJobs: 0 };
     s.count++;
     s.matched += j.matched;
     s.ref += j.refOps;
+    if (j.csv) {
+      csvJobs++;
+      csvFullExact += j.csv.fullPipeline.exact;
+      csvFullTotal += j.csv.fullPipeline.total;
+      csvEmissionExact += j.csv.emission.exact;
+      csvEmissionTotal += j.csv.emission.total;
+      csvRuleGenExact += j.csv.ruleGen.exact;
+      csvRuleGenTotal += j.csv.ruleGen.total;
+      s.csvFullExact += j.csv.fullPipeline.exact;
+      s.csvFullTotal += j.csv.fullPipeline.total;
+      s.csvJobs++;
+    }
     byCat.set(cat, s);
   }
 
@@ -411,6 +548,11 @@ function buildSummary(
       matched: s.matched,
       ref: s.ref,
       matchPercent: s.ref > 0 ? (s.matched / s.ref) * 100 : 0,
+      ...(s.csvJobs > 0 ? {
+        csvFullExact: s.csvFullExact,
+        csvFullTotal: s.csvFullTotal,
+        csvFullPct: s.csvFullTotal > 0 ? (s.csvFullExact / s.csvFullTotal) * 100 : 0,
+      } : {}),
     }))
     .sort((a, b) => b.ref - a.ref);
 
@@ -425,6 +567,14 @@ function buildSummary(
     overallMatchPercent: totalRef > 0 ? (totalMatched / totalRef) * 100 : 0,
     byCategory,
     errors,
+    ...(csvJobs > 0 ? {
+      csvJobs,
+      csvFullExact,
+      csvFullTotal,
+      csvFullPct: csvFullTotal > 0 ? (csvFullExact / csvFullTotal) * 100 : 0,
+      csvEmissionPct: csvEmissionTotal > 0 ? (csvEmissionExact / csvEmissionTotal) * 100 : 0,
+      csvRuleGenPct: csvRuleGenTotal > 0 ? (csvRuleGenExact / csvRuleGenTotal) * 100 : 0,
+    } : {}),
   };
 }
 

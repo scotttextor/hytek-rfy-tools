@@ -28,11 +28,18 @@ interface JobDiffFrame {
   extras: number;
 }
 
+interface JobCsvStats {
+  fullPipeline: { exact: number; total: number; pct: number; missing: number; extra: number };
+  emission:    { exact: number; total: number; pct: number };
+  ruleGen:     { exact: number; total: number; pct: number };
+}
+
 interface JobResult {
   project: string;
   plan: string;
   xmlPath: string;
   rfyPath: string;
+  csvPath?: string;
   matched: number;
   refOps: number;
   oursOps: number;
@@ -42,6 +49,7 @@ interface JobResult {
   byOpType: Record<string, { matched: number; missing: number; extras: number }>;
   frames: JobDiffFrame[];
   setup: { id: string; name: string } | null;
+  csv?: JobCsvStats;
   error?: string;
 }
 
@@ -51,6 +59,9 @@ interface CategoryStat {
   matched: number;
   ref: number;
   matchPercent: number;
+  csvFullExact?: number;
+  csvFullTotal?: number;
+  csvFullPct?: number;
 }
 
 interface RegressionSummary {
@@ -64,6 +75,12 @@ interface RegressionSummary {
   overallMatchPercent: number;
   byCategory: CategoryStat[];
   errors: { project: string; plan: string; error: string }[];
+  csvJobs?: number;
+  csvFullExact?: number;
+  csvFullTotal?: number;
+  csvFullPct?: number;
+  csvEmissionPct?: number;
+  csvRuleGenPct?: number;
 }
 
 interface RegressionReport {
@@ -351,6 +368,36 @@ function SummaryPanel({ summary }: { summary: RegressionSummary }) {
           bigColor={summary.errors.length > 0 ? "text-red-400" : "text-zinc-200"}
         />
       </div>
+      {/* CSV-level diff stats. Only shown if at least one job had a paired
+          .csv reference (most older corpus jobs don't, only HG260044+ have
+          Detailer-emitted CSVs). The three percentages decompose the gap:
+          full = ours-csv vs Detailer-csv; emit = decoder→csv accuracy;
+          rule = synthesize→csv accuracy. */}
+      {summary.csvJobs && summary.csvJobs > 0 && (
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4 pt-3 border-t border-zinc-800">
+          <Stat
+            label="CSV full pipeline"
+            value={fmtPct(summary.csvFullPct ?? 0)}
+            hint={`${(summary.csvFullExact ?? 0).toLocaleString()} / ${(summary.csvFullTotal ?? 0).toLocaleString()} rows · ${summary.csvJobs} job${summary.csvJobs === 1 ? "" : "s"}`}
+            bigColor="text-sky-400"
+          />
+          <Stat
+            label="CSV emission"
+            value={fmtPct(summary.csvEmissionPct ?? 0)}
+            hint="decoder → CSV accuracy"
+          />
+          <Stat
+            label="CSV rule-gen"
+            value={fmtPct(summary.csvRuleGenPct ?? 0)}
+            hint="synthesize → CSV accuracy"
+          />
+          <Stat
+            label="CSV vs RFY"
+            value={fmtPct(summary.overallMatchPercent - (summary.csvFullPct ?? 0))}
+            hint="op-level lead over row-level"
+          />
+        </div>
+      )}
       <div>
         <h3 className="text-xs uppercase tracking-wider text-zinc-400 mb-2">By category</h3>
         <div className="space-y-1 font-mono text-xs">
@@ -364,6 +411,11 @@ function SummaryPanel({ summary }: { summary: RegressionSummary }) {
               <span className="text-zinc-500">
                 {c.count} jobs · {c.matched.toLocaleString()}/{c.ref.toLocaleString()}
               </span>
+              {c.csvFullPct !== undefined && (
+                <span className="text-sky-400">
+                  csv {fmtPct(c.csvFullPct)}
+                </span>
+              )}
             </div>
           ))}
         </div>
