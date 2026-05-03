@@ -113,10 +113,18 @@ function categoryBar(pct: number): string {
 
 // ---------- component ----------
 
+interface CorpusUnavailable {
+  corpusUnavailable: true;
+  corpusDir: string;
+  message: string;
+  hint: string;
+}
+
 export default function RegressionPage() {
   const [report, setReport] = useState<RegressionReport | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [unavailable, setUnavailable] = useState<CorpusUnavailable | null>(null);
   const [filterText, setFilterText] = useState<string>("");
   const [sortKey, setSortKey] = useState<SortKey>("match");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
@@ -132,6 +140,7 @@ export default function RegressionPage() {
   async function load(force: boolean) {
     setLoading(true);
     setError(null);
+    setUnavailable(null);
     try {
       const res = force
         ? await fetch("/api/regression", { method: "POST" })
@@ -140,8 +149,16 @@ export default function RegressionPage() {
         const j = await res.json().catch(() => ({}));
         throw new Error(j.error || `HTTP ${res.status}`);
       }
-      const data: RegressionReport = await res.json();
-      setReport(data);
+      const data = await res.json();
+      // Corpus-not-found returns 200 with a structured indicator (not an
+      // error) so the dashboard can render a friendly explanation when
+      // running on Vercel without the local corpus folder.
+      if (data && data.corpusUnavailable) {
+        setUnavailable(data as CorpusUnavailable);
+        setReport(null);
+      } else {
+        setReport(data as RegressionReport);
+      }
     } catch (e) {
       setError(String(e instanceof Error ? e.message : e));
     } finally {
@@ -242,13 +259,41 @@ export default function RegressionPage() {
         </div>
       )}
 
-      {!report && loading && (
+      {/* Corpus-unavailable: shown on Vercel and other hosts where the
+          local Windows corpus path doesn't exist. Not an error — just
+          information about how to enable the dashboard. */}
+      {unavailable && (
+        <div className="rounded-lg border border-amber-800 bg-amber-950/40 text-amber-200 p-5 mb-6 text-sm">
+          <div className="font-semibold text-amber-300 mb-2">
+            Regression dashboard needs a local corpus folder
+          </div>
+          <div className="mb-3">
+            The diff harness reads paired{" "}
+            <code className="bg-zinc-900 px-1 rounded">.xml</code>/
+            <code className="bg-zinc-900 px-1 rounded">.rfy</code>/
+            <code className="bg-zinc-900 px-1 rounded">.csv</code>{" "}
+            files from disk. This deployment does not have the corpus
+            mounted.
+          </div>
+          <div className="mb-1">
+            <strong>Configured path:</strong>{" "}
+            <code className="bg-zinc-900 px-1 rounded text-xs">
+              {unavailable.corpusDir}
+            </code>
+          </div>
+          <div className="mt-3 text-zinc-400 text-xs">
+            {unavailable.hint}
+          </div>
+        </div>
+      )}
+
+      {!report && !unavailable && loading && (
         <div className="rounded-lg border border-zinc-800 bg-zinc-900/40 p-8 text-center text-zinc-400">
           Running corpus diff... This typically takes 1-2 minutes (~1-3s per job × ~40 jobs).
         </div>
       )}
 
-      {!report && !loading && !error && (
+      {!report && !unavailable && !loading && !error && (
         <div className="rounded-lg border border-zinc-800 bg-zinc-900/40 p-8 text-center text-zinc-400">
           No data yet. Click <strong>Refresh</strong> to run the corpus diff.
         </div>

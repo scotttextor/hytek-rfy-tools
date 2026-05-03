@@ -15,6 +15,18 @@ import path from "node:path";
 const RULESETS_DIR = path.join(process.cwd(), "data", "rulesets");
 const ACTIVE_FILE = path.join(RULESETS_DIR, "active.json");
 
+/**
+ * Read a JSON file, stripping a UTF-8 BOM if present.
+ * The HYTEK source machine-types/frame-types files were exported by tools
+ * that prepend a BOM (`0xEF 0xBB 0xBF`); JSON.parse rejects that with
+ * `Unexpected token '﻿'`. Strip it before parsing.
+ */
+async function readJsonStripBom(file: string): Promise<unknown> {
+  let raw = await fs.readFile(file, "utf8");
+  if (raw.charCodeAt(0) === 0xFEFF) raw = raw.slice(1);
+  return JSON.parse(raw);
+}
+
 export interface RulesetMeta {
   name: string;
   description: string;
@@ -40,8 +52,7 @@ export function isValidRulesetName(name: string): boolean {
 /** Get the currently active ruleset name. Returns "default" if none set. */
 export async function getActive(): Promise<string> {
   try {
-    const raw = await fs.readFile(ACTIVE_FILE, "utf8");
-    const parsed = JSON.parse(raw);
+    const parsed = (await readJsonStripBom(ACTIVE_FILE)) as { active?: string };
     return parsed.active || "default";
   } catch {
     return "default";
@@ -73,8 +84,7 @@ export async function listRulesets(): Promise<RulesetListEntry[]> {
     const stat = await fs.stat(dir).catch(() => null);
     if (!stat?.isDirectory()) continue;
     try {
-      const metaRaw = await fs.readFile(path.join(dir, "meta.json"), "utf8");
-      const meta = JSON.parse(metaRaw) as RulesetMeta;
+      const meta = (await readJsonStripBom(path.join(dir, "meta.json"))) as RulesetMeta;
       out.push({ ...meta, active: entry === active });
     } catch {
       // Skip rulesets with broken meta
@@ -99,13 +109,10 @@ export async function getRuleset(name: string): Promise<{
     throw new Error(`Invalid ruleset name: ${name}`);
   }
   const dir = path.join(RULESETS_DIR, name);
-  const metaRaw = await fs.readFile(path.join(dir, "meta.json"), "utf8");
-  const machineRaw = await fs.readFile(path.join(dir, "machine-types.json"), "utf8");
-  const frameRaw = await fs.readFile(path.join(dir, "frame-types.json"), "utf8");
   return {
-    meta: JSON.parse(metaRaw),
-    machineTypes: JSON.parse(machineRaw),
-    frameTypes: JSON.parse(frameRaw),
+    meta: (await readJsonStripBom(path.join(dir, "meta.json"))) as RulesetMeta,
+    machineTypes: await readJsonStripBom(path.join(dir, "machine-types.json")),
+    frameTypes: await readJsonStripBom(path.join(dir, "frame-types.json")),
   };
 }
 
@@ -114,9 +121,7 @@ export async function getRulesetMachineTypes(name: string): Promise<unknown> {
   if (!isValidRulesetName(name)) {
     throw new Error(`Invalid ruleset name: ${name}`);
   }
-  const file = path.join(RULESETS_DIR, name, "machine-types.json");
-  const raw = await fs.readFile(file, "utf8");
-  return JSON.parse(raw);
+  return readJsonStripBom(path.join(RULESETS_DIR, name, "machine-types.json"));
 }
 
 /** Get only the frame-types data for a ruleset. */
@@ -124,9 +129,7 @@ export async function getRulesetFrameTypes(name: string): Promise<unknown> {
   if (!isValidRulesetName(name)) {
     throw new Error(`Invalid ruleset name: ${name}`);
   }
-  const file = path.join(RULESETS_DIR, name, "frame-types.json");
-  const raw = await fs.readFile(file, "utf8");
-  return JSON.parse(raw);
+  return readJsonStripBom(path.join(RULESETS_DIR, name, "frame-types.json"));
 }
 
 /** Create a new named ruleset by cloning from a parent (or "default"). */
@@ -194,7 +197,7 @@ export async function saveRuleset(args: {
   const metaPath = path.join(dir, "meta.json");
   let meta: RulesetMeta;
   try {
-    meta = JSON.parse(await fs.readFile(metaPath, "utf8"));
+    meta = (await readJsonStripBom(metaPath)) as RulesetMeta;
   } catch {
     throw new Error(`Ruleset does not exist: ${name}`);
   }
