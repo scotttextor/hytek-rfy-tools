@@ -226,6 +226,10 @@ export default function RegressionPage() {
 
   return (
     <main className="min-h-screen p-6 max-w-7xl mx-auto bg-zinc-950 text-zinc-200">
+      {/* HYTEK Group official logo — yellow on black, per brand manual. */}
+      <div className="flex items-center gap-3 mb-4">
+        <img src="/hytek-group-logo.png" alt="HYTEK GROUP" className="h-10" />
+      </div>
       <header className="mb-6 flex items-baseline justify-between gap-4 flex-wrap">
         <div>
           <h1 className="text-3xl font-bold">

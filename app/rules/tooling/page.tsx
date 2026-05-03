@@ -121,6 +121,10 @@ export default function ToolingRulesPage() {
 
   return (
     <main className="min-h-screen p-8 max-w-6xl mx-auto">
+      {/* HYTEK Group official logo — yellow on black, per brand manual. */}
+      <div className="flex items-center gap-3 mb-4">
+        <img src="/hytek-group-logo.png" alt="HYTEK GROUP" className="h-10" />
+      </div>
       <header className="mb-6">
         <div className="flex items-baseline justify-between gap-4 mb-2">
           <h1 className="text-3xl font-bold">

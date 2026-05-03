@@ -248,9 +248,15 @@ export default function RulesPage() {
 
   return (
     <main className="min-h-screen bg-zinc-950 text-zinc-100 p-6">
+      {/* HYTEK Group official logo — yellow on black, per brand manual. */}
+      <div className="flex items-center gap-3 mb-4">
+        <img src="/hytek-group-logo.png" alt="HYTEK GROUP" className="h-10" />
+      </div>
       <header className="mb-4">
         <div className="flex items-baseline gap-4 mb-2">
-          <h1 className="text-2xl font-bold">HYTEK Rules Manager</h1>
+          <h1 className="text-2xl font-bold">
+            <span className="text-yellow-400">HYTEK</span> Rules Manager
+          </h1>
           <a href="/" className="text-sm text-zinc-400 hover:text-zinc-200">← Back to RFY tools</a>
         </div>
         <p className="text-sm text-zinc-400">
