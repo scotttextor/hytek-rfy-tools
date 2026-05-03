@@ -160,6 +160,12 @@ export default function Page() {
           </h1>
           <div className="flex gap-2">
             <a
+              href="/viewer"
+              className="text-sm px-3 py-1.5 rounded bg-yellow-400 text-black font-medium hover:bg-yellow-300 transition"
+            >
+              ✏ Wall Viewer →
+            </a>
+            <a
               href="/regression"
               className="text-sm px-3 py-1.5 rounded border border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black transition"
             >

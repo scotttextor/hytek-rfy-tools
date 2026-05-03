@@ -13,6 +13,7 @@ import { decode } from "@hytek/rfy-codec";
 import { useViewerStore } from "./store";
 import { Sidebar } from "./components/Sidebar";
 import { Wall } from "./components/Wall";
+import { documentToScheduleXml } from "./lib/serialize";
 
 export default function ViewerPage() {
   const loadDoc = useViewerStore((s) => s.loadDoc);
@@ -47,27 +48,45 @@ export default function ViewerPage() {
   // (FrameCAD-import XML). Phase 0 just supports .rfy; XML support
   // requires plumbing the same XML→RfyDocument path the home page uses,
   // which we add in Phase 1.
-  // Save back to .rfy by re-serialising the edited doc through the codec
-  // and triggering a browser download. Round-trip path:
-  //   doc → codec.synthesizeRfyFromXml? → encryptRfy → Blob → download
-  // The simplest reliable path right now: serialise the doc back to its
-  // schedule XML form via the encoder, then encryptRfy. We POST to a
-  // small server endpoint that does this Node-side because the codec's
-  // synthesize path uses Node-only deps. Phase 5 will wire that
-  // endpoint; for now the button shows a helpful "coming in Phase 5"
-  // toast so we can ship Phase 2 today without blocking.
+  // Save back to .rfy. Round-trip:
+  //   1. serialize RfyDocument → schedule XML  (lib/serialize.ts)
+  //   2. POST XML to /api/encode → server encrypts → returns .rfy bytes
+  //   3. trigger download
+  // The /api/encode endpoint takes the inner schedule XML directly and
+  // applies encryptRfy() — no synthesis or rule re-application happens,
+  // so what comes out is exactly what's in the doc state.
   const onSave = useCallback(async () => {
     if (!doc) return;
     setError(null);
     setSaving(true);
     try {
-      // TODO Phase 5: POST doc to /api/viewer-save → server returns
-      // encrypted RFY bytes → trigger download.
-      setError("Save back to .rfy lands in Phase 5. Edits stay in this tab — they'll persist if you don't refresh.");
+      const xml = documentToScheduleXml(doc);
+      const outName = (filename ?? "edited.rfy").replace(/\.(xml|rfy)$/i, ".rfy");
+      const res = await fetch("/api/encode", {
+        method: "POST",
+        headers: { "content-type": "application/octet-stream", "x-filename": encodeURIComponent(outName) },
+        body: xml,
+      });
+      if (!res.ok) {
+        const errText = await res.text();
+        throw new Error(`Server rejected XML: ${errText.slice(0, 300)}`);
+      }
+      const blob = await res.blob();
+      // Trigger browser download.
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = outName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      setError(`Save failed: ${err instanceof Error ? err.message : String(err)}`);
     } finally {
       setSaving(false);
     }
-  }, [doc]);
+  }, [doc, filename]);
 
   const onDrop = useCallback(async (e: React.DragEvent) => {
     e.preventDefault();
