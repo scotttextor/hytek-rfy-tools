@@ -5,8 +5,10 @@
 //   profile, dimensions, full op list, role, orientation.
 
 "use client";
+import { useState } from "react";
 import { useViewerStore } from "../store";
 import { frameSummary, docSummary } from "../lib/geometry";
+import { AddOpDialog } from "./AddOpDialog";
 import type { RfyToolingOp } from "@hytek/rfy-codec";
 
 function opLabel(op: RfyToolingOp, stickLength: number): string {
@@ -26,6 +28,8 @@ export function Sidebar() {
   const selectPlan = useViewerStore((s) => s.selectPlan);
   const selectFrame = useViewerStore((s) => s.selectFrame);
   const selectStick = useViewerStore((s) => s.selectStick);
+  const removeOp = useViewerStore((s) => s.removeOp);
+  const [showAddOp, setShowAddOp] = useState(false);
 
   if (!doc) {
     return (
@@ -150,17 +154,44 @@ export function Sidebar() {
           </div>
 
           <div className="px-4 py-3">
-            <div className="text-xs uppercase tracking-wider text-zinc-500 mb-2">
-              Tool ops ({selectedStick.tooling.length})
+            <div className="flex items-center justify-between mb-2">
+              <div className="text-xs uppercase tracking-wider text-zinc-500">
+                Tool ops ({selectedStick.tooling.length})
+              </div>
+              <button
+                onClick={() => setShowAddOp(true)}
+                className="text-xs px-2 py-1 rounded bg-yellow-400 text-black font-medium hover:bg-yellow-300 transition"
+              >
+                + Add op
+              </button>
             </div>
             <ul className="space-y-1 text-xs font-mono">
               {selectedStick.tooling.map((op, i) => (
-                <li key={i} className="text-zinc-300 px-2 py-1 rounded hover:bg-zinc-900">
-                  {opLabel(op, selectedStick.length)}
+                <li
+                  key={i}
+                  className="text-zinc-300 px-2 py-1 rounded hover:bg-zinc-900 flex items-center justify-between gap-2 group"
+                >
+                  <span>{opLabel(op, selectedStick.length)}</span>
+                  <button
+                    onClick={() => selectedStickKey && removeOp(selectedStickKey, i)}
+                    className="text-zinc-600 hover:text-red-400 opacity-0 group-hover:opacity-100 transition"
+                    aria-label="Delete op"
+                    title="Delete this op"
+                  >
+                    ✕
+                  </button>
                 </li>
               ))}
             </ul>
           </div>
+
+          {showAddOp && selectedStickKey && (
+            <AddOpDialog
+              stickKey={selectedStickKey}
+              stickLength={selectedStick.length}
+              onClose={() => setShowAddOp(false)}
+            />
+          )}
         </div>
       )}
     </aside>

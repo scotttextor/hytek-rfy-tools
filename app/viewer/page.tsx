@@ -8,7 +8,7 @@
 // See docs/superpowers/specs/2026-05-03-wall-viewer-design.md.
 
 "use client";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { decode } from "@hytek/rfy-codec";
 import { useViewerStore } from "./store";
 import { Sidebar } from "./components/Sidebar";
@@ -19,13 +19,54 @@ export default function ViewerPage() {
   const reset = useViewerStore((s) => s.reset);
   const doc = useViewerStore((s) => s.doc);
   const filename = useViewerStore((s) => s.filename);
+  const dirty = useViewerStore((s) => s.dirty);
+  const undo = useViewerStore((s) => s.undo);
+  const redo = useViewerStore((s) => s.redo);
+  const canUndo = useViewerStore((s) => s.canUndo());
+  const canRedo = useViewerStore((s) => s.canRedo());
   const [error, setError] = useState<string | null>(null);
   const [dragOver, setDragOver] = useState(false);
+  const [saving, setSaving] = useState(false);
+
+  // Keyboard shortcuts: Ctrl/Cmd+Z = undo, Ctrl/Cmd+Shift+Z (or Y) = redo.
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      const mod = e.ctrlKey || e.metaKey;
+      if (!mod) return;
+      const key = e.key.toLowerCase();
+      if (key === "z" && !e.shiftKey) { e.preventDefault(); undo(); }
+      else if ((key === "z" && e.shiftKey) || key === "y") { e.preventDefault(); redo(); }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [undo, redo]);
 
   // Drop handler — accepts .rfy (binary, codec decodes) or .xml
   // (FrameCAD-import XML). Phase 0 just supports .rfy; XML support
   // requires plumbing the same XML→RfyDocument path the home page uses,
   // which we add in Phase 1.
+  // Save back to .rfy by re-serialising the edited doc through the codec
+  // and triggering a browser download. Round-trip path:
+  //   doc → codec.synthesizeRfyFromXml? → encryptRfy → Blob → download
+  // The simplest reliable path right now: serialise the doc back to its
+  // schedule XML form via the encoder, then encryptRfy. We POST to a
+  // small server endpoint that does this Node-side because the codec's
+  // synthesize path uses Node-only deps. Phase 5 will wire that
+  // endpoint; for now the button shows a helpful "coming in Phase 5"
+  // toast so we can ship Phase 2 today without blocking.
+  const onSave = useCallback(async () => {
+    if (!doc) return;
+    setError(null);
+    setSaving(true);
+    try {
+      // TODO Phase 5: POST doc to /api/viewer-save → server returns
+      // encrypted RFY bytes → trigger download.
+      setError("Save back to .rfy lands in Phase 5. Edits stay in this tab — they'll persist if you don't refresh.");
+    } finally {
+      setSaving(false);
+    }
+  }, [doc]);
+
   const onDrop = useCallback(async (e: React.DragEvent) => {
     e.preventDefault();
     setDragOver(false);
@@ -33,17 +74,33 @@ export default function ViewerPage() {
     const file = e.dataTransfer.files[0];
     if (!file) return;
     try {
-      if (file.name.toLowerCase().endsWith(".rfy")) {
+      const lname = file.name.toLowerCase();
+      if (lname.endsWith(".rfy")) {
+        // .rfy = encrypted bytes. Decode client-side.
         const buf = Buffer.from(await file.arrayBuffer());
         const decoded = decode(buf);
         loadDoc(decoded, file.name);
-      } else if (file.name.toLowerCase().endsWith(".xml")) {
-        // Phase 1: wire the input-XML → synthesizeRfyFromPlans pipeline
-        // the home page's encode-bundle endpoint uses, so the viewer can
-        // load the same XML files the home page accepts.
-        setError("XML import lands in Phase 1. For now, drop a .rfy file.");
+      } else if (lname.endsWith(".xml")) {
+        // Input XML (FrameCAD <framecad_import>) requires server-side
+        // synthesis through the existing /api/encode-auto pipeline,
+        // because the codec's framecadImportToRfy uses Node-only deps.
+        // Round-trip: POST XML → server returns encrypted RFY bytes →
+        // client decodes with codec.decode → RfyDocument.
+        const xml = await file.text();
+        const res = await fetch("/api/encode-auto", {
+          method: "POST",
+          headers: { "content-type": "application/octet-stream", "x-filename": encodeURIComponent(file.name) },
+          body: xml,
+        });
+        if (!res.ok) {
+          const errText = await res.text();
+          throw new Error(`Server rejected XML: ${errText.slice(0, 300)}`);
+        }
+        const buf = Buffer.from(await res.arrayBuffer());
+        const decoded = decode(buf);
+        loadDoc(decoded, file.name);
       } else {
-        setError(`Unsupported file type: ${file.name}. Drop a .rfy file.`);
+        setError(`Unsupported file type: ${file.name}. Drop a .rfy or .xml file.`);
       }
     } catch (err) {
       setError(`Failed to load ${file.name}: ${err instanceof Error ? err.message : String(err)}`);
@@ -70,11 +127,39 @@ export default function ViewerPage() {
           </p>
         </div>
         {filename && (
-          <div className="text-xs text-zinc-500">
-            <span className="text-zinc-300 font-mono">{filename}</span>
+          <div className="flex items-center gap-2">
+            {/* Edit toolbar — only visible when a doc is loaded */}
+            <button
+              onClick={undo}
+              disabled={!canUndo}
+              className="px-2 py-1 rounded border border-zinc-700 text-zinc-300 text-xs hover:border-yellow-400 hover:text-yellow-400 transition disabled:opacity-30 disabled:cursor-not-allowed"
+              title="Undo (Ctrl+Z)"
+            >
+              ↶ Undo
+            </button>
+            <button
+              onClick={redo}
+              disabled={!canRedo}
+              className="px-2 py-1 rounded border border-zinc-700 text-zinc-300 text-xs hover:border-yellow-400 hover:text-yellow-400 transition disabled:opacity-30 disabled:cursor-not-allowed"
+              title="Redo (Ctrl+Shift+Z)"
+            >
+              ↷ Redo
+            </button>
+            <button
+              onClick={onSave}
+              disabled={!dirty || saving}
+              className="px-3 py-1 rounded bg-yellow-400 text-black text-xs font-medium hover:bg-yellow-300 transition disabled:opacity-40 disabled:cursor-not-allowed"
+              title="Save edits back to .rfy"
+            >
+              {saving ? "Saving…" : dirty ? "💾 Save" : "💾 Saved"}
+            </button>
+            <span className="text-xs text-zinc-500 mx-2">
+              <span className="text-zinc-300 font-mono">{filename}</span>
+              {dirty && <span className="text-yellow-400 ml-2">●</span>}
+            </span>
             <button
               onClick={() => { reset(); setError(null); }}
-              className="ml-3 px-2 py-1 rounded border border-zinc-700 text-zinc-400 hover:border-yellow-400 hover:text-yellow-400 transition"
+              className="px-2 py-1 rounded border border-zinc-700 text-zinc-400 text-xs hover:border-yellow-400 hover:text-yellow-400 transition"
             >
               Close
             </button>
