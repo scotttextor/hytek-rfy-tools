@@ -1,0 +1,148 @@
+<h2>Visual fidelity: how "real" should the wall look?</h2>
+<p class="subtitle">Each level represents roughly 2-3× the build effort of the one before it. All three are technically achievable in a Next.js / React / WebGL stack — the question is how realistic the user needs the picture to be.</p>
+
+<div class="cards">
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="background: #0a0a0a; padding: 24px; min-height: 220px;">
+      <svg viewBox="0 0 320 200" style="width: 100%; height: 200px;">
+        <!-- Top plate -->
+        <rect x="20" y="20" width="280" height="12" fill="#888" stroke="#fff" stroke-width="1"/>
+        <!-- Bottom plate -->
+        <rect x="20" y="168" width="280" height="12" fill="#888" stroke="#fff" stroke-width="1"/>
+        <!-- Studs -->
+        <rect x="22" y="32" width="10" height="136" fill="#888" stroke="#fff" stroke-width="1"/>
+        <rect x="78" y="32" width="10" height="136" fill="#888" stroke="#fff" stroke-width="1"/>
+        <rect x="138" y="32" width="10" height="136" fill="#888" stroke="#fff" stroke-width="1"/>
+        <rect x="198" y="32" width="10" height="136" fill="#888" stroke="#fff" stroke-width="1"/>
+        <rect x="258" y="32" width="10" height="136" fill="#888" stroke="#fff" stroke-width="1"/>
+        <rect x="288" y="32" width="10" height="136" fill="#888" stroke="#fff" stroke-width="1"/>
+        <!-- Tool ops as labels -->
+        <circle cx="27" cy="50" r="2" fill="#FFCB05"/>
+        <circle cx="27" cy="100" r="2" fill="#FFCB05"/>
+        <circle cx="27" cy="150" r="2" fill="#FFCB05"/>
+        <circle cx="83" cy="50" r="2" fill="#FFCB05"/>
+        <circle cx="83" cy="100" r="2" fill="#FFCB05"/>
+        <circle cx="83" cy="150" r="2" fill="#FFCB05"/>
+        <text x="50" y="14" fill="#888" font-size="9" font-family="Arial">L1 — top plate</text>
+        <text x="50" y="195" fill="#888" font-size="9" font-family="Arial">L1 — bottom plate · Stud × 6 · 13 ops</text>
+      </svg>
+    </div>
+    <div class="card-body">
+      <div class="letter">A</div>
+      <h3>Schematic 2D</h3>
+      <p><strong>Effort: ~2 weeks read-only, +2 weeks edit</strong>. Sticks as plain rectangles with op markers. Not "real-world looking" — but fast, accurate, matches Detailer's wireframe view. Uses pure SVG.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="background: #0a0a0a; padding: 24px; min-height: 220px;">
+      <svg viewBox="0 0 320 200" style="width: 100%; height: 200px;">
+        <defs>
+          <linearGradient id="steelB" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0" stop-color="#d8d8e0"/>
+            <stop offset="0.5" stop-color="#a8a8b0"/>
+            <stop offset="1" stop-color="#888890"/>
+          </linearGradient>
+        </defs>
+        <!-- Top plate with C-section profile shadow -->
+        <rect x="20" y="20" width="280" height="14" fill="url(#steelB)" stroke="#444" stroke-width="0.5"/>
+        <rect x="20" y="32" width="280" height="2" fill="#555"/>
+        <!-- Bottom plate -->
+        <rect x="20" y="166" width="280" height="14" fill="url(#steelB)" stroke="#444" stroke-width="0.5"/>
+        <rect x="20" y="166" width="280" height="2" fill="#555"/>
+        <!-- Studs (C-section visible: web+flange) -->
+        <g>
+          <rect x="22" y="34" width="11" height="132" fill="url(#steelB)" stroke="#444" stroke-width="0.4"/>
+          <rect x="22" y="34" width="2" height="132" fill="#555"/>
+          <rect x="78" y="34" width="11" height="132" fill="url(#steelB)" stroke="#444" stroke-width="0.4"/>
+          <rect x="78" y="34" width="2" height="132" fill="#555"/>
+          <rect x="138" y="34" width="11" height="132" fill="url(#steelB)" stroke="#444" stroke-width="0.4"/>
+          <rect x="138" y="34" width="2" height="132" fill="#555"/>
+          <rect x="198" y="34" width="11" height="132" fill="url(#steelB)" stroke="#444" stroke-width="0.4"/>
+          <rect x="198" y="34" width="2" height="132" fill="#555"/>
+          <rect x="258" y="34" width="11" height="132" fill="url(#steelB)" stroke="#444" stroke-width="0.4"/>
+          <rect x="258" y="34" width="2" height="132" fill="#555"/>
+        </g>
+        <!-- Real-shape tool ops -->
+        <!-- Inner dimples = small dome circles -->
+        <circle cx="27.5" cy="50" r="1.5" fill="#666"/>
+        <circle cx="27.5" cy="100" r="1.5" fill="#666"/>
+        <circle cx="27.5" cy="150" r="1.5" fill="#666"/>
+        <!-- Lip notches as actual cut shapes -->
+        <path d="M 32,80 L 36,82 L 36,86 L 32,88 Z" fill="#0a0a0a"/>
+        <path d="M 32,120 L 36,122 L 36,126 L 32,128 Z" fill="#0a0a0a"/>
+        <!-- Bolt holes as actual circles -->
+        <circle cx="83.5" cy="172" r="2" fill="#0a0a0a" stroke="#444" stroke-width="0.4"/>
+        <circle cx="143.5" cy="172" r="2" fill="#0a0a0a" stroke="#444" stroke-width="0.4"/>
+        <circle cx="203.5" cy="172" r="2" fill="#0a0a0a" stroke="#444" stroke-width="0.4"/>
+        <!-- Swage = oval bump shadow -->
+        <ellipse cx="83.5" cy="38" rx="3" ry="1.5" fill="#666"/>
+        <ellipse cx="143.5" cy="38" rx="3" ry="1.5" fill="#666"/>
+        <text x="50" y="14" fill="#888" font-size="9" font-family="Arial">L1 · GF-LBW · 70 S 41 · 0.75mm · steel-grey shaded</text>
+      </svg>
+    </div>
+    <div class="card-body">
+      <div class="letter">B</div>
+      <h3>2D realistic (recommended)</h3>
+      <p><strong>Effort: ~3-4 weeks read-only, +4 weeks edit</strong>. Sticks rendered with steel shading + C-section flange shadow visible. Tool ops drawn as the actual punch shapes (real notch geometry, real hole circles, dimple bumps). Looks like a manufacturing drawing. Same Detailer-style elevation view, but the parts look like steel, not boxes. Pure SVG so it's still fast + interactive + crisp at any zoom.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image" style="background: #0a0a0a; padding: 24px; min-height: 220px;">
+      <svg viewBox="0 0 320 200" style="width: 100%; height: 200px;">
+        <defs>
+          <linearGradient id="steelC" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0" stop-color="#e0e0e8"/>
+            <stop offset="0.5" stop-color="#a8a8b0"/>
+            <stop offset="1" stop-color="#707078"/>
+          </linearGradient>
+          <linearGradient id="flangeC" x1="0" x2="1" y1="0" y2="0">
+            <stop offset="0" stop-color="#888890"/>
+            <stop offset="1" stop-color="#454550"/>
+          </linearGradient>
+        </defs>
+        <!-- Isometric-style projection of one stud + plates -->
+        <g transform="translate(0, 8)">
+          <!-- Top plate, iso projected -->
+          <polygon points="40,30 280,30 290,38 50,38" fill="url(#steelC)" stroke="#444" stroke-width="0.4"/>
+          <polygon points="40,30 50,38 50,52 40,44" fill="#454550"/>
+          <polygon points="280,30 290,38 290,52 280,44" fill="#454550"/>
+          <polygon points="50,38 290,38 290,52 50,52" fill="url(#flangeC)"/>
+          <!-- Studs as iso-projected C-sections -->
+          <g transform="translate(60, 0)">
+            <polygon points="0,52 10,52 14,60 4,60 4,160 14,160 10,168 0,168 -4,160 -4,60" fill="url(#steelC)" stroke="#444" stroke-width="0.3"/>
+            <polygon points="-4,60 4,60 4,160 -4,160" fill="#454550"/>
+          </g>
+          <g transform="translate(140, 0)">
+            <polygon points="0,52 10,52 14,60 4,60 4,160 14,160 10,168 0,168 -4,160 -4,60" fill="url(#steelC)" stroke="#444" stroke-width="0.3"/>
+            <polygon points="-4,60 4,60 4,160 -4,160" fill="#454550"/>
+          </g>
+          <g transform="translate(220, 0)">
+            <polygon points="0,52 10,52 14,60 4,60 4,160 14,160 10,168 0,168 -4,160 -4,60" fill="url(#steelC)" stroke="#444" stroke-width="0.3"/>
+            <polygon points="-4,60 4,60 4,160 -4,160" fill="#454550"/>
+          </g>
+          <!-- Bottom plate -->
+          <polygon points="40,170 280,170 290,178 50,178" fill="url(#steelC)" stroke="#444" stroke-width="0.4"/>
+          <polygon points="40,170 50,178 50,184 40,176" fill="#454550"/>
+          <!-- Tool ops -->
+          <circle cx="68" cy="78" r="1.6" fill="#0a0a0a"/>
+          <circle cx="68" cy="120" r="1.6" fill="#0a0a0a"/>
+          <circle cx="148" cy="78" r="1.6" fill="#0a0a0a"/>
+          <circle cx="228" cy="78" r="1.6" fill="#0a0a0a"/>
+          <circle cx="60" cy="178" r="2.5" fill="#0a0a0a" stroke="#222" stroke-width="0.4"/>
+          <circle cx="140" cy="178" r="2.5" fill="#0a0a0a" stroke="#222" stroke-width="0.4"/>
+          <circle cx="220" cy="178" r="2.5" fill="#0a0a0a" stroke="#222" stroke-width="0.4"/>
+        </g>
+        <text x="44" y="195" fill="#888" font-size="9" font-family="Arial">L1 · 3D rotatable · C-section depth visible · click parts to select</text>
+      </svg>
+    </div>
+    <div class="card-body">
+      <div class="letter">C</div>
+      <h3>3D WebGL (Three.js)</h3>
+      <p><strong>Effort: ~6-8 weeks read-only, +12 weeks full edit</strong>. Each stick is a real 3D extrusion of its C-section profile. Tool ops are actual 3D punches (CSG boolean subtraction). Camera orbit, zoom, walk-around. Looks like a CAD model — closest to "real world". Heavy WebGL load on browser. Big leap in build effort.</p>
+    </div>
+  </div>
+</div>
+
+<p class="subtitle" style="margin-top: 28px;">All three options use the existing data your codec already has — <code>outlineCorners</code> + <code>tooling</code> ops + <code>profile</code> dims. No extra data extraction needed.</p>
