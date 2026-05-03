@@ -1,17 +1,14 @@
-// GET /api/setups — return all HYTEK machine setups + frame types
-// from data/hytek-machine-types.json and data/hytek-frame-types.json.
+// GET /api/setups — return all HYTEK machine setups from the ACTIVE ruleset.
 //
-// These files are the authoritative source-of-truth for HYTEK's tooling
-// rules. Master copies live on Y:\(08) DETAILING\(13) FRAMECAD\FrameCAD
-// DETAILER\HYTEK MACHINE_FRAME TYPES\ — when HYTEK updates them, copy
-// the .sups files into data/ as .json and redeploy.
+// Reads from data/rulesets/<active>/machine-types.json. The active ruleset
+// is set via POST /api/rulesets/active. Default ruleset is read-only and
+// represents factory HYTEK rules (extracted from FrameCAD Detailer .sups).
 //
 // The codec auto-resolves which setup to use based on the input XML's
 // profile web (e.g. 70S41 → setup [2] F325iT 70mm).
 
 import { NextResponse } from "next/server";
-import fs from "node:fs/promises";
-import path from "node:path";
+import { getActive, getRulesetMachineTypes } from "@/lib/rulesets";
 
 export const runtime = "nodejs";
 
@@ -45,9 +42,9 @@ function toBool(s: unknown): boolean { return String(s).toLowerCase() === "true"
 
 export async function GET() {
   try {
-    const dataDir = path.join(process.cwd(), "data");
-    const machineRaw = await fs.readFile(path.join(dataDir, "hytek-machine-types.json"), "utf8");
-    const m = JSON.parse(machineRaw.replace(/^﻿/, ""));
+    const active = await getActive();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const m = await getRulesetMachineTypes(active) as any;
 
     const setups: MachineSetupSummary[] = [];
     const fullSetups: Record<string, unknown> = {};
@@ -83,7 +80,8 @@ export async function GET() {
       setups,
       full: fullSetups,
       count: setups.length,
-      source: "data/hytek-machine-types.json",
+      ruleset: active,
+      source: `data/rulesets/${active}/machine-types.json`,
     }, {
       headers: { "cache-control": "no-store" },
     });
@@ -91,6 +89,42 @@ export async function GET() {
     return NextResponse.json(
       { error: String(e instanceof Error ? e.message : e) },
       { status: 500 },
+    );
+  }
+}
+
+// PUT /api/setups — save edited machine types back to the active ruleset.
+//   body: { full: { <id>: <setup>, ... } } — the same shape as `full` returned by GET
+import { saveRuleset } from "@/lib/rulesets";
+
+export async function PUT(req: Request) {
+  try {
+    const active = await getActive();
+    if (active === "default") {
+      return NextResponse.json(
+        { error: "Cannot save to the default ruleset. Use 'Save As' to create a new editable copy first." },
+        { status: 403 },
+      );
+    }
+    const body = await req.json() as { full?: Record<string, unknown> };
+    if (!body || !body.full || typeof body.full !== "object") {
+      return NextResponse.json({ error: "Body must contain { full: {...} }" }, { status: 400 });
+    }
+    // Reconstruct the original .sups-style envelope: { MachineSetups: { ...full, Count: N } }
+    const ids = Object.keys(body.full);
+    const machineTypes = {
+      FrameTypes: { Count: "0" },
+      MachineSetups: {
+        ...body.full,
+        Count: String(ids.length),
+      },
+    };
+    await saveRuleset({ name: active, machineTypes });
+    return NextResponse.json({ ok: true, saved: ids.length, ruleset: active });
+  } catch (e) {
+    return NextResponse.json(
+      { error: e instanceof Error ? e.message : String(e) },
+      { status: 400 },
     );
   }
 }

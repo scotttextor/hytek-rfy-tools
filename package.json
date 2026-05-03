@@ -10,7 +10,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@hytek/rfy-codec": "github:scotttextor/hytek-rfy-codec#0c838958a8b7d01a1a520239e5dca36b2de8969f",
+    "@hytek/rfy-codec": "github:scotttextor/hytek-rfy-codec",
     "fast-xml-parser": "^5.7.2",
     "jszip": "^3.10.1",
     "next": "16.2.3",

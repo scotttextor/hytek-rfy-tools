@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import RulesetSelector from "./RulesetSelector";
 
 type Tab = "machines" | "frames";
 
@@ -38,7 +39,8 @@ export default function RulesPage() {
   // Reset selection when tab changes — IDs are namespaced by tab
   useEffect(() => { setSelectedId(null); setEditingId(null); }, [tab]);
 
-  useEffect(() => {
+  // Reload data from server. Called on initial mount AND after ruleset switches.
+  const reloadFromServer = useCallback(() => {
     setLoading(true);
     Promise.all([
       fetch("/api/setups").then(r => r.json() as Promise<SetupsResponse | { error: string }>),
@@ -50,8 +52,48 @@ export default function RulesPage() {
       setSetupOrder(Object.keys(s.full));
       setFrameTypesFull(f.full);
       setFrameTypeOrder(Object.keys(f.full));
+      setSetupsDirty(false);
+      setFrameTypesDirty(false);
+      setError(null);
     }).catch(e => setError(String(e))).finally(() => setLoading(false));
   }, []);
+
+  useEffect(() => { reloadFromServer(); }, [reloadFromServer]);
+
+  // Save current edits to the active ruleset (server PUT to /api/setups + /api/frame-types).
+  const saveToActiveRuleset = useCallback(async () => {
+    setError(null);
+    const promises: Promise<Response>[] = [];
+    if (setupsDirty) {
+      promises.push(fetch("/api/setups", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ full: setupsFull }),
+      }));
+    }
+    if (frameTypesDirty) {
+      promises.push(fetch("/api/frame-types", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ full: frameTypesFull }),
+      }));
+    }
+    if (promises.length === 0) return;
+    const results = await Promise.all(promises);
+    for (const r of results) {
+      if (!r.ok) {
+        const j = await r.json().catch(() => ({}));
+        throw new Error(j.error || `Save failed: HTTP ${r.status}`);
+      }
+    }
+    setSetupsDirty(false);
+    setFrameTypesDirty(false);
+  }, [setupsDirty, setupsFull, frameTypesDirty, frameTypesFull]);
+
+  async function actionSaveToRuleset() {
+    try { await saveToActiveRuleset(); }
+    catch (e) { setError(e instanceof Error ? e.message : String(e)); }
+  }
 
   // Derived: the summary array for current tab's table
   const setupSummaries = useMemo(() => {
@@ -217,6 +259,13 @@ export default function RulesPage() {
         </p>
       </header>
 
+      {/* Ruleset selector — switch between named templates, Save As, Revert, Delete */}
+      <RulesetSelector
+        onActiveChanged={() => reloadFromServer()}
+        isDirty={setupsDirty || frameTypesDirty}
+        onSave={saveToActiveRuleset}
+      />
+
       {/* Tabs */}
       <div className="flex gap-1 mb-3 border-b border-zinc-800">
         {(["machines", "frames"] as const).map(t => (
@@ -245,12 +294,24 @@ export default function RulesPage() {
         <span className="flex-1" />
         <button onClick={actionResetFromServer} className="action-btn">Reset from Server</button>
         <button
+          onClick={actionSaveToRuleset}
+          disabled={!isDirty}
+          className={`action-btn ${isDirty ? "action-save" : ""}`}
+          title={
+            isDirty
+              ? "Save changes to the active ruleset (server-side persistence). Doesn't affect the default ruleset."
+              : "No changes to save"
+          }
+        >
+          💾 Save to Active Ruleset
+        </button>
+        <button
           onClick={actionExportJson}
           disabled={!isDirty}
           className={`action-btn ${isDirty ? "action-export" : ""}`}
           title={isDirty ? "Download the modified JSON to commit to the repo" : "No changes to export"}
         >
-          Export Modified JSON ↓
+          Export JSON ↓
         </button>
         <style jsx>{`
           .action-btn {
@@ -269,6 +330,8 @@ export default function RulesPage() {
           .action-danger:hover:not(:disabled) { background: rgba(239, 68, 68, 0.15); border-color: #b91c1c; color: #fca5a5; }
           .action-export { border-color: #22c55e; color: #4ade80; }
           .action-export:hover:not(:disabled) { background: rgba(74, 222, 128, 0.1); }
+          .action-save { border-color: #3b82f6; color: #60a5fa; }
+          .action-save:hover:not(:disabled) { background: rgba(96, 165, 250, 0.1); }
         `}</style>
       </div>
 

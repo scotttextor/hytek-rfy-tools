@@ -1,0 +1,7 @@
+{
+  "name": "default",
+  "description": "Original HYTEK machine setups + frame types (factory defaults from FrameCAD Detailer .sups files). Read-only — never modified.",
+  "created": "2026-05-03T00:00:00Z",
+  "readonly": true,
+  "parent": null
+}
