@@ -1,0 +1,34 @@
+<h2>Three build approaches for the wall editor</h2>
+<p class="subtitle">All three reach Option 2 (full editor parity). They differ in build sequence, libraries, and where state lives. My recommendation is <strong>Approach A</strong> — described first.</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Pure SVG + React + Zustand store (recommended)</h3>
+      <p style="margin-top: 8px;"><strong>Stack:</strong> SVG inline in React, Zustand for state, custom undo/redo history, save-back via existing codec encode pipeline.</p>
+      <p style="margin-top: 6px;"><strong>Why this:</strong> Lightest dep footprint. SVG is text — debuggable, accessible, every modern browser handles it natively. State store is a single object that mirrors the RFY document; every edit is one mutation we can undo. Round-trip back to .rfy uses the codec's existing encode path.</p>
+      <p style="margin-top: 6px;"><strong>Tradeoff:</strong> We write our own pan/zoom/select primitives (~300 lines). Done well, gives us pixel-perfect control over what looks right.</p>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>react-konva (canvas-based) + Zustand</h3>
+      <p style="margin-top: 8px;"><strong>Stack:</strong> Konva.js for canvas rendering, react-konva bindings, Zustand for state.</p>
+      <p style="margin-top: 6px;"><strong>Why this:</strong> Built-in pan / zoom / drag-and-drop primitives, hit-testing for "which stick did I click", performance scales to thousands of shapes without effort. Mature library.</p>
+      <p style="margin-top: 6px;"><strong>Tradeoff:</strong> Canvas isn't text — harder to debug ("why is this stick blue not grey?" requires opening the canvas inspector). Library footprint is ~200KB. Custom shapes (the C-section flange shadow, the punch geometry) need to be drawn imperatively, not declaratively. Marginal performance win is wasted because we already chose to render one frame at a time.</p>
+    </div>
+  </div>
+
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>tldraw / excalidraw fork</h3>
+      <p style="margin-top: 8px;"><strong>Stack:</strong> Fork an existing open-source diagramming tool, replace the shape vocabulary with HYTEK sticks + ops.</p>
+      <p style="margin-top: 6px;"><strong>Why this:</strong> Free undo/redo, free pan/zoom, free select/move/multi-select, free export. Looks production-ready out of the box.</p>
+      <p style="margin-top: 6px;"><strong>Tradeoff:</strong> Big dep we don't fully control — bound to whatever shape system the upstream picks. Customising the steel rendering and tool-op shapes fights the library. Round-trip to RFY becomes "translate tldraw shapes back to RfyDocument" which is brittle. <em>Higher risk, not recommended.</em></p>
+    </div>
+  </div>
+</div>
