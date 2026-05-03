@@ -1,0 +1,269 @@
+<h2>Visual rendering model — what each tool op looks like</h2>
+<p class="subtitle">Each stick rendered as a real-world C-section: web body + flange shadow on the left edge (showing that the stick has depth). Tool ops drawn as their actual physical shape, not abstract symbols.</p>
+
+<h3>Comparison: schematic vs real-world rendering</h3>
+
+<div class="split">
+  <div class="mockup">
+    <div class="mockup-header">Schematic (Approach A from earlier)</div>
+    <div class="mockup-body" style="background:#0a0a0a;padding:20px">
+      <svg viewBox="0 0 600 80" style="width:100%;height:80px">
+        <!-- Plain stud -->
+        <rect x="10" y="20" width="580" height="40" fill="#888" stroke="#fff" stroke-width="0.5"/>
+        <!-- Tool op markers as plain dots -->
+        <circle cx="30" cy="40" r="2" fill="#FFCB05"/>
+        <circle cx="55" cy="40" r="2" fill="#FFCB05"/>
+        <circle cx="120" cy="40" r="2" fill="#FFCB05"/>
+        <circle cx="200" cy="40" r="2" fill="#FFCB05"/>
+        <circle cx="300" cy="40" r="2" fill="#FFCB05"/>
+        <circle cx="380" cy="40" r="2" fill="#FFCB05"/>
+        <circle cx="450" cy="40" r="2" fill="#FFCB05"/>
+        <circle cx="530" cy="40" r="2" fill="#FFCB05"/>
+        <circle cx="570" cy="40" r="2" fill="#FFCB05"/>
+        <text x="10" y="74" fill="#666" font-size="9" font-family="Arial">All ops shown as identical yellow dots — no info from the picture alone</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="mockup">
+    <div class="mockup-header">Real-world (Approach B — what we're building)</div>
+    <div class="mockup-body" style="background:#0a0a0a;padding:20px">
+      <svg viewBox="0 0 600 80" style="width:100%;height:80px">
+        <defs>
+          <linearGradient id="steel" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0" stop-color="#dcdce4"/>
+            <stop offset="0.4" stop-color="#a8a8b0"/>
+            <stop offset="1" stop-color="#7a7a82"/>
+          </linearGradient>
+          <linearGradient id="flangeShadow" x1="0" x2="1" y1="0" y2="0">
+            <stop offset="0" stop-color="#3a3a40"/>
+            <stop offset="1" stop-color="#6a6a72"/>
+          </linearGradient>
+        </defs>
+        <!-- Stud body (the web face seen from elevation) -->
+        <rect x="10" y="22" width="580" height="40" fill="url(#steel)" stroke="#444" stroke-width="0.4"/>
+        <!-- Flange shadow on left edge — showing the C-section depth -->
+        <rect x="10" y="22" width="3" height="40" fill="url(#flangeShadow)"/>
+        <!-- Tool ops drawn as their real shapes -->
+        <!-- 30: InnerDimple (small dome) -->
+        <circle cx="30" cy="42" r="2" fill="#666" stroke="#444" stroke-width="0.3"/>
+        <circle cx="30" cy="41" r="1" fill="#999"/>
+        <!-- 55: Swage (oval bump) -->
+        <ellipse cx="55" cy="42" rx="4" ry="2" fill="#888" stroke="#555" stroke-width="0.3"/>
+        <ellipse cx="55" cy="41" rx="2.5" ry="1" fill="#bbb"/>
+        <!-- 120: InnerService (slot - oval hole) -->
+        <ellipse cx="120" cy="42" rx="5" ry="2.5" fill="#0a0a0a" stroke="#222" stroke-width="0.4"/>
+        <!-- 200: LipNotch (cut into the flange edge — visible as a notch in the flange shadow) -->
+        <path d="M 198 22 L 202 25 L 202 30 L 198 33 Z" fill="#0a0a0a" stroke="#222" stroke-width="0.3"/>
+        <!-- 300: Web hole (BOLT HOLE - real circle hole in the web) -->
+        <circle cx="300" cy="42" r="3" fill="#0a0a0a" stroke="#222" stroke-width="0.4"/>
+        <!-- 380: Bolt (ANCHOR - bigger hole, slightly different shading) -->
+        <circle cx="380" cy="42" r="3.5" fill="#0a0a0a" stroke="#222" stroke-width="0.5"/>
+        <circle cx="380" cy="42" r="2" fill="#1a1a1a"/>
+        <!-- 450: InnerNotch (notch in the web) -->
+        <path d="M 446 38 L 454 38 L 454 46 L 446 46 Z" fill="#0a0a0a" stroke="#222" stroke-width="0.3"/>
+        <!-- 530: Chamfer (corner cut at end) -->
+        <path d="M 525 22 L 535 22 L 535 28 Z" fill="#0a0a0a"/>
+        <!-- 570: end cap (Swage at end) -->
+        <ellipse cx="570" cy="42" rx="4" ry="2" fill="#888" stroke="#555" stroke-width="0.3"/>
+        <ellipse cx="570" cy="41" rx="2.5" ry="1" fill="#bbb"/>
+        <text x="10" y="74" fill="#888" font-size="9" font-family="Arial">Each op shape = its real physical shape. You can see it's a notch vs a hole vs a bump just by looking.</text>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<h3>Each tool op type — drawn at full detail</h3>
+<p class="subtitle">Hover any of these in the live app and you'll see the op name + position. Click to select. Click empty stick area to add a new op of any type.</p>
+
+<div style="background:#0a0a0a;padding:24px;border-radius:8px;margin:16px 0">
+  <svg viewBox="0 0 700 480" style="width:100%;height:480px">
+    <defs>
+      <linearGradient id="steelB" x1="0" x2="0" y1="0" y2="1">
+        <stop offset="0" stop-color="#dcdce4"/>
+        <stop offset="0.4" stop-color="#a8a8b0"/>
+        <stop offset="1" stop-color="#7a7a82"/>
+      </linearGradient>
+      <linearGradient id="flangeShadowB" x1="0" x2="1" y1="0" y2="0">
+        <stop offset="0" stop-color="#3a3a40"/>
+        <stop offset="1" stop-color="#6a6a72"/>
+      </linearGradient>
+    </defs>
+
+    <!-- InnerDimple -->
+    <g transform="translate(30, 30)">
+      <rect x="0" y="0" width="120" height="40" fill="url(#steelB)" stroke="#444" stroke-width="0.4"/>
+      <rect x="0" y="0" width="3" height="40" fill="url(#flangeShadowB)"/>
+      <circle cx="60" cy="20" r="3" fill="#666" stroke="#444" stroke-width="0.4"/>
+      <circle cx="60" cy="18" r="1.5" fill="#bbb"/>
+      <text x="0" y="58" fill="#FFCB05" font-size="11" font-family="Arial" font-weight="bold">InnerDimple</text>
+      <text x="0" y="72" fill="#999" font-size="9" font-family="Arial">Small dome — pre-punched indent</text>
+    </g>
+
+    <!-- Swage -->
+    <g transform="translate(180, 30)">
+      <rect x="0" y="0" width="120" height="40" fill="url(#steelB)" stroke="#444" stroke-width="0.4"/>
+      <rect x="0" y="0" width="3" height="40" fill="url(#flangeShadowB)"/>
+      <ellipse cx="60" cy="20" rx="14" ry="6" fill="#999" stroke="#555" stroke-width="0.4"/>
+      <ellipse cx="60" cy="17" rx="9" ry="3" fill="#cccccc"/>
+      <text x="0" y="58" fill="#FFCB05" font-size="11" font-family="Arial" font-weight="bold">Swage</text>
+      <text x="0" y="72" fill="#999" font-size="9" font-family="Arial">Oval bump — stiffening rib</text>
+    </g>
+
+    <!-- LipNotch -->
+    <g transform="translate(330, 30)">
+      <rect x="0" y="0" width="120" height="40" fill="url(#steelB)" stroke="#444" stroke-width="0.4"/>
+      <rect x="0" y="0" width="3" height="40" fill="url(#flangeShadowB)"/>
+      <path d="M 50 0 L 70 5 L 70 12 L 50 14 Z" fill="#0a0a0a" stroke="#222" stroke-width="0.3"/>
+      <path d="M 50 26 L 70 28 L 70 35 L 50 40 Z" fill="#0a0a0a" stroke="#222" stroke-width="0.3"/>
+      <text x="0" y="58" fill="#FFCB05" font-size="11" font-family="Arial" font-weight="bold">LipNotch</text>
+      <text x="0" y="72" fill="#999" font-size="9" font-family="Arial">V-cut on each lip — stud crossing</text>
+    </g>
+
+    <!-- InnerNotch / Web Notch -->
+    <g transform="translate(480, 30)">
+      <rect x="0" y="0" width="120" height="40" fill="url(#steelB)" stroke="#444" stroke-width="0.4"/>
+      <rect x="0" y="0" width="3" height="40" fill="url(#flangeShadowB)"/>
+      <path d="M 52 14 L 68 14 L 68 26 L 52 26 Z" fill="#0a0a0a" stroke="#222" stroke-width="0.4"/>
+      <text x="0" y="58" fill="#FFCB05" font-size="11" font-family="Arial" font-weight="bold">InnerNotch (WEB NOTCH)</text>
+      <text x="0" y="72" fill="#999" font-size="9" font-family="Arial">Rectangular notch in the web</text>
+    </g>
+
+    <!-- Bolt (ANCHOR) -->
+    <g transform="translate(30, 130)">
+      <rect x="0" y="0" width="120" height="40" fill="url(#steelB)" stroke="#444" stroke-width="0.4"/>
+      <rect x="0" y="0" width="3" height="40" fill="url(#flangeShadowB)"/>
+      <circle cx="60" cy="20" r="6" fill="#0a0a0a" stroke="#222" stroke-width="0.5"/>
+      <circle cx="60" cy="20" r="3" fill="#1a1a1a"/>
+      <text x="0" y="58" fill="#FFCB05" font-size="11" font-family="Arial" font-weight="bold">Bolt (ANCHOR)</text>
+      <text x="0" y="72" fill="#999" font-size="9" font-family="Arial">Anchor hole into slab — bottom plate</text>
+    </g>
+
+    <!-- Web (BOLT HOLE) -->
+    <g transform="translate(180, 130)">
+      <rect x="0" y="0" width="120" height="40" fill="url(#steelB)" stroke="#444" stroke-width="0.4"/>
+      <rect x="0" y="0" width="3" height="40" fill="url(#flangeShadowB)"/>
+      <circle cx="60" cy="20" r="4" fill="#0a0a0a" stroke="#222" stroke-width="0.4"/>
+      <text x="0" y="58" fill="#FFCB05" font-size="11" font-family="Arial" font-weight="bold">Web (BOLT HOLES)</text>
+      <text x="0" y="72" fill="#999" font-size="9" font-family="Arial">Hole through web for bolting</text>
+    </g>
+
+    <!-- InnerService -->
+    <g transform="translate(330, 130)">
+      <rect x="0" y="0" width="120" height="40" fill="url(#steelB)" stroke="#444" stroke-width="0.4"/>
+      <rect x="0" y="0" width="3" height="40" fill="url(#flangeShadowB)"/>
+      <ellipse cx="60" cy="20" rx="10" ry="5" fill="#0a0a0a" stroke="#222" stroke-width="0.4"/>
+      <text x="0" y="58" fill="#FFCB05" font-size="11" font-family="Arial" font-weight="bold">InnerService (SERVICE HOLE)</text>
+      <text x="0" y="72" fill="#999" font-size="9" font-family="Arial">Oval slot for cables / pipes</text>
+    </g>
+
+    <!-- Chamfer -->
+    <g transform="translate(480, 130)">
+      <rect x="6" y="0" width="114" height="40" fill="url(#steelB)" stroke="#444" stroke-width="0.4"/>
+      <rect x="6" y="0" width="3" height="40" fill="url(#flangeShadowB)"/>
+      <path d="M 0 0 L 12 0 L 12 8 Z" fill="#0a0a0a"/>
+      <path d="M 0 40 L 12 40 L 12 32 Z" fill="#0a0a0a"/>
+      <text x="0" y="58" fill="#FFCB05" font-size="11" font-family="Arial" font-weight="bold">Chamfer / TrussChamfer</text>
+      <text x="0" y="72" fill="#999" font-size="9" font-family="Arial">Corner cut — diagonal stick ends</text>
+    </g>
+
+    <!-- ScrewHoles -->
+    <g transform="translate(30, 230)">
+      <rect x="0" y="0" width="120" height="40" fill="url(#steelB)" stroke="#444" stroke-width="0.4"/>
+      <rect x="0" y="0" width="3" height="40" fill="url(#flangeShadowB)"/>
+      <circle cx="40" cy="20" r="2.5" fill="#0a0a0a"/>
+      <circle cx="60" cy="20" r="2.5" fill="#0a0a0a"/>
+      <circle cx="80" cy="20" r="2.5" fill="#0a0a0a"/>
+      <text x="0" y="58" fill="#FFCB05" font-size="11" font-family="Arial" font-weight="bold">ScrewHoles (ANCHOR cluster)</text>
+      <text x="0" y="72" fill="#999" font-size="9" font-family="Arial">Cluster of small holes — chord screws</text>
+    </g>
+
+    <!-- LeftFlange / RightFlange -->
+    <g transform="translate(180, 230)">
+      <rect x="0" y="0" width="120" height="40" fill="url(#steelB)" stroke="#444" stroke-width="0.4"/>
+      <rect x="0" y="0" width="3" height="40" fill="url(#flangeShadowB)"/>
+      <path d="M 50 0 L 70 5 L 70 12 L 50 14 Z" fill="#0a0a0a" stroke="#222" stroke-width="0.3"/>
+      <text x="0" y="58" fill="#FFCB05" font-size="11" font-family="Arial" font-weight="bold">LeftFlange / RightFlange</text>
+      <text x="0" y="72" fill="#999" font-size="9" font-family="Arial">Variant of LipNotch on one side only</text>
+    </g>
+
+    <!-- Partial Flange -->
+    <g transform="translate(330, 230)">
+      <rect x="0" y="0" width="120" height="40" fill="url(#steelB)" stroke="#444" stroke-width="0.4"/>
+      <rect x="0" y="0" width="3" height="40" fill="url(#flangeShadowB)"/>
+      <path d="M 50 0 L 70 5 L 70 9 L 50 10 Z" fill="#0a0a0a" stroke="#222" stroke-width="0.3"/>
+      <text x="0" y="58" fill="#FFCB05" font-size="11" font-family="Arial" font-weight="bold">Left/RightPartialFlange</text>
+      <text x="0" y="72" fill="#999" font-size="9" font-family="Arial">Half-depth flange notch</text>
+    </g>
+
+    <!-- Spanned span shows multiple ops -->
+    <g transform="translate(480, 230)">
+      <rect x="0" y="0" width="120" height="40" fill="url(#steelB)" stroke="#444" stroke-width="0.4"/>
+      <rect x="0" y="0" width="3" height="40" fill="url(#flangeShadowB)"/>
+      <path d="M 30 0 L 36 4 L 36 11 L 30 13 Z" fill="#0a0a0a" stroke="#222" stroke-width="0.3"/>
+      <path d="M 60 0 L 66 4 L 66 11 L 60 13 Z" fill="#0a0a0a" stroke="#222" stroke-width="0.3"/>
+      <path d="M 90 0 L 96 4 L 96 11 L 90 13 Z" fill="#0a0a0a" stroke="#222" stroke-width="0.3"/>
+      <text x="0" y="58" fill="#FFCB05" font-size="11" font-family="Arial" font-weight="bold">Spanned op (multiple positions)</text>
+      <text x="0" y="72" fill="#999" font-size="9" font-family="Arial">e.g. LipNotch [74..119] expands to 3 cells</text>
+    </g>
+
+    <!-- Selected stick example -->
+    <g transform="translate(30, 340)">
+      <text x="0" y="-4" fill="#FFCB05" font-size="11" font-family="Arial" font-weight="bold">Selected stick — full annotation</text>
+      <rect x="0" y="0" width="640" height="50" fill="url(#steelB)" stroke="#FFCB05" stroke-width="2"/>
+      <rect x="0" y="0" width="3" height="50" fill="url(#flangeShadowB)"/>
+      <!-- Various ops along the stick -->
+      <circle cx="40" cy="25" r="2.5" fill="#666" stroke="#444" stroke-width="0.3"/>
+      <ellipse cx="80" cy="25" rx="6" ry="3" fill="#888" stroke="#555" stroke-width="0.3"/>
+      <ellipse cx="80" cy="22" rx="3.5" ry="1.5" fill="#bbb"/>
+      <ellipse cx="180" cy="25" rx="8" ry="3.5" fill="#0a0a0a" stroke="#222" stroke-width="0.4"/>
+      <circle cx="280" cy="25" r="3.5" fill="#0a0a0a" stroke="#222" stroke-width="0.4"/>
+      <path d="M 380 0 L 390 5 L 390 12 L 380 13 Z" fill="#0a0a0a" stroke="#222" stroke-width="0.3"/>
+      <path d="M 380 38 L 390 39 L 390 46 L 380 50 Z" fill="#0a0a0a" stroke="#222" stroke-width="0.3"/>
+      <circle cx="280" cy="25" r="3.5" fill="#0a0a0a" stroke="#222" stroke-width="0.4"/>
+      <circle cx="500" cy="25" r="6" fill="#0a0a0a" stroke="#222" stroke-width="0.5"/>
+      <circle cx="500" cy="25" r="3" fill="#1a1a1a"/>
+      <ellipse cx="610" cy="25" rx="6" ry="3" fill="#888" stroke="#555" stroke-width="0.3"/>
+      <ellipse cx="610" cy="22" rx="3.5" ry="1.5" fill="#bbb"/>
+      <!-- Length annotation -->
+      <line x1="0" y1="62" x2="640" y2="62" stroke="#666" stroke-width="0.5"/>
+      <line x1="0" y1="58" x2="0" y2="66" stroke="#666" stroke-width="0.5"/>
+      <line x1="640" y1="58" x2="640" y2="66" stroke="#666" stroke-width="0.5"/>
+      <text x="320" y="76" fill="#999" font-size="10" font-family="Arial" text-anchor="middle">2757 mm</text>
+      <text x="0" y="-22" fill="#fff" font-size="11" font-family="Arial">L1-S3 · STUD · 70 S 41 · 0.75mm · 8 ops · click ops to inspect</text>
+    </g>
+  </svg>
+</div>
+
+<h3>Selected stick: side panel info</h3>
+<p class="subtitle">When a stick is selected, the right sidebar shows everything about it. Each op is editable inline — click position to change, dropdown to change type, × to delete.</p>
+
+<div class="mockup">
+  <div class="mockup-header">Sidebar — selected stick L1-S3</div>
+  <div class="mockup-body" style="background:#1a1a1a;color:#ccc;padding:16px;font-family:Arial,sans-serif;font-size:13px">
+    <div style="border-bottom:1px solid #333;padding-bottom:8px;margin-bottom:12px">
+      <div style="font-size:16px;font-weight:bold;color:#FFCB05">L1-S3</div>
+      <div style="color:#888">STUD · 2757mm · LEFT</div>
+    </div>
+    <div style="margin-bottom:12px">
+      <div style="font-size:10px;text-transform:uppercase;color:#666;margin-bottom:4px">Profile</div>
+      <div>70 S 41 · 0.75mm · F300i · steel grade 550</div>
+    </div>
+    <div style="margin-bottom:12px">
+      <div style="font-size:10px;text-transform:uppercase;color:#666;margin-bottom:4px">Tool ops (8)</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 24px;gap:6px;align-items:center">
+        <span style="color:#bbb">InnerDimple</span><span>16.5mm</span><span style="color:#666;cursor:pointer">×</span>
+        <span style="color:#bbb">Swage</span><span>27.5mm</span><span style="color:#666;cursor:pointer">×</span>
+        <span style="color:#bbb">InnerService</span><span>296mm</span><span style="color:#666;cursor:pointer">×</span>
+        <span style="color:#bbb">InnerService</span><span>446mm</span><span style="color:#666;cursor:pointer">×</span>
+        <span style="color:#bbb">LipNotch span</span><span>1303-1348mm</span><span style="color:#666;cursor:pointer">×</span>
+        <span style="color:#bbb">InnerDimple</span><span>1325.5mm</span><span style="color:#666;cursor:pointer">×</span>
+        <span style="color:#bbb">Swage span</span><span>2718-2757mm</span><span style="color:#666;cursor:pointer">×</span>
+        <span style="color:#bbb">InnerDimple</span><span>2740.5mm</span><span style="color:#666;cursor:pointer">×</span>
+      </div>
+    </div>
+    <button style="background:#FFCB05;color:#231F20;border:none;padding:8px 16px;font-weight:bold;cursor:pointer">+ Add tool op</button>
+  </div>
+</div>
+
+<p class="subtitle" style="margin-top:24px">Does this rendering style match what you imagined when you said "real-world"? Click to confirm, or tell me what to change.</p>
