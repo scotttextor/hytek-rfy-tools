@@ -335,35 +335,50 @@ children.push(...ref([
   ["scripts/csv-diff-sweep.mjs", "CSV-level corpus sweep with 3-way summary table."],
 ]));
 
-// === 10. Wall Editor (coming soon) ===
-children.push(h1("10. Wall Editor (/viewer) — coming soon"));
-children.push(body("This page is being built — design approved 2026-05-03. It does NOT exist in the live app yet. This section documents what it will do so you can plan around the timeline."));
+// === 10. Wall Editor — LIVE ===
+children.push(h1("10. Wall Editor (/viewer) — LIVE"));
+children.push(body("All five build phases shipped 2026-05-03. The Wall Editor is now the primary yellow button in the home-page navigation."));
+children.push(body("Live URL:  https://hytek-rfy-tools.vercel.app/viewer", { bold: true }));
 
-children.push(h2("10.1  What it will do"));
-children.push(bullet("Render an imported XML or .rfy as a real-looking wall in 2D — sticks drawn as actual steel sections (C-section profile visible), tool ops drawn as real punch shapes (notches, holes, dimple bumps)."));
-children.push(bullet("Sidebar lists every frame in the imported file. Click a frame → it draws on the canvas."));
-children.push(bullet("Pan / zoom the wall view — GPU-accelerated, no lag."));
-children.push(bullet("Click a stick → side panel shows full op list + profile + length."));
-children.push(bullet("Click anywhere on a stick → \"add tool op\" menu — pick LipNotch, Swage, Bolt, etc., position it."));
-children.push(bullet("Drag stick endpoints to resize. Drag a stick to move it."));
-children.push(bullet("Click empty wall area → add a new stick."));
-children.push(bullet("Right-click an op → delete or change type."));
-children.push(bullet("Undo / redo on every action."));
-children.push(bullet("\"Save\" button — exports the edited wall back to a downloadable .rfy file ready for the F300i."));
+children.push(h2("10.1  How to use it"));
+children.push(num(1, "Drop a .rfy or input .xml file anywhere on the /viewer page. The wall renders in real-world style — sticks drawn as actual steel sections with visible C-section flange depth, tool ops drawn as their actual physical shape (real notch geometry, real holes, real swage bumps)."));
+children.push(num(2, "Sidebar lists every frame in the imported file. Click a frame to render it on the canvas. The wall auto-fits the viewport."));
+children.push(num(3, "Drag empty canvas to pan. Mouse wheel to zoom — both crisp at any zoom level."));
+children.push(num(4, "Click a stick to select it (highlights in HYTEK yellow). The sidebar's bottom panel shows the stick's profile, length, role, and full ordered op list."));
+children.push(num(5, "+ Add op: opens a dialog with the tool-type dropdown (all 14 types) and a position input. Sensible defaults — spanned types get a 39mm centred span, point types get the position you specify."));
+children.push(num(6, "Hover any op in the side list → red ✕ to delete it. Logged to undo history."));
+children.push(num(7, "Drag the body of a SELECTED stick to move it. Drag the yellow circle handles at each end to resize/reorient."));
+children.push(num(8, "✏ Draw stick mode: click the toolbar button (cursor becomes crosshair), drag on the canvas to define a new stick by start → end midline. Releases commits via addStick. Default profile: 70 S 41 / 0.75mm."));
+children.push(num(9, "Undo/redo: ↶ Undo and ↷ Redo buttons in the header, or Ctrl+Z / Ctrl+Shift+Z keyboard shortcuts. Up to 100 steps of history per session."));
+children.push(num(10, "💾 Save: when the document is dirty (yellow ● marker next to filename), click Save to download an updated .rfy file ready for the F300i. The save round-trips through /api/encode — your edited document gets serialised back to schedule XML and re-encrypted."));
 
-children.push(h2("10.2  What it will NOT do"));
+children.push(h2("10.2  What it edits — and what it doesn't"));
 children.push(callout("The Wall Editor edits PER-JOB data — the .rfy file for ONE specific job. It does NOT edit any rules. Saving in the Wall Editor never touches default*, never touches your named rulesets, never changes what the encoder does next time you import a different XML. Two completely separate save targets."));
 
-children.push(h2("10.3  Build approach (already locked in)"));
+children.push(h2("10.3  Tool-op shapes (visual key)"));
+children.push(body("Each tool-op type is drawn as its actual physical shape so you can read the wall picture at a glance:"));
+children.push(...ref([
+  ["InnerDimple", "Small dome circle with a lighter highlight — pre-punched indent."],
+  ["Swage", "Oval bump 14mm × 6mm with highlight — stiffening rib."],
+  ["LipNotch", "V-cut on each lip edge — appears at every stud crossing."],
+  ["LeftFlange / RightFlange", "Single-side V-cut variant of LipNotch."],
+  ["LeftPartialFlange / RightPartialFlange", "Half-depth V-cut on one side."],
+  ["InnerNotch (WEB NOTCH)", "Rectangular notch in the web — fitment cutout."],
+  ["Web (BOLT HOLES)", "Filled circle through the web — pass-through bolt hole."],
+  ["Bolt (ANCHOR)", "Larger filled circle with darker inner ring — anchor bolt into slab."],
+  ["ScrewHoles (ANCHOR cluster)", "Three small filled circles — chord-pair screw cluster."],
+  ["InnerService (SERVICE HOLE)", "Oval slot 10mm × 5mm — cable / pipe pass-through."],
+  ["Chamfer / TrussChamfer", "Triangular corner cut — diagonal stick ends."],
+]));
+
+children.push(h2("10.4  Build approach (locked in)"));
 children.push(...ref([
   ["Stack", "Pure SVG + React + Zustand. No 3rd-party drawing library — full control over how steel and tool ops render."],
   ["Visual fidelity", "2D realistic — sticks drawn with steel shading + C-section flange shadow visible. Tool ops drawn as actual punch geometry, not abstract symbols. Looks like a manufacturing drawing."],
-  ["Build sequence", "Read-only viewer first (~3-4 weeks), then add tool-op editing (~2 weeks), then stick move/add (~2 weeks). Each stage ships independently — production stays unaffected throughout."],
-  ["Isolation", "Lives entirely under app/viewer/ in the repo. Hidden from nav until v1 ships. No risk of breaking /, /rules, /rules/tooling, or /regression while it's being built."],
+  ["Performance", "Renders one frame at a time (~600 SVG elements). Pan/zoom via SVG viewBox math (not CSS scale) so stroke widths stay crisp at any zoom. Frame switching is instant from in-memory model."],
+  ["Isolation", "Lives entirely under app/viewer/. Zero changes to /, /rules, /rules/tooling, /regression. The wall editor's save action only touches the downloaded .rfy file — never any rule files on disk."],
+  ["Save round-trip", "doc → documentToScheduleXml(doc) → POST /api/encode → encryptRfy → .rfy bytes → browser download. Existing /api/encode is reused — no new server endpoint needed."],
 ]));
-
-children.push(h2("10.4  When you'll see it"));
-children.push(body("Read-only viewer (sees the wall, sees the ops, can't edit yet) targets ~3-4 weeks. Full editor with tool-op editing + stick move/add targets ~7-8 weeks total. Each stage will ship independently — you'll see the read-only viewer LIVE on hytek-rfy-tools.vercel.app first, then editing arrives on top of it without disturbing anything else."));
 
 // ---- Build & write ----
 const doc = new Document({
