@@ -144,11 +144,18 @@ function referenceTable(rows) {
 const children = [];
 
 // Cover banner
+//
+// IMPORTANT: pass `type: "png"` explicitly. Without it, the docx package
+// stores the image with extension `.undefined`, which is not in
+// [Content_Types].xml's list of recognised image MIME types — Word then
+// flags the document with "Word found unreadable content" on open.
+// Verified 2026-05-03 by Scott; the dialog disappears once we set the
+// type correctly.
 if (logoBuffer) {
   children.push(new Paragraph({
     alignment: AlignmentType.CENTER,
     spacing: { before: 600, after: 240 },
-    children: [new ImageRun({ data: logoBuffer, transformation: { width: 240, height: 80 } })],
+    children: [new ImageRun({ data: logoBuffer, type: "png", transformation: { width: 240, height: 80 } })],
   }));
 }
 children.push(new Paragraph({
@@ -495,8 +502,35 @@ const doc = new Document({
   }],
 });
 
-const outPath = path.join(__dirname, "..", "docs", "HYTEK_RFY_Tools_User_Guide.docx");
+// Write to a fresh filename if the canonical one is locked (Word holds an
+// exclusive lock when the file is open, preventing overwrite). Falls
+// back to a -v2, -v3 etc. suffix until a free path is found.
+const docsDir = path.join(__dirname, "..", "docs");
+let outPath = path.join(docsDir, "HYTEK_RFY_Tools_User_Guide.docx");
+
+function pickWritablePath(base) {
+  if (!fs.existsSync(base)) return base;
+  // Test write-access; if locked, pick a versioned filename.
+  try {
+    fs.accessSync(base, fs.constants.W_OK);
+    // Try opening for write briefly to check Windows lock.
+    const fd = fs.openSync(base, "r+");
+    fs.closeSync(fd);
+    return base;
+  } catch {
+    const dir = path.dirname(base);
+    const ext = path.extname(base);
+    const stem = path.basename(base, ext);
+    for (let v = 2; v < 50; v++) {
+      const candidate = path.join(dir, `${stem}-v${v}${ext}`);
+      if (!fs.existsSync(candidate)) return candidate;
+    }
+    return base; // give up, let writeFileSync fail with a clear error
+  }
+}
+
 Packer.toBuffer(doc).then(buf => {
+  outPath = pickWritablePath(outPath);
   fs.writeFileSync(outPath, buf);
   console.log("Wrote", outPath, `(${buf.length.toLocaleString()} bytes)`);
 }).catch(e => {
