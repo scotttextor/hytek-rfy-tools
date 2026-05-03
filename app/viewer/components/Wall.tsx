@@ -32,6 +32,8 @@ export function Wall() {
   const selectStick = useViewerStore((s) => s.selectStick);
   const moveStickAction = useViewerStore((s) => s.moveStick);
   const moveStickEndAction = useViewerStore((s) => s.moveStickEnd);
+  const addStickAction = useViewerStore((s) => s.addStick);
+  const tool = useViewerStore((s) => s.tool);
 
   const frame = doc?.project.plans[selectedPlanIdx]?.frames[selectedFrameIdx];
 
@@ -62,6 +64,21 @@ export function Wall() {
   // so the dragging stick re-renders each frame with a transient offset.
   const [activeDrag, setActiveDrag] = useState<ActiveDrag | null>(null);
 
+  // Active stick-draw operation in elevation coords. Set on pointerdown
+  // when tool === "draw-stick"; updated on pointermove; committed via
+  // store.addStick on pointerup.
+  const [drawing, setDrawing] = useState<{ x1: number; y1: number; x2: number; y2: number } | null>(null);
+
+  /** Convert client (px) coords on the SVG to elevation-coord (mm) coords. */
+  function clientToElevation(clientX: number, clientY: number): { x: number; y: number } {
+    if (!svgRef.current) return { x: 0, y: 0 };
+    const rect = svgRef.current.getBoundingClientRect();
+    return {
+      x: view.x + (clientX - rect.left) * (view.w / rect.width),
+      y: view.y + (clientY - rect.top) * (view.h / rect.height),
+    };
+  }
+
   // Convert screen pixel delta → elevation-coord delta using the
   // current viewBox-to-element scale.
   function screenToElevationDelta(dxPx: number, dyPx: number): { dx: number; dy: number } {
@@ -76,9 +93,20 @@ export function Wall() {
   const onPanStart = (e: React.MouseEvent<SVGSVGElement>) => {
     if (e.button !== 0) return;
     if (activeDrag) return; // stick drag has priority
+    if (tool === "draw-stick") {
+      // Start drawing a new stick from this elevation-coord point.
+      const p = clientToElevation(e.clientX, e.clientY);
+      setDrawing({ x1: p.x, y1: p.y, x2: p.x, y2: p.y });
+      return;
+    }
     panRef.current = { x: e.clientX, y: e.clientY, vx: view.x, vy: view.y };
   };
   const onMouseMove = (e: React.MouseEvent<SVGSVGElement>) => {
+    if (drawing) {
+      const p = clientToElevation(e.clientX, e.clientY);
+      setDrawing({ ...drawing, x2: p.x, y2: p.y });
+      return;
+    }
     if (activeDrag) {
       const { dx, dy } = screenToElevationDelta(e.clientX - activeDrag.startClientX, e.clientY - activeDrag.startClientY);
       setActiveDrag({ ...activeDrag, dx, dy });
@@ -94,8 +122,16 @@ export function Wall() {
   };
   const onMouseUp = () => {
     panRef.current = null;
+    if (drawing) {
+      const dx = drawing.x2 - drawing.x1;
+      const dy = drawing.y2 - drawing.y1;
+      if (Math.hypot(dx, dy) > 5) {
+        addStickAction({ x: drawing.x1, y: drawing.y1 }, { x: drawing.x2, y: drawing.y2 });
+      }
+      setDrawing(null);
+      return;
+    }
     if (activeDrag) {
-      // Commit the drag as a single edit (one history entry).
       if (activeDrag.kind === "stick-body") {
         if (Math.abs(activeDrag.dx) > 0.5 || Math.abs(activeDrag.dy) > 0.5) {
           moveStickAction(activeDrag.stickKey, activeDrag.dx, activeDrag.dy);
@@ -161,7 +197,7 @@ export function Wall() {
             onMouseLeave={onMouseUp}
             onWheel={onWheel}
             onClick={onCanvasClick}
-            style={{ cursor: activeDrag ? "grabbing" : panRef.current ? "grabbing" : "grab" }}
+            style={{ cursor: tool === "draw-stick" ? "crosshair" : activeDrag ? "grabbing" : panRef.current ? "grabbing" : "grab" }}
           >
             <defs>
               <linearGradient id="steel" x1="0" x2="0" y1="0" y2="1">
@@ -174,6 +210,21 @@ export function Wall() {
                 <stop offset="100%" stopColor="#6a6a72" />
               </linearGradient>
             </defs>
+
+            {/* In-progress stick draw — shown as a yellow line preview
+                while the user drags. Committed via store.addStick on
+                pointerup. */}
+            {drawing && (
+              <line
+                x1={drawing.x1} y1={drawing.y1}
+                x2={drawing.x2} y2={drawing.y2}
+                stroke="#FFCB05"
+                strokeWidth={4}
+                strokeDasharray="6 4"
+                strokeLinecap="round"
+                opacity={0.85}
+              />
+            )}
 
             {/* Sticks — each rendered in elevation coords by Stick.tsx.
                 The active drag's stickKey gets a transient (dx, dy) offset

@@ -17,6 +17,7 @@ import {
   updateOpPos as editUpdateOpPos,
   moveStick as editMoveStick,
   moveStickEnd as editMoveStickEnd,
+  addStick as editAddStick,
   parseStickKey,
 } from "./lib/edits";
 
@@ -35,6 +36,11 @@ export interface ViewerState {
   panX: number;
   panY: number;
 
+  /** Active drawing tool. "select" = normal click/drag; "draw-stick" =
+   *  left-drag on empty canvas creates a new stick from drag start →
+   *  drag end (in elevation coords). */
+  tool: "select" | "draw-stick";
+
   history: RfyDocument[];
   future: RfyDocument[];
   dirty: boolean;
@@ -50,6 +56,7 @@ export interface ViewerState {
   selectOp: (idx: number | null) => void;
   setZoom: (zoom: number) => void;
   setPan: (panX: number, panY: number) => void;
+  setTool: (tool: "select" | "draw-stick") => void;
 
   // Edits
   addOp: (stickKey: string, op: RfyToolingOp) => void;
@@ -57,6 +64,7 @@ export interface ViewerState {
   updateOpPos: (stickKey: string, opIdx: number, newPos: number) => void;
   moveStick: (stickKey: string, dx: number, dy: number) => void;
   moveStickEnd: (stickKey: string, endIdx: 0 | 1, dx: number, dy: number) => void;
+  addStick: (start: { x: number; y: number }, end: { x: number; y: number }) => void;
 
   // History
   undo: () => void;
@@ -75,6 +83,7 @@ const initialState = {
   zoom: 1,
   panX: 0,
   panY: 0,
+  tool: "select" as "select" | "draw-stick",
   history: [],
   future: [],
   dirty: false,
@@ -110,6 +119,7 @@ export const useViewerStore = create<ViewerState>((set, get) => {
     selectOp: (idx) => set({ selectedOpIdx: idx }),
     setZoom: (zoom) => set({ zoom }),
     setPan: (panX, panY) => set({ panX, panY }),
+    setTool: (tool) => set({ tool }),
 
     addOp: (stickKey, op) => {
       const { doc, selectedPlanIdx } = get();
@@ -154,6 +164,14 @@ export const useViewerStore = create<ViewerState>((set, get) => {
       if (!addr) return;
       const next = editMoveStickEnd(doc, addr, endIdx, dx, dy);
       set({ doc: next, history: snapshot(), future: [], dirty: true });
+    },
+
+    addStick: (start, end) => {
+      const { doc, selectedPlanIdx, selectedFrameIdx } = get();
+      if (!doc) return;
+      const next = editAddStick(doc, selectedPlanIdx, selectedFrameIdx, { start, end });
+      if (next === doc) return;  // no-op (zero-length stick)
+      set({ doc: next, history: snapshot(), future: [], dirty: true, tool: "select" });
     },
 
     undo: () => {

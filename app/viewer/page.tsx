@@ -24,6 +24,8 @@ export default function ViewerPage() {
   const redo = useViewerStore((s) => s.redo);
   const canUndo = useViewerStore((s) => s.canUndo());
   const canRedo = useViewerStore((s) => s.canRedo());
+  const tool = useViewerStore((s) => s.tool);
+  const setTool = useViewerStore((s) => s.setTool);
   const [error, setError] = useState<string | null>(null);
   const [dragOver, setDragOver] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -129,6 +131,17 @@ export default function ViewerPage() {
         {filename && (
           <div className="flex items-center gap-2">
             {/* Edit toolbar — only visible when a doc is loaded */}
+            <button
+              onClick={() => setTool(tool === "draw-stick" ? "select" : "draw-stick")}
+              className={`px-2 py-1 rounded text-xs transition ${
+                tool === "draw-stick"
+                  ? "bg-yellow-400 text-black font-medium"
+                  : "border border-zinc-700 text-zinc-300 hover:border-yellow-400 hover:text-yellow-400"
+              }`}
+              title="Toggle Draw Stick mode (drag on empty area to add a new stick)"
+            >
+              ✏ Draw stick
+            </button>
             <button
               onClick={undo}
               disabled={!canUndo}

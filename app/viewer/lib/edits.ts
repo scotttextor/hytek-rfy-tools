@@ -132,6 +132,85 @@ export function moveStickEnd(
   return next;
 }
 
+/**
+ * Add a new stick to a frame. Caller supplies start (x1, y1) and end
+ * (x2, y2) midline endpoints in elevation coords plus a profile to
+ * inherit. The stick is constructed with a default outline (rectangle
+ * with profile.web as thickness) and zero tooling — user adds ops via
+ * the existing addOp action.
+ *
+ * Profile defaults: if `inheritFrom` is provided, copies the profile
+ * from that stick. Otherwise uses 70S41/0.75 (HYTEK's most common
+ * profile — same default as the home page).
+ */
+import type { RfyStick, RfyProfile } from "@hytek/rfy-codec";
+
+const DEFAULT_PROFILE: RfyProfile = {
+  metricLabel: "70 S 41",
+  imperialLabel: "275 S 161",
+  gauge: "0.75",
+  yield: "550",
+  machineSeries: "F300i",
+  shape: "S",
+  web: 70,
+  lFlange: 41,
+  rFlange: 38,
+  lip: 12,
+};
+
+export function addStick(
+  doc: RfyDocument,
+  planIdx: number,
+  frameIdx: number,
+  args: {
+    start: { x: number; y: number };
+    end: { x: number; y: number };
+    name?: string;
+    profile?: RfyProfile;
+    type?: "stud" | "plate";
+  },
+): RfyDocument {
+  const next = cloneDoc(doc);
+  const frame = next.project.plans[planIdx]?.frames[frameIdx];
+  if (!frame) return doc;
+  const profile = args.profile ?? DEFAULT_PROFILE;
+  const length = Math.hypot(args.end.x - args.start.x, args.end.y - args.start.y);
+  if (length < 1) return doc;
+  // Build a 4-corner outline rectangle for the stick. Two short edges =
+  // perpendicular to the length axis, scaled to profile.web (in mm).
+  const ux = (args.end.x - args.start.x) / length;
+  const uy = (args.end.y - args.start.y) / length;
+  // Perpendicular unit vector (rotate 90°)
+  const px = -uy;
+  const py = ux;
+  const halfW = profile.web / 2;
+  const corners = [
+    { x: args.start.x + px * halfW, y: args.start.y + py * halfW },
+    { x: args.start.x - px * halfW, y: args.start.y - py * halfW },
+    { x: args.end.x   - px * halfW, y: args.end.y   - py * halfW },
+    { x: args.end.x   + px * halfW, y: args.end.y   + py * halfW },
+  ];
+  // Pick a unique stick name. If none provided, use S<N+1>.
+  const existing = new Set(frame.sticks.map(s => s.name));
+  let name = args.name?.trim();
+  if (!name) {
+    let i = frame.sticks.length + 1;
+    while (existing.has(`S${i}`)) i++;
+    name = `S${i}`;
+  }
+  const newStick: RfyStick = {
+    name,
+    length,
+    type: args.type ?? "stud",
+    flipped: false,
+    profile,
+    tooling: [],
+    outlineCorners: corners,
+  };
+  frame.sticks = [...frame.sticks, newStick];
+  return next;
+}
+
 /** Default new-op factory — given a tool type and stick context, return a
  *  sensible default op shape. Spanned types get a default 39mm span; point
  *  types get a position the caller supplies. */
