@@ -109,13 +109,29 @@ children.push(num(3, "Frame types — which rule profile applies to which frame 
 children.push(h2("3.1  The ruleset selector (top of page)"));
 children.push(body("This is the band at the top with the active ruleset name + four buttons:"));
 children.push(...ref([
-  ["Active ruleset", "The ruleset currently being used by the encoder. The name appears next to a READ-ONLY badge if it's \"default\"."],
+  ["Active ruleset", "The ruleset currently being used by the encoder. The name appears next to a READ-ONLY badge if it's \"default\" (or any default.N version — see below)."],
   ["Save As New", "Clones the active ruleset to a new named copy. You give it a name (e.g., \"experiment-2026-05-15\") and an optional description. The new copy becomes editable — original stays untouched."],
   ["Revert", "Discards in-memory edits and re-loads the active ruleset from disk. Use this if you've made changes you don't want to keep but haven't saved yet."],
   ["Delete", "Permanently deletes a NON-default named ruleset. Default cannot be deleted. The currently-active ruleset cannot be deleted (switch to another first)."],
   ["Switch", "Changes which ruleset is active. The encoder immediately uses the newly-selected ruleset for any subsequent encode/decode."],
 ]));
-children.push(callout("Rule of thumb: don't edit \"default\". Click Save As New first, name your experiment, then edit the copy. If anything goes wrong, switch back to \"default\" and you're restored to factory rules."));
+
+children.push(h2("3.1a  The default master file — STANDING DIRECTIVE"));
+children.push(body("The \"default\" ruleset is the factory baseline — the original HYTEK rules extracted from FrameCAD Detailer's .sups files. It is intentionally sacred."));
+children.push(body("The default master can ONLY ever be changed by editing source files in the git repo and pushing new code. There is NO path through the running app — no UI button, no API call, no admin override — that can modify it. This is enforced at every layer:"));
+children.push(bullet("UI: \"Save\" button is hidden when the active ruleset is read-only."));
+children.push(bullet("API: /api/setups PUT and /api/frame-types PUT both return 403 if the active ruleset is default."));
+children.push(bullet("Library: lib/rulesets.ts rejects saveRuleset() calls with \"Ruleset is read-only\"."));
+children.push(bullet("File: meta.json has readonly: true; the deletion endpoint specifically excludes \"default\"."));
+
+children.push(h2("3.1b  Versioned defaults — when a fault is found"));
+children.push(body("If we ever identify a fault in the default rules, we do NOT edit the original. We create a NEW versioned default that incorporates the fix, and the original stays on disk forever."));
+children.push(body("How it works:"));
+children.push(num(1, "Developer regenerates or fixes the JSON in data/rulesets/default.N/ (where N is the next free version number — default.1, default.2, etc.)."));
+children.push(num(2, "Pushes the change to git. The app now ships with BOTH the original default AND default.N — both visible in the ruleset selector, both read-only, both preserved permanently."));
+children.push(num(3, "The \"preferred default\" pointer flips to default.N (also a code change). The encoder uses default.N by default for new sessions."));
+children.push(num(4, "Anyone wanting the original behavior can switch back to plain \"default\" anytime — it's still there, untouched, exactly as shipped."));
+children.push(callout("Rule of thumb: never edit a default* ruleset. Click Save As New to clone, then edit the copy. If your experiment goes wrong, switch back to any default version and you're restored to that factory baseline. Full restorability — no factory version is ever lost."));
 
 children.push(h2("3.2  Machine Types tab — per-profile rules"));
 children.push(body("Each machine type is a profile (70S41 0.75, 89S41 1.15, etc.) with these editable settings:"));
@@ -318,6 +334,36 @@ children.push(...ref([
   ["scripts/csv-diff-pipeline.mjs", "One-shot wrapper running both RFY and CSV diffs."],
   ["scripts/csv-diff-sweep.mjs", "CSV-level corpus sweep with 3-way summary table."],
 ]));
+
+// === 10. Wall Editor (coming soon) ===
+children.push(h1("10. Wall Editor (/viewer) — coming soon"));
+children.push(body("This page is being built — design approved 2026-05-03. It does NOT exist in the live app yet. This section documents what it will do so you can plan around the timeline."));
+
+children.push(h2("10.1  What it will do"));
+children.push(bullet("Render an imported XML or .rfy as a real-looking wall in 2D — sticks drawn as actual steel sections (C-section profile visible), tool ops drawn as real punch shapes (notches, holes, dimple bumps)."));
+children.push(bullet("Sidebar lists every frame in the imported file. Click a frame → it draws on the canvas."));
+children.push(bullet("Pan / zoom the wall view — GPU-accelerated, no lag."));
+children.push(bullet("Click a stick → side panel shows full op list + profile + length."));
+children.push(bullet("Click anywhere on a stick → \"add tool op\" menu — pick LipNotch, Swage, Bolt, etc., position it."));
+children.push(bullet("Drag stick endpoints to resize. Drag a stick to move it."));
+children.push(bullet("Click empty wall area → add a new stick."));
+children.push(bullet("Right-click an op → delete or change type."));
+children.push(bullet("Undo / redo on every action."));
+children.push(bullet("\"Save\" button — exports the edited wall back to a downloadable .rfy file ready for the F300i."));
+
+children.push(h2("10.2  What it will NOT do"));
+children.push(callout("The Wall Editor edits PER-JOB data — the .rfy file for ONE specific job. It does NOT edit any rules. Saving in the Wall Editor never touches default*, never touches your named rulesets, never changes what the encoder does next time you import a different XML. Two completely separate save targets."));
+
+children.push(h2("10.3  Build approach (already locked in)"));
+children.push(...ref([
+  ["Stack", "Pure SVG + React + Zustand. No 3rd-party drawing library — full control over how steel and tool ops render."],
+  ["Visual fidelity", "2D realistic — sticks drawn with steel shading + C-section flange shadow visible. Tool ops drawn as actual punch geometry, not abstract symbols. Looks like a manufacturing drawing."],
+  ["Build sequence", "Read-only viewer first (~3-4 weeks), then add tool-op editing (~2 weeks), then stick move/add (~2 weeks). Each stage ships independently — production stays unaffected throughout."],
+  ["Isolation", "Lives entirely under app/viewer/ in the repo. Hidden from nav until v1 ships. No risk of breaking /, /rules, /rules/tooling, or /regression while it's being built."],
+]));
+
+children.push(h2("10.4  When you'll see it"));
+children.push(body("Read-only viewer (sees the wall, sees the ops, can't edit yet) targets ~3-4 weeks. Full editor with tool-op editing + stick move/add targets ~7-8 weeks total. Each stage will ship independently — you'll see the read-only viewer LIVE on hytek-rfy-tools.vercel.app first, then editing arrives on top of it without disturbing anything else."));
 
 // ---- Build & write ----
 const doc = new Document({
