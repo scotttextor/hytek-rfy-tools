@@ -26,9 +26,14 @@ const WHITE = "FFFFFF";
 const BLUE = "1E63D5"; // for warning callouts
 
 // ---- Logo ----
+// Set NO_LOGO=1 to build without the cover-page logo image — useful when
+// debugging "Word found unreadable content" issues to isolate whether the
+// image embed is the cause.
 let logoBuffer = null;
-const logoPath = path.join(__dirname, "..", "public", "hytek-group-logo.png");
-try { logoBuffer = fs.readFileSync(logoPath); } catch { /* no logo */ }
+if (!process.env.NO_LOGO) {
+  const logoPath = path.join(__dirname, "..", "public", "hytek-group-logo.png");
+  try { logoBuffer = fs.readFileSync(logoPath); } catch { /* no logo */ }
+}
 
 // ---- Cell + paragraph helpers ----
 const border = { style: BorderStyle.SINGLE, size: 1, color: "DDDDDD" };
