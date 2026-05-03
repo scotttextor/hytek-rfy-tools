@@ -12,12 +12,26 @@ import { useViewerStore } from "../store";
 import { Stick } from "./Stick";
 import { frameBBox, padBBox } from "../lib/geometry";
 
+interface ActiveDrag {
+  kind: "stick-body" | "stick-end";
+  stickKey: string;
+  endIdx?: 0 | 1;
+  /** Pointer screen coords at drag-start. */
+  startClientX: number;
+  startClientY: number;
+  /** Live cumulative offset in elevation coords. */
+  dx: number;
+  dy: number;
+}
+
 export function Wall() {
   const doc = useViewerStore((s) => s.doc);
   const selectedPlanIdx = useViewerStore((s) => s.selectedPlanIdx);
   const selectedFrameIdx = useViewerStore((s) => s.selectedFrameIdx);
   const selectedStickKey = useViewerStore((s) => s.selectedStickKey);
   const selectStick = useViewerStore((s) => s.selectStick);
+  const moveStickAction = useViewerStore((s) => s.moveStick);
+  const moveStickEndAction = useViewerStore((s) => s.moveStickEnd);
 
   const frame = doc?.project.plans[selectedPlanIdx]?.frames[selectedFrameIdx];
 
@@ -42,24 +56,67 @@ export function Wall() {
 
   // Pan: drag with primary button on empty area.
   const svgRef = useRef<SVGSVGElement | null>(null);
-  const dragRef = useRef<{ x: number; y: number; vx: number; vy: number } | null>(null);
+  const panRef = useRef<{ x: number; y: number; vx: number; vy: number } | null>(null);
 
-  const onMouseDown = (e: React.MouseEvent<SVGSVGElement>) => {
-    // Only start panning if the click target is the SVG itself or
-    // background — not a stick (stick stops propagation).
+  // Active stick drag (move-body or end-resize). Lives in component state
+  // so the dragging stick re-renders each frame with a transient offset.
+  const [activeDrag, setActiveDrag] = useState<ActiveDrag | null>(null);
+
+  // Convert screen pixel delta → elevation-coord delta using the
+  // current viewBox-to-element scale.
+  function screenToElevationDelta(dxPx: number, dyPx: number): { dx: number; dy: number } {
+    if (!svgRef.current) return { dx: 0, dy: 0 };
+    const rect = svgRef.current.getBoundingClientRect();
+    return {
+      dx: dxPx * (view.w / rect.width),
+      dy: dyPx * (view.h / rect.height),
+    };
+  }
+
+  const onPanStart = (e: React.MouseEvent<SVGSVGElement>) => {
     if (e.button !== 0) return;
-    dragRef.current = { x: e.clientX, y: e.clientY, vx: view.x, vy: view.y };
+    if (activeDrag) return; // stick drag has priority
+    panRef.current = { x: e.clientX, y: e.clientY, vx: view.x, vy: view.y };
   };
   const onMouseMove = (e: React.MouseEvent<SVGSVGElement>) => {
-    if (!dragRef.current || !svgRef.current) return;
+    if (activeDrag) {
+      const { dx, dy } = screenToElevationDelta(e.clientX - activeDrag.startClientX, e.clientY - activeDrag.startClientY);
+      setActiveDrag({ ...activeDrag, dx, dy });
+      return;
+    }
+    if (!panRef.current || !svgRef.current) return;
     const rect = svgRef.current.getBoundingClientRect();
     const scaleX = view.w / rect.width;
     const scaleY = view.h / rect.height;
-    const dx = (e.clientX - dragRef.current.x) * scaleX;
-    const dy = (e.clientY - dragRef.current.y) * scaleY;
-    setView(v => ({ ...v, x: dragRef.current!.vx - dx, y: dragRef.current!.vy - dy }));
+    const dx = (e.clientX - panRef.current.x) * scaleX;
+    const dy = (e.clientY - panRef.current.y) * scaleY;
+    setView(v => ({ ...v, x: panRef.current!.vx - dx, y: panRef.current!.vy - dy }));
   };
-  const onMouseUp = () => { dragRef.current = null; };
+  const onMouseUp = () => {
+    panRef.current = null;
+    if (activeDrag) {
+      // Commit the drag as a single edit (one history entry).
+      if (activeDrag.kind === "stick-body") {
+        if (Math.abs(activeDrag.dx) > 0.5 || Math.abs(activeDrag.dy) > 0.5) {
+          moveStickAction(activeDrag.stickKey, activeDrag.dx, activeDrag.dy);
+        }
+      } else if (activeDrag.kind === "stick-end" && activeDrag.endIdx !== undefined) {
+        if (Math.abs(activeDrag.dx) > 0.5 || Math.abs(activeDrag.dy) > 0.5) {
+          moveStickEndAction(activeDrag.stickKey, activeDrag.endIdx, activeDrag.dx, activeDrag.dy);
+        }
+      }
+      setActiveDrag(null);
+    }
+  };
+
+  const onBodyPointerDown = (e: React.PointerEvent, stickKey: string) => {
+    e.stopPropagation();
+    setActiveDrag({ kind: "stick-body", stickKey, startClientX: e.clientX, startClientY: e.clientY, dx: 0, dy: 0 });
+  };
+  const onEndPointerDown = (e: React.PointerEvent, stickKey: string, endIdx: 0 | 1) => {
+    e.stopPropagation();
+    setActiveDrag({ kind: "stick-end", stickKey, endIdx, startClientX: e.clientX, startClientY: e.clientY, dx: 0, dy: 0 });
+  };
 
   // Zoom: mouse-wheel, centred on cursor position.
   const onWheel = (e: React.WheelEvent<SVGSVGElement>) => {
@@ -98,13 +155,13 @@ export function Wall() {
             xmlns="http://www.w3.org/2000/svg"
             viewBox={`${view.x} ${view.y} ${view.w} ${view.h}`}
             preserveAspectRatio="xMidYMid meet"
-            onMouseDown={onMouseDown}
+            onMouseDown={onPanStart}
             onMouseMove={onMouseMove}
             onMouseUp={onMouseUp}
             onMouseLeave={onMouseUp}
             onWheel={onWheel}
             onClick={onCanvasClick}
-            style={{ cursor: dragRef.current ? "grabbing" : "grab" }}
+            style={{ cursor: activeDrag ? "grabbing" : panRef.current ? "grabbing" : "grab" }}
           >
             <defs>
               <linearGradient id="steel" x1="0" x2="0" y1="0" y2="1">
@@ -118,9 +175,13 @@ export function Wall() {
               </linearGradient>
             </defs>
 
-            {/* Sticks — each rendered in elevation coords by Stick.tsx */}
+            {/* Sticks — each rendered in elevation coords by Stick.tsx.
+                The active drag's stickKey gets a transient (dx, dy) offset
+                so it follows the cursor in real-time without dirtying the
+                store until pointerup commits the edit. */}
             {frame.sticks.map((stick, i) => {
               const key = `${selectedFrameIdx}-${i}`;
+              const isDragging = activeDrag?.stickKey === key && activeDrag.kind === "stick-body";
               return (
                 <Stick
                   key={key}
@@ -128,6 +189,9 @@ export function Wall() {
                   stickKey={key}
                   selected={selectedStickKey === key}
                   onSelect={selectStick}
+                  dragOffset={isDragging ? { dx: activeDrag.dx, dy: activeDrag.dy } : null}
+                  onBodyPointerDown={onBodyPointerDown}
+                  onEndPointerDown={onEndPointerDown}
                 />
               );
             })}
@@ -141,7 +205,7 @@ export function Wall() {
               {" · "}
               {frame.sticks.length} sticks · {frame.sticks.reduce((s, x) => s + x.tooling.length, 0)} ops
             </span>
-            <span>drag to pan · wheel to zoom · click stick to select</span>
+            <span>drag empty area = pan · wheel = zoom · click stick = select · drag selected stick = move · drag yellow handles = resize</span>
           </div>
         </>
       )}

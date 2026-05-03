@@ -11,7 +11,14 @@
 
 import { create } from "zustand";
 import type { RfyDocument, RfyToolingOp } from "@hytek/rfy-codec";
-import { addOp as editAddOp, removeOp as editRemoveOp, updateOpPos as editUpdateOpPos, parseStickKey } from "./lib/edits";
+import {
+  addOp as editAddOp,
+  removeOp as editRemoveOp,
+  updateOpPos as editUpdateOpPos,
+  moveStick as editMoveStick,
+  moveStickEnd as editMoveStickEnd,
+  parseStickKey,
+} from "./lib/edits";
 
 const MAX_HISTORY = 100;
 
@@ -48,6 +55,8 @@ export interface ViewerState {
   addOp: (stickKey: string, op: RfyToolingOp) => void;
   removeOp: (stickKey: string, opIdx: number) => void;
   updateOpPos: (stickKey: string, opIdx: number, newPos: number) => void;
+  moveStick: (stickKey: string, dx: number, dy: number) => void;
+  moveStickEnd: (stickKey: string, endIdx: 0 | 1, dx: number, dy: number) => void;
 
   // History
   undo: () => void;
@@ -126,6 +135,24 @@ export const useViewerStore = create<ViewerState>((set, get) => {
       const addr = parseStickKey(stickKey, selectedPlanIdx);
       if (!addr) return;
       const next = editUpdateOpPos(doc, addr, opIdx, newPos);
+      set({ doc: next, history: snapshot(), future: [], dirty: true });
+    },
+
+    moveStick: (stickKey, dx, dy) => {
+      const { doc, selectedPlanIdx } = get();
+      if (!doc) return;
+      const addr = parseStickKey(stickKey, selectedPlanIdx);
+      if (!addr) return;
+      const next = editMoveStick(doc, addr, dx, dy);
+      set({ doc: next, history: snapshot(), future: [], dirty: true });
+    },
+
+    moveStickEnd: (stickKey, endIdx, dx, dy) => {
+      const { doc, selectedPlanIdx } = get();
+      if (!doc) return;
+      const addr = parseStickKey(stickKey, selectedPlanIdx);
+      if (!addr) return;
+      const next = editMoveStickEnd(doc, addr, endIdx, dx, dy);
       set({ doc: next, history: snapshot(), future: [], dirty: true });
     },
 
