@@ -95,14 +95,16 @@ export async function GET() {
 
 // PUT /api/setups — save edited machine types back to the active ruleset.
 //   body: { full: { <id>: <setup>, ... } } — the same shape as `full` returned by GET
-import { saveRuleset } from "@/lib/rulesets";
+import { saveRuleset, isDefaultName } from "@/lib/rulesets";
 
 export async function PUT(req: Request) {
   try {
     const active = await getActive();
-    if (active === "default") {
+    // Reject any default* ruleset (default, default.1, default.2 ...)
+    // — see lib/rulesets.ts for the full standing-directive rationale.
+    if (isDefaultName(active)) {
       return NextResponse.json(
-        { error: "Cannot save to the default ruleset. Use 'Save As' to create a new editable copy first." },
+        { error: `Cannot save to the protected factory default "${active}". Click 'Save As' to create a new editable copy first.` },
         { status: 403 },
       );
     }

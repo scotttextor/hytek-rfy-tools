@@ -2,7 +2,7 @@
 // PUT /api/frame-types — save edited frame types back to the active ruleset.
 
 import { NextResponse } from "next/server";
-import { getActive, getRulesetFrameTypes, saveRuleset } from "@/lib/rulesets";
+import { getActive, getRulesetFrameTypes, saveRuleset, isDefaultName } from "@/lib/rulesets";
 
 export const runtime = "nodejs";
 
@@ -69,9 +69,9 @@ export async function GET() {
 export async function PUT(req: Request) {
   try {
     const active = await getActive();
-    if (active === "default") {
+    if (isDefaultName(active)) {
       return NextResponse.json(
-        { error: "Cannot save to the default ruleset. Use 'Save As' to create a new editable copy first." },
+        { error: `Cannot save to the protected factory default "${active}". Click 'Save As' to create a new editable copy first.` },
         { status: 403 },
       );
     }

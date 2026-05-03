@@ -39,14 +39,28 @@ export interface RulesetListEntry extends RulesetMeta {
   active: boolean;
 }
 
-/** Validate ruleset name: alphanumeric + dash/underscore + space, max 64 chars */
+/** Validate ruleset name: alphanumeric + dash/underscore + space + dot, max 64 chars.
+ *  Dots are allowed so `default.1`, `default.2`, etc. (versioned defaults) can be
+ *  created as new dirs. Path traversal (`..`) is still rejected. */
 export function isValidRulesetName(name: string): boolean {
   if (!name || typeof name !== "string") return false;
   if (name.length === 0 || name.length > 64) return false;
-  if (!/^[\w\- ]+$/.test(name)) return false;
+  if (!/^[\w\-. ]+$/.test(name)) return false;
   // Reject path traversal attempts
   if (name.includes("..") || name.includes("/") || name.includes("\\")) return false;
   return true;
+}
+
+/**
+ * A name is a "default" if it is exactly "default" OR matches the
+ * versioned pattern "default.N" (default.1, default.2, ...). All
+ * defaults are read-only and can never be deleted via the running app —
+ * the only way to introduce or modify a default is via a code commit
+ * to the repo. See docs/superpowers/specs/2026-05-03-wall-viewer-design.md
+ * and the user guide section 3.1a "The default master file".
+ */
+export function isDefaultName(name: string): boolean {
+  return name === "default" || /^default\.\d+$/.test(name);
 }
 
 /** Get the currently active ruleset name. Returns "default" if none set. */
@@ -85,7 +99,12 @@ export async function listRulesets(): Promise<RulesetListEntry[]> {
     if (!stat?.isDirectory()) continue;
     try {
       const meta = (await readJsonStripBom(path.join(dir, "meta.json"))) as RulesetMeta;
-      out.push({ ...meta, active: entry === active });
+      // Defense-in-depth: if any default* ruleset has readonly:false in
+      // its meta.json (manual tampering or a bug), force-flag readonly
+      // anyway. The lib NEVER trusts a default* meta.json to opt out
+      // of read-only.
+      const meta2 = isDefaultName(entry) ? { ...meta, readonly: true } : meta;
+      out.push({ ...meta2, active: entry === active });
     } catch {
       // Skip rulesets with broken meta
     }
@@ -143,8 +162,12 @@ export async function createRuleset(args: {
   if (!isValidRulesetName(name)) {
     throw new Error(`Invalid ruleset name: ${name}`);
   }
-  if (name === "default") {
-    throw new Error(`Cannot create ruleset named "default" — that's the protected factory ruleset`);
+  if (isDefaultName(name)) {
+    throw new Error(
+      `Cannot create ruleset with reserved name "${name}". The default* namespace ` +
+      `(default, default.1, default.2 ...) is reserved for factory baselines that ` +
+      `can only be added by a code commit to the repo. Use a different name.`
+    );
   }
   const dir = path.join(RULESETS_DIR, name);
   // Reject if already exists
@@ -195,6 +218,18 @@ export async function saveRuleset(args: {
   }
   const dir = path.join(RULESETS_DIR, name);
   const metaPath = path.join(dir, "meta.json");
+  // STANDING DIRECTIVE: any default* ruleset is read-only at the lib
+  // layer regardless of its meta.json. This blocks any caller — UI,
+  // direct API hit, or admin script — from overwriting a factory
+  // baseline. The only path to change `default*` is a code commit to
+  // data/rulesets/.
+  if (isDefaultName(name)) {
+    throw new Error(
+      `Ruleset "${name}" is a protected factory default and can never be edited via ` +
+      `the app. To create a new factory baseline (default.N), edit data/rulesets/ in ` +
+      `the repo and push. Use Save As to create a named editable copy instead.`
+    );
+  }
   let meta: RulesetMeta;
   try {
     meta = (await readJsonStripBom(metaPath)) as RulesetMeta;
@@ -224,13 +259,21 @@ export async function saveRuleset(args: {
   }
 }
 
-/** Delete a named ruleset. Cannot delete default or active. */
+/** Delete a named ruleset. Cannot delete any default* or the active ruleset. */
 export async function deleteRuleset(name: string): Promise<void> {
   if (!isValidRulesetName(name)) {
     throw new Error(`Invalid ruleset name: ${name}`);
   }
-  if (name === "default") {
-    throw new Error(`Cannot delete the default ruleset`);
+  // STANDING DIRECTIVE: every factory baseline (default, default.1, ...)
+  // stays on disk forever. Removing one would erase a ruleset users
+  // might want to roll back to. Defaults are only removable via a code
+  // change in the repo (delete the dir, push), and that's intentional.
+  if (isDefaultName(name)) {
+    throw new Error(
+      `Cannot delete protected factory default "${name}". The default* namespace ` +
+      `is preserved permanently for full rollback. Defaults are only removable via ` +
+      `a code commit to the repo.`
+    );
   }
   const active = await getActive();
   if (name === active) {
