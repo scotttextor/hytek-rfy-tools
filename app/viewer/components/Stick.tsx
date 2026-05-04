@@ -24,12 +24,22 @@ interface StickProps {
    *  pointerup via store.moveStick. */
   dragOffset?: { dx: number; dy: number } | null;
   /** Pointer-down handlers passed in from Wall — body for move-drag,
-   *  per-end handles for endpoint-drag. */
+   *  per-end handles for endpoint-drag, and per-op marker for op-drag. */
   onBodyPointerDown?: (e: React.PointerEvent, stickKey: string) => void;
   onEndPointerDown?: (e: React.PointerEvent, stickKey: string, endIdx: 0 | 1) => void;
+  /** Pointer-down on a tool-op marker. Wall starts an op-drag that
+   *  projects cursor delta onto the stick's length axis. Only enabled
+   *  when this stick is selected (so unselected sticks don't intercept
+   *  pan gestures on the canvas). */
+  onOpPointerDown?: (e: React.PointerEvent, stickKey: string, opSourceIdx: number) => void;
+  /** While an op is being dragged, Wall passes (sourceIdx, deltaPos)
+   *  here so this stick can render every marker that came from that
+   *  tooling op shifted by deltaPos — gives live visual feedback before
+   *  the commit on pointerup. */
+  dragOp?: { sourceIdx: number; deltaPos: number } | null;
 }
 
-export function Stick({ stick, stickKey, selected, onSelect, dragOffset, onBodyPointerDown, onEndPointerDown }: StickProps) {
+export function Stick({ stick, stickKey, selected, onSelect, dragOffset, onBodyPointerDown, onEndPointerDown, onOpPointerDown, dragOp }: StickProps) {
   const m = stickMidline(stick);
   if (!m) return null;
 
@@ -69,9 +79,33 @@ export function Stick({ stick, stickKey, selected, onSelect, dragOffset, onBodyP
         opacity={0.85}
         pointerEvents="none"
       />
-      {ops.map((op, i) => (
-        <ToolOp key={i} type={op.type} pos={op.pos} thickness={thickness} />
-      ))}
+      {ops.map((op, i) => {
+        // Live drag preview — every rendered marker that originated from
+        // the dragging tooling op shifts by deltaPos. For point ops only
+        // one marker; for spanned ops every expanded marker.
+        const shifted = dragOp && dragOp.sourceIdx === op.sourceIdx ? op.pos + dragOp.deltaPos : op.pos;
+        const isDraggingThis = !!(dragOp && dragOp.sourceIdx === op.sourceIdx);
+        return (
+          <g
+            key={i}
+            // Wrap in a <g> so we can attach the pointer-down handler to
+            // the entire marker (including children) without splitting
+            // ToolOp's switch logic.
+            onPointerDown={(e) => {
+              if (selected && onOpPointerDown) {
+                e.stopPropagation();
+                onOpPointerDown(e, stickKey, op.sourceIdx);
+              }
+            }}
+            style={{
+              cursor: selected && onOpPointerDown ? "grab" : "default",
+              opacity: isDraggingThis ? 0.85 : 1,
+            }}
+          >
+            <ToolOp type={op.type} pos={shifted} thickness={thickness} />
+          </g>
+        );
+      })}
       {/* Endpoint resize handles — only on the selected stick. Drag to
           resize / re-orient the stick. */}
       {selected && onEndPointerDown && (

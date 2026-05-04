@@ -11,18 +11,29 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useViewerStore } from "../store";
 import { Stick } from "./Stick";
 import { ProfilePickerDialog } from "./ProfilePickerDialog";
-import { frameBBox, padBBox } from "../lib/geometry";
+import { frameBBox, padBBox, stickMidline } from "../lib/geometry";
 
 interface ActiveDrag {
-  kind: "stick-body" | "stick-end";
+  kind: "stick-body" | "stick-end" | "op";
   stickKey: string;
   endIdx?: 0 | 1;
+  /** For "op" drags — index into stick.tooling. */
+  opSourceIdx?: number;
+  /** For "op" drags — projection unit vector along the stick's length
+   *  axis at drag-start, in elevation coords. Cached so we don't
+   *  recompute every mousemove. */
+  opAxisX?: number;
+  opAxisY?: number;
   /** Pointer screen coords at drag-start. */
   startClientX: number;
   startClientY: number;
   /** Live cumulative offset in elevation coords. */
   dx: number;
   dy: number;
+  /** For "op" drags — live cumulative delta along the stick's length
+   *  axis (mm). Equals (dx, dy) projected onto (opAxisX, opAxisY) and
+   *  snapped to 0.5mm. */
+  deltaPos?: number;
 }
 
 export function Wall() {
@@ -33,6 +44,7 @@ export function Wall() {
   const selectStick = useViewerStore((s) => s.selectStick);
   const moveStickAction = useViewerStore((s) => s.moveStick);
   const moveStickEndAction = useViewerStore((s) => s.moveStickEnd);
+  const updateOpPosAction = useViewerStore((s) => s.updateOpPos);
   const tool = useViewerStore((s) => s.tool);
   const setTool = useViewerStore((s) => s.setTool);
 
@@ -119,7 +131,18 @@ export function Wall() {
     }
     if (activeDrag) {
       const { dx, dy } = screenToElevationDelta(e.clientX - activeDrag.startClientX, e.clientY - activeDrag.startClientY);
-      setActiveDrag({ ...activeDrag, dx, dy });
+      if (activeDrag.kind === "op") {
+        // Project elevation-coord delta onto the stick's length axis
+        // (cached at drag-start) to get a 1-D position delta. Snap to
+        // 0.5mm so dragged ops land on tidy values.
+        const ax = activeDrag.opAxisX ?? 1;
+        const ay = activeDrag.opAxisY ?? 0;
+        const projected = dx * ax + dy * ay;
+        const snapped = Math.round(projected * 2) / 2;
+        setActiveDrag({ ...activeDrag, dx, dy, deltaPos: snapped });
+      } else {
+        setActiveDrag({ ...activeDrag, dx, dy });
+      }
       return;
     }
     if (!panRef.current || !svgRef.current) return;
@@ -155,6 +178,37 @@ export function Wall() {
         if (Math.abs(activeDrag.dx) > 0.5 || Math.abs(activeDrag.dy) > 0.5) {
           moveStickEndAction(activeDrag.stickKey, activeDrag.endIdx, activeDrag.dx, activeDrag.dy);
         }
+      } else if (activeDrag.kind === "op" && activeDrag.opSourceIdx !== undefined && frame) {
+        const dp = activeDrag.deltaPos ?? 0;
+        if (Math.abs(dp) >= 0.5) {
+          // Resolve the underlying tooling op to compute the new
+          // anchor position. Spanned ops drag the whole span; the
+          // edits.updateOpPos action treats `newPos` as the new
+          // startPos and preserves length.
+          const [frameIdxStr, stickIdxStr] = activeDrag.stickKey.split("-");
+          const stickIdx = parseInt(stickIdxStr ?? "", 10);
+          const frameIdx = parseInt(frameIdxStr ?? "", 10);
+          if (!Number.isNaN(stickIdx) && !Number.isNaN(frameIdx)) {
+            const stick = frame.sticks[stickIdx];
+            const op = stick?.tooling[activeDrag.opSourceIdx];
+            if (op) {
+              if (op.kind === "point") {
+                const newPos = op.pos + dp;
+                const clamped = Math.max(0, Math.min(stick!.length, newPos));
+                updateOpPosAction(activeDrag.stickKey, activeDrag.opSourceIdx, clamped);
+              } else if (op.kind === "spanned") {
+                // Treat newPos as the new startPos. Clamp so the span
+                // doesn't slide off either end of the stick.
+                const span = op.endPos - op.startPos;
+                const newStart = op.startPos + dp;
+                const clamped = Math.max(0, Math.min(stick!.length - span, newStart));
+                updateOpPosAction(activeDrag.stickKey, activeDrag.opSourceIdx, clamped);
+              }
+              // start/end ops are anchored to the stick edge — they
+              // don't have a draggable position.
+            }
+          }
+        }
       }
       setActiveDrag(null);
     }
@@ -167,6 +221,34 @@ export function Wall() {
   const onEndPointerDown = (e: React.PointerEvent, stickKey: string, endIdx: 0 | 1) => {
     e.stopPropagation();
     setActiveDrag({ kind: "stick-end", stickKey, endIdx, startClientX: e.clientX, startClientY: e.clientY, dx: 0, dy: 0 });
+  };
+  const onOpPointerDown = (e: React.PointerEvent, stickKey: string, opSourceIdx: number) => {
+    e.stopPropagation();
+    if (!frame) return;
+    // Cache the stick's length-axis unit vector at drag-start. We
+    // project the cursor's elevation-coord delta onto this axis to
+    // turn 2-D drag into a 1-D position delta along the stick.
+    const [, stickIdxStr] = stickKey.split("-");
+    const stickIdx = parseInt(stickIdxStr ?? "", 10);
+    if (Number.isNaN(stickIdx)) return;
+    const stick = frame.sticks[stickIdx];
+    if (!stick) return;
+    const m = stickMidline(stick);
+    if (!m || m.length === 0) return;
+    const opAxisX = (m.end.x - m.start.x) / m.length;
+    const opAxisY = (m.end.y - m.start.y) / m.length;
+    setActiveDrag({
+      kind: "op",
+      stickKey,
+      opSourceIdx,
+      opAxisX,
+      opAxisY,
+      startClientX: e.clientX,
+      startClientY: e.clientY,
+      dx: 0,
+      dy: 0,
+      deltaPos: 0,
+    });
   };
 
   // Zoom: mouse-wheel, centred on cursor position.
@@ -248,6 +330,12 @@ export function Wall() {
             {frame.sticks.map((stick, i) => {
               const key = `${selectedFrameIdx}-${i}`;
               const isDragging = activeDrag?.stickKey === key && activeDrag.kind === "stick-body";
+              const opDrag =
+                activeDrag?.stickKey === key &&
+                activeDrag.kind === "op" &&
+                activeDrag.opSourceIdx !== undefined
+                  ? { sourceIdx: activeDrag.opSourceIdx, deltaPos: activeDrag.deltaPos ?? 0 }
+                  : null;
               return (
                 <Stick
                   key={key}
@@ -258,6 +346,8 @@ export function Wall() {
                   dragOffset={isDragging ? { dx: activeDrag.dx, dy: activeDrag.dy } : null}
                   onBodyPointerDown={onBodyPointerDown}
                   onEndPointerDown={onEndPointerDown}
+                  onOpPointerDown={onOpPointerDown}
+                  dragOp={opDrag}
                 />
               );
             })}
@@ -271,7 +361,7 @@ export function Wall() {
               {" · "}
               {frame.sticks.length} sticks · {frame.sticks.reduce((s, x) => s + x.tooling.length, 0)} ops
             </span>
-            <span>drag empty area = pan · wheel = zoom · click stick = select · drag selected stick = move · drag yellow handles = resize</span>
+            <span>drag empty area = pan · wheel = zoom · click stick = select · drag selected stick = move · drag yellow handles = resize · drag op marker = reposition</span>
           </div>
 
           {/* Profile picker — shown after the user finishes drawing a
