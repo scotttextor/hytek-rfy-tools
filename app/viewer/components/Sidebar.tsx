@@ -9,7 +9,6 @@ import { useState } from "react";
 import { useViewerStore } from "../store";
 import { frameSummary, docSummary } from "../lib/geometry";
 import { AddOpDialog } from "./AddOpDialog";
-import { Legend } from "./Legend";
 import type { RfyToolingOp } from "@hytek/rfy-codec";
 
 function opLabel(op: RfyToolingOp, stickLength: number): string {
@@ -34,13 +33,8 @@ export function Sidebar() {
 
   if (!doc) {
     return (
-      <aside className="w-72 shrink-0 border-r border-zinc-800 flex flex-col">
-        <div className="p-4 text-sm text-zinc-500 flex-1">
-          Drop a <code className="text-yellow-400">.rfy</code> file on the canvas to load a job.
-        </div>
-        {/* Legend visible even before a file is loaded so users can preview
-            what each tool color means. */}
-        <Legend />
+      <aside className="w-72 shrink-0 border-r border-zinc-800 p-4 text-sm text-zinc-500">
+        Drop a <code className="text-yellow-400">.rfy</code> file on the canvas to load a job.
       </aside>
     );
   }
@@ -200,11 +194,6 @@ export function Sidebar() {
           )}
         </div>
       )}
-
-      {/* Tool legend — color swatch + CSV label + description per op type.
-          Sits at the very bottom, collapsible, always visible when a doc
-          is loaded so users can identify any colored ring on the canvas. */}
-      <Legend />
     </aside>
   );
 }

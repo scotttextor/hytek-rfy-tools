@@ -251,20 +251,34 @@ export function Wall() {
     });
   };
 
-  // Zoom: mouse-wheel, centred on cursor position.
-  const onWheel = (e: React.WheelEvent<SVGSVGElement>) => {
-    if (!svgRef.current) return;
-    const rect = svgRef.current.getBoundingClientRect();
-    const cx = view.x + (e.clientX - rect.left) * (view.w / rect.width);
-    const cy = view.y + (e.clientY - rect.top) * (view.h / rect.height);
-    const factor = e.deltaY > 0 ? 1.15 : 1 / 1.15;
-    setView(v => ({
-      x: cx - (cx - v.x) * factor,
-      y: cy - (cy - v.y) * factor,
-      w: v.w * factor,
-      h: v.h * factor,
-    }));
-  };
+  // Zoom: mouse-wheel, centred on cursor position. Attached as a NATIVE
+  // event listener with `passive: false` so we can call preventDefault
+  // and STOP the wheel event from bubbling up to the page (where it
+  // would scroll the body or — under Ctrl — zoom the whole page).
+  // React's onWheel is registered as passive by default in React 18+,
+  // so calling preventDefault inside a React handler is silently
+  // ignored. Hence this useEffect.
+  useEffect(() => {
+    const el = svgRef.current;
+    if (!el) return;
+    const handler = (e: WheelEvent) => {
+      e.preventDefault();
+      const rect = el.getBoundingClientRect();
+      const cx = view.x + (e.clientX - rect.left) * (view.w / rect.width);
+      const cy = view.y + (e.clientY - rect.top) * (view.h / rect.height);
+      const factor = e.deltaY > 0 ? 1.15 : 1 / 1.15;
+      setView(v => ({
+        x: cx - (cx - v.x) * factor,
+        y: cy - (cy - v.y) * factor,
+        w: v.w * factor,
+        h: v.h * factor,
+      }));
+    };
+    el.addEventListener("wheel", handler, { passive: false });
+    return () => el.removeEventListener("wheel", handler);
+    // We deliberately re-attach when the view changes so the closure
+    // captures the latest view rect for cursor-centred zoom.
+  }, [view.x, view.y, view.w, view.h]);
 
   // Click empty canvas → deselect stick
   const onCanvasClick = () => selectStick(null);
@@ -292,7 +306,6 @@ export function Wall() {
             onMouseMove={onMouseMove}
             onMouseUp={onMouseUp}
             onMouseLeave={onMouseUp}
-            onWheel={onWheel}
             onClick={onCanvasClick}
             style={{ cursor: tool === "draw-stick" ? "crosshair" : activeDrag ? "grabbing" : panRef.current ? "grabbing" : "grab" }}
           >

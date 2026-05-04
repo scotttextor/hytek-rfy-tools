@@ -13,6 +13,7 @@ import { decode } from "@hytek/rfy-codec";
 import { useViewerStore } from "./store";
 import { Sidebar } from "./components/Sidebar";
 import { Wall } from "./components/Wall";
+import { LegendStrip } from "./components/LegendStrip";
 import { documentToScheduleXml } from "./lib/serialize";
 
 export default function ViewerPage() {
@@ -204,6 +205,12 @@ export default function ViewerPage() {
           ← Tools
         </a>
       </header>
+
+      {/* Tool-op color legend strip — always visible. Lives between the
+          header and the canvas/sidebar so users can scan it without
+          opening anything. Each chip shows the type's color + name +
+          CSV label; hover for the description tooltip. */}
+      <LegendStrip />
 
       {error && (
         <div className="px-6 py-3 border-b border-red-900 bg-red-950/40 text-red-300 text-sm">
