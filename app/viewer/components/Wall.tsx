@@ -10,6 +10,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useViewerStore } from "../store";
 import { Stick } from "./Stick";
+import { ProfilePickerDialog } from "./ProfilePickerDialog";
 import { frameBBox, padBBox } from "../lib/geometry";
 
 interface ActiveDrag {
@@ -32,8 +33,8 @@ export function Wall() {
   const selectStick = useViewerStore((s) => s.selectStick);
   const moveStickAction = useViewerStore((s) => s.moveStick);
   const moveStickEndAction = useViewerStore((s) => s.moveStickEnd);
-  const addStickAction = useViewerStore((s) => s.addStick);
   const tool = useViewerStore((s) => s.tool);
+  const setTool = useViewerStore((s) => s.setTool);
 
   const frame = doc?.project.plans[selectedPlanIdx]?.frames[selectedFrameIdx];
 
@@ -65,9 +66,18 @@ export function Wall() {
   const [activeDrag, setActiveDrag] = useState<ActiveDrag | null>(null);
 
   // Active stick-draw operation in elevation coords. Set on pointerdown
-  // when tool === "draw-stick"; updated on pointermove; committed via
-  // store.addStick on pointerup.
+  // when tool === "draw-stick"; updated on pointermove; on pointerup we
+  // stash the pending draw into `pendingDraw` and pop the profile picker
+  // dialog so the user picks a profile before committing.
   const [drawing, setDrawing] = useState<{ x1: number; y1: number; x2: number; y2: number } | null>(null);
+
+  // A finished draw waiting for the user to pick a profile.
+  // Until they confirm, we hold off calling store.addStick and keep the
+  // draw mode active. Cancel = discard the draw entirely.
+  const [pendingDraw, setPendingDraw] = useState<{
+    start: { x: number; y: number };
+    end: { x: number; y: number };
+  } | null>(null);
 
   /** Convert client (px) coords on the SVG to elevation-coord (mm) coords. */
   function clientToElevation(clientX: number, clientY: number): { x: number; y: number } {
@@ -126,7 +136,12 @@ export function Wall() {
       const dx = drawing.x2 - drawing.x1;
       const dy = drawing.y2 - drawing.y1;
       if (Math.hypot(dx, dy) > 5) {
-        addStickAction({ x: drawing.x1, y: drawing.y1 }, { x: drawing.x2, y: drawing.y2 });
+        // Stash the draw and pop the profile picker. The actual
+        // store.addStick call happens in the dialog's commit path.
+        setPendingDraw({
+          start: { x: drawing.x1, y: drawing.y1 },
+          end: { x: drawing.x2, y: drawing.y2 },
+        });
       }
       setDrawing(null);
       return;
@@ -258,6 +273,27 @@ export function Wall() {
             </span>
             <span>drag empty area = pan · wheel = zoom · click stick = select · drag selected stick = move · drag yellow handles = resize</span>
           </div>
+
+          {/* Profile picker — shown after the user finishes drawing a
+              new stick. Cancel discards the draw; commit calls
+              store.addStick which flips tool back to "select". */}
+          {pendingDraw && (
+            <ProfilePickerDialog
+              start={pendingDraw.start}
+              end={pendingDraw.end}
+              onCancel={() => {
+                setPendingDraw(null);
+                // Stay in draw-stick mode so the user can try again
+                // without re-toggling the toolbar button.
+              }}
+              onCommit={() => {
+                setPendingDraw(null);
+                // store.addStick already flips tool back to "select",
+                // but be defensive in case that ever changes.
+                setTool("select");
+              }}
+            />
+          )}
         </>
       )}
     </div>

@@ -10,7 +10,7 @@
 // Undo / redo move the doc between `history` and `future` stacks.
 
 import { create } from "zustand";
-import type { RfyDocument, RfyToolingOp } from "@hytek/rfy-codec";
+import type { RfyDocument, RfyToolingOp, RfyProfile } from "@hytek/rfy-codec";
 import {
   addOp as editAddOp,
   removeOp as editRemoveOp,
@@ -41,6 +41,11 @@ export interface ViewerState {
    *  drag end (in elevation coords). */
   tool: "select" | "draw-stick";
 
+  /** Last profile picked in the Profile picker dialog. Persists across
+   *  draws so a user drawing several sticks of the same profile doesn't
+   *  have to re-pick every time. Reset on doc-load / reset. */
+  lastUsedProfile: RfyProfile | null;
+
   history: RfyDocument[];
   future: RfyDocument[];
   dirty: boolean;
@@ -64,7 +69,8 @@ export interface ViewerState {
   updateOpPos: (stickKey: string, opIdx: number, newPos: number) => void;
   moveStick: (stickKey: string, dx: number, dy: number) => void;
   moveStickEnd: (stickKey: string, endIdx: 0 | 1, dx: number, dy: number) => void;
-  addStick: (start: { x: number; y: number }, end: { x: number; y: number }) => void;
+  addStick: (start: { x: number; y: number }, end: { x: number; y: number }, profile?: RfyProfile) => void;
+  setLastUsedProfile: (profile: RfyProfile) => void;
 
   // History
   undo: () => void;
@@ -84,6 +90,7 @@ const initialState = {
   panX: 0,
   panY: 0,
   tool: "select" as "select" | "draw-stick",
+  lastUsedProfile: null as RfyProfile | null,
   history: [],
   future: [],
   dirty: false,
@@ -109,6 +116,7 @@ export const useViewerStore = create<ViewerState>((set, get) => {
         selectedStickKey: null, selectedOpIdx: null,
         history: [], future: [], dirty: false,
         zoom: 1, panX: 0, panY: 0,
+        lastUsedProfile: null,
       }),
 
     reset: () => set(initialState),
@@ -166,13 +174,22 @@ export const useViewerStore = create<ViewerState>((set, get) => {
       set({ doc: next, history: snapshot(), future: [], dirty: true });
     },
 
-    addStick: (start, end) => {
+    addStick: (start, end, profile) => {
       const { doc, selectedPlanIdx, selectedFrameIdx } = get();
       if (!doc) return;
-      const next = editAddStick(doc, selectedPlanIdx, selectedFrameIdx, { start, end });
+      const next = editAddStick(doc, selectedPlanIdx, selectedFrameIdx, { start, end, profile });
       if (next === doc) return;  // no-op (zero-length stick)
-      set({ doc: next, history: snapshot(), future: [], dirty: true, tool: "select" });
+      set({
+        doc: next,
+        history: snapshot(),
+        future: [],
+        dirty: true,
+        tool: "select",
+        ...(profile ? { lastUsedProfile: profile } : {}),
+      });
     },
+
+    setLastUsedProfile: (profile) => set({ lastUsedProfile: profile }),
 
     undo: () => {
       const { history, doc } = get();
