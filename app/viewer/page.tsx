@@ -13,6 +13,7 @@ import { decode } from "@hytek/rfy-codec";
 import { useViewerStore } from "./store";
 import { Sidebar } from "./components/Sidebar";
 import { Wall } from "./components/Wall";
+import { Wall3D } from "./components/Wall3D";
 import { LegendStrip } from "./components/LegendStrip";
 import { StickInspector } from "./components/StickInspector";
 import { documentToScheduleXml } from "./lib/serialize";
@@ -29,6 +30,8 @@ export default function ViewerPage() {
   const canRedo = useViewerStore((s) => s.canRedo());
   const tool = useViewerStore((s) => s.tool);
   const setTool = useViewerStore((s) => s.setTool);
+  const viewMode = useViewerStore((s) => s.viewMode);
+  const setViewMode = useViewerStore((s) => s.setViewMode);
   const [error, setError] = useState<string | null>(null);
   const [dragOver, setDragOver] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -152,14 +155,41 @@ export default function ViewerPage() {
         {filename && (
           <div className="flex items-center gap-2">
             {/* Edit toolbar — only visible when a doc is loaded */}
+            {/* 2D / 3D view-mode toggle. Always visible. 2D = full edit
+                support; 3D = read-only inspection (rotate / pan / zoom). */}
+            <div className="flex items-center rounded border border-zinc-700 overflow-hidden text-xs mr-1">
+              <button
+                onClick={() => setViewMode("2d")}
+                className={`px-2.5 py-1 transition ${
+                  viewMode === "2d"
+                    ? "bg-yellow-400 text-black font-medium"
+                    : "text-zinc-400 hover:text-zinc-200"
+                }`}
+                title="2D elevation view — full editing"
+              >
+                2D
+              </button>
+              <button
+                onClick={() => setViewMode("3d")}
+                className={`px-2.5 py-1 transition border-l border-zinc-700 ${
+                  viewMode === "3d"
+                    ? "bg-yellow-400 text-black font-medium"
+                    : "text-zinc-400 hover:text-zinc-200"
+                }`}
+                title="3D view — rotate, pan, zoom (read-only)"
+              >
+                3D
+              </button>
+            </div>
             <button
               onClick={() => setTool(tool === "draw-stick" ? "select" : "draw-stick")}
-              className={`px-2 py-1 rounded text-xs transition ${
+              disabled={viewMode === "3d"}
+              className={`px-2 py-1 rounded text-xs transition disabled:opacity-30 disabled:cursor-not-allowed ${
                 tool === "draw-stick"
                   ? "bg-yellow-400 text-black font-medium"
                   : "border border-zinc-700 text-zinc-300 hover:border-yellow-400 hover:text-yellow-400"
               }`}
-              title="Toggle Draw Stick mode (drag on empty area to add a new stick)"
+              title="Toggle Draw Stick mode (drag on empty area to add a new stick) — 2D only"
             >
               ✏ Draw stick
             </button>
@@ -227,7 +257,7 @@ export default function ViewerPage() {
             close (deselects the stick). */}
         <StickInspector />
         <div className="flex-1 relative">
-          <Wall />
+          {viewMode === "3d" ? <Wall3D /> : <Wall />}
           {/* Drop overlay — visible while dragging a file in */}
           {dragOver && !doc && (
             <div className="absolute inset-0 bg-yellow-400/10 border-2 border-dashed border-yellow-400 flex items-center justify-center pointer-events-none">

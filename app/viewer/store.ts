@@ -41,6 +41,11 @@ export interface ViewerState {
    *  drag end (in elevation coords). */
   tool: "select" | "draw-stick";
 
+  /** View mode toggle. "2d" renders the original SVG elevation view (full
+   *  edit support). "3d" renders a Three.js scene with the same sticks
+   *  extruded as C-section meshes — read-only inspection. */
+  viewMode: "2d" | "3d";
+
   /** Last profile picked in the Profile picker dialog. Persists across
    *  draws so a user drawing several sticks of the same profile doesn't
    *  have to re-pick every time. Reset on doc-load / reset. */
@@ -62,6 +67,7 @@ export interface ViewerState {
   setZoom: (zoom: number) => void;
   setPan: (panX: number, panY: number) => void;
   setTool: (tool: "select" | "draw-stick") => void;
+  setViewMode: (mode: "2d" | "3d") => void;
 
   // Edits
   addOp: (stickKey: string, op: RfyToolingOp) => void;
@@ -90,6 +96,7 @@ const initialState = {
   panX: 0,
   panY: 0,
   tool: "select" as "select" | "draw-stick",
+  viewMode: "2d" as "2d" | "3d",
   lastUsedProfile: null as RfyProfile | null,
   history: [],
   future: [],
@@ -128,6 +135,7 @@ export const useViewerStore = create<ViewerState>((set, get) => {
     setZoom: (zoom) => set({ zoom }),
     setPan: (panX, panY) => set({ panX, panY }),
     setTool: (tool) => set({ tool }),
+    setViewMode: (mode) => set({ viewMode: mode }),
 
     addOp: (stickKey, op) => {
       const { doc, selectedPlanIdx } = get();
