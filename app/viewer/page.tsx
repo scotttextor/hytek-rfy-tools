@@ -14,6 +14,7 @@ import { useViewerStore } from "./store";
 import { Sidebar } from "./components/Sidebar";
 import { Wall } from "./components/Wall";
 import { LegendStrip } from "./components/LegendStrip";
+import { StickInspector } from "./components/StickInspector";
 import { documentToScheduleXml } from "./lib/serialize";
 
 export default function ViewerPage() {
@@ -220,6 +221,11 @@ export default function ViewerPage() {
 
       <div className="flex-1 flex overflow-hidden">
         <Sidebar />
+        {/* StickInspector is its own column, immediately right of the
+            frames sidebar. It's null when no stick is selected so the
+            canvas reclaims its width. Click the ✕ in the header to
+            close (deselects the stick). */}
+        <StickInspector />
         <div className="flex-1 relative">
           <Wall />
           {/* Drop overlay — visible while dragging a file in */}
