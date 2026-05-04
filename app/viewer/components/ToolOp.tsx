@@ -20,6 +20,7 @@
 
 "use client";
 import type { ToolType } from "@hytek/rfy-codec";
+import { TOOL_COLORS } from "../lib/tool-colors";
 
 interface ToolOpProps {
   type: ToolType;
@@ -31,12 +32,17 @@ interface ToolOpProps {
 
 export function ToolOp({ type, pos, thickness }: ToolOpProps) {
   const half = thickness / 2;
+  // Colored outline ring per tool type — overlaid on the realistic shape so
+  // users can identify the operation at a glance. See app/viewer/lib/tool-colors.ts
+  // for the palette + Legend component for the visual key.
+  const ring = TOOL_COLORS[type]?.color ?? "#888";
+  const ringW = 1.0;
 
   switch (type) {
     case "InnerDimple":
       return (
         <g transform={`translate(${pos} ${half})`}>
-          <circle r={3} fill="#666" stroke="#444" strokeWidth={0.4} />
+          <circle r={3} fill="#666" stroke={ring} strokeWidth={ringW} />
           <circle r={1.5} cy={-0.5} fill="#bbb" />
         </g>
       );
@@ -44,7 +50,7 @@ export function ToolOp({ type, pos, thickness }: ToolOpProps) {
     case "Swage":
       return (
         <g transform={`translate(${pos} ${half})`}>
-          <ellipse rx={14} ry={6} fill="#999" stroke="#555" strokeWidth={0.4} />
+          <ellipse rx={14} ry={6} fill="#999" stroke={ring} strokeWidth={ringW} />
           <ellipse rx={9} ry={3} cy={-1.5} fill="#cccccc" />
         </g>
       );
@@ -53,10 +59,10 @@ export function ToolOp({ type, pos, thickness }: ToolOpProps) {
       // V-cut in both lips (top and bottom edges of the elevation rect)
       return (
         <g transform={`translate(${pos} 0)`}>
-          <path d={`M -10,0 L 10,5 L 10,12 L -10,14 Z`} fill="#0a0a0a" stroke="#222" strokeWidth={0.3} />
+          <path d={`M -10,0 L 10,5 L 10,12 L -10,14 Z`} fill="#0a0a0a" stroke={ring} strokeWidth={ringW} />
           <path
             d={`M -10,${thickness} L 10,${thickness - 5} L 10,${thickness - 12} L -10,${thickness - 14} Z`}
-            fill="#0a0a0a" stroke="#222" strokeWidth={0.3}
+            fill="#0a0a0a" stroke={ring} strokeWidth={ringW}
           />
         </g>
       );
@@ -64,7 +70,7 @@ export function ToolOp({ type, pos, thickness }: ToolOpProps) {
     case "LeftFlange":
       return (
         <g transform={`translate(${pos} 0)`}>
-          <path d={`M -10,0 L 10,5 L 10,12 L -10,14 Z`} fill="#0a0a0a" stroke="#222" strokeWidth={0.3} />
+          <path d={`M -10,0 L 10,5 L 10,12 L -10,14 Z`} fill="#0a0a0a" stroke={ring} strokeWidth={ringW} />
         </g>
       );
 
@@ -73,7 +79,7 @@ export function ToolOp({ type, pos, thickness }: ToolOpProps) {
         <g transform={`translate(${pos} 0)`}>
           <path
             d={`M -10,${thickness} L 10,${thickness - 5} L 10,${thickness - 12} L -10,${thickness - 14} Z`}
-            fill="#0a0a0a" stroke="#222" strokeWidth={0.3}
+            fill="#0a0a0a" stroke={ring} strokeWidth={ringW}
           />
         </g>
       );
@@ -81,7 +87,7 @@ export function ToolOp({ type, pos, thickness }: ToolOpProps) {
     case "LeftPartialFlange":
       return (
         <g transform={`translate(${pos} 0)`}>
-          <path d={`M -8,0 L 8,3 L 8,8 L -8,9 Z`} fill="#0a0a0a" stroke="#222" strokeWidth={0.3} />
+          <path d={`M -8,0 L 8,3 L 8,8 L -8,9 Z`} fill="#0a0a0a" stroke={ring} strokeWidth={ringW} />
         </g>
       );
 
@@ -90,7 +96,7 @@ export function ToolOp({ type, pos, thickness }: ToolOpProps) {
         <g transform={`translate(${pos} 0)`}>
           <path
             d={`M -8,${thickness} L 8,${thickness - 3} L 8,${thickness - 8} L -8,${thickness - 9} Z`}
-            fill="#0a0a0a" stroke="#222" strokeWidth={0.3}
+            fill="#0a0a0a" stroke={ring} strokeWidth={ringW}
           />
         </g>
       );
@@ -98,7 +104,7 @@ export function ToolOp({ type, pos, thickness }: ToolOpProps) {
     case "InnerNotch":
       return (
         <g transform={`translate(${pos} ${half})`}>
-          <rect x={-8} y={-6} width={16} height={12} fill="#0a0a0a" stroke="#222" strokeWidth={0.4} />
+          <rect x={-8} y={-6} width={16} height={12} fill="#0a0a0a" stroke={ring} strokeWidth={ringW} />
         </g>
       );
 
@@ -106,7 +112,7 @@ export function ToolOp({ type, pos, thickness }: ToolOpProps) {
       // BOLT HOLES — straight hole through the web
       return (
         <g transform={`translate(${pos} ${half})`}>
-          <circle r={4} fill="#0a0a0a" stroke="#222" strokeWidth={0.4} />
+          <circle r={4} fill="#0a0a0a" stroke={ring} strokeWidth={ringW} />
         </g>
       );
 
@@ -114,7 +120,7 @@ export function ToolOp({ type, pos, thickness }: ToolOpProps) {
       // ANCHOR — bigger hole with darker inner ring
       return (
         <g transform={`translate(${pos} ${half})`}>
-          <circle r={6} fill="#0a0a0a" stroke="#222" strokeWidth={0.5} />
+          <circle r={6} fill="#0a0a0a" stroke={ring} strokeWidth={ringW} />
           <circle r={3} fill="#1a1a1a" />
         </g>
       );
@@ -123,9 +129,9 @@ export function ToolOp({ type, pos, thickness }: ToolOpProps) {
       // Cluster of three small holes
       return (
         <g transform={`translate(${pos} ${half})`}>
-          <circle cx={-8} r={2.5} fill="#0a0a0a" />
-          <circle cx={0} r={2.5} fill="#0a0a0a" />
-          <circle cx={8} r={2.5} fill="#0a0a0a" />
+          <circle cx={-8} r={2.5} fill="#0a0a0a" stroke={ring} strokeWidth={ringW} />
+          <circle cx={0} r={2.5} fill="#0a0a0a" stroke={ring} strokeWidth={ringW} />
+          <circle cx={8} r={2.5} fill="#0a0a0a" stroke={ring} strokeWidth={ringW} />
         </g>
       );
 
@@ -133,7 +139,7 @@ export function ToolOp({ type, pos, thickness }: ToolOpProps) {
       // Oval slot for cables/pipes
       return (
         <g transform={`translate(${pos} ${half})`}>
-          <ellipse rx={10} ry={5} fill="#0a0a0a" stroke="#222" strokeWidth={0.4} />
+          <ellipse rx={10} ry={5} fill="#0a0a0a" stroke={ring} strokeWidth={ringW} />
         </g>
       );
 
@@ -145,8 +151,8 @@ export function ToolOp({ type, pos, thickness }: ToolOpProps) {
       // direction which is handled by the caller positioning.
       return (
         <g transform={`translate(${pos} 0)`}>
-          <path d={`M -6,0 L 6,0 L 6,6 Z`} fill="#0a0a0a" />
-          <path d={`M -6,${thickness} L 6,${thickness} L 6,${thickness - 6} Z`} fill="#0a0a0a" />
+          <path d={`M -6,0 L 6,0 L 6,6 Z`} fill="#0a0a0a" stroke={ring} strokeWidth={ringW} />
+          <path d={`M -6,${thickness} L 6,${thickness} L 6,${thickness - 6} Z`} fill="#0a0a0a" stroke={ring} strokeWidth={ringW} />
         </g>
       );
     }

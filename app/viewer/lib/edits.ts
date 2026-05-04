@@ -177,13 +177,18 @@ export function addStick(
   const length = Math.hypot(args.end.x - args.start.x, args.end.y - args.start.y);
   if (length < 1) return doc;
   // Build a 4-corner outline rectangle for the stick. Two short edges =
-  // perpendicular to the length axis, scaled to profile.web (in mm).
+  // perpendicular to the length axis. Thickness = max(lFlange, rFlange)
+  // — the SAME convention Detailer uses (verified vs codec
+  // synthesize-plans.ts:496). Using profile.web here was wrong: web is
+  // the depth INTO the page (70mm for 70S41), not the visible elevation
+  // height (which is the flange dimension, 41mm). New sticks were
+  // rendering ~70% taller than existing sticks before this fix.
   const ux = (args.end.x - args.start.x) / length;
   const uy = (args.end.y - args.start.y) / length;
   // Perpendicular unit vector (rotate 90°)
   const px = -uy;
   const py = ux;
-  const halfW = profile.web / 2;
+  const halfW = Math.max(profile.lFlange, profile.rFlange) / 2;
   const corners = [
     { x: args.start.x + px * halfW, y: args.start.y + py * halfW },
     { x: args.start.x - px * halfW, y: args.start.y - py * halfW },
@@ -207,8 +212,92 @@ export function addStick(
     tooling: [],
     outlineCorners: corners,
   };
+
+  // Auto-generate connection ops at crossings with existing sticks in
+  // the frame. Mirrors the codec's frame-context-ops behavior in a
+  // simplified inline form: at each pairwise stick-on-stick crossing we
+  // add an InnerDimple at the crossing point + a LipNotch span centred
+  // on it (45mm wide — Detailer's standard cap-width). Both the new
+  // stick AND the existing stick get the ops added.
+  //
+  // This isn't a full reimplementation of frame-context.ts (which
+  // handles role-aware variants like web-bolt-holes, anchors,
+  // chord-screw clusters etc.) — it just handles the single most common
+  // case (stud crossing plate / nog crossing stud / W crossing chord).
+  // For everything else, the user can manually add ops, OR re-import
+  // the edited .rfy through the home page's encode-bundle endpoint
+  // which will re-run the full rule engine.
+  for (const other of frame.sticks) {
+    const cross = midlineIntersection(
+      { x: args.start.x, y: args.start.y }, { x: args.end.x, y: args.end.y },
+      other,
+    );
+    if (!cross) continue;
+    // Position along the new stick: project cross point onto new midline
+    const newPos = (cross.x - args.start.x) * ux + (cross.y - args.start.y) * uy;
+    if (newPos < 1 || newPos > length - 1) continue;
+    const otherMidline = midlineFromOutline(other);
+    if (!otherMidline) continue;
+    const otherDx = otherMidline.end.x - otherMidline.start.x;
+    const otherDy = otherMidline.end.y - otherMidline.start.y;
+    const otherLen = Math.hypot(otherDx, otherDy);
+    if (otherLen < 1) continue;
+    const otherUx = otherDx / otherLen;
+    const otherUy = otherDy / otherLen;
+    const otherPos = (cross.x - otherMidline.start.x) * otherUx + (cross.y - otherMidline.start.y) * otherUy;
+    if (otherPos < 1 || otherPos > otherLen - 1) continue;
+    // 45mm-wide LipNotch span (Detailer cap convention) clamped to length
+    const halfSpan = 22.5;
+    const newSpanStart = Math.max(0, newPos - halfSpan);
+    const newSpanEnd = Math.min(length, newPos + halfSpan);
+    const otherSpanStart = Math.max(0, otherPos - halfSpan);
+    const otherSpanEnd = Math.min(otherLen, otherPos + halfSpan);
+    newStick.tooling.push({ kind: "spanned", type: "LipNotch", startPos: newSpanStart, endPos: newSpanEnd });
+    newStick.tooling.push({ kind: "point", type: "InnerDimple", pos: newPos });
+    other.tooling = [
+      ...other.tooling,
+      { kind: "spanned", type: "LipNotch", startPos: otherSpanStart, endPos: otherSpanEnd },
+      { kind: "point", type: "InnerDimple", pos: otherPos },
+    ];
+  }
+
   frame.sticks = [...frame.sticks, newStick];
   return next;
+}
+
+/** Compute midline endpoints from a stick's outlineCorners. */
+function midlineFromOutline(stick: RfyStick): { start: { x: number; y: number }; end: { x: number; y: number } } | null {
+  const cs = stick.outlineCorners;
+  if (!cs || cs.length !== 4) return null;
+  const edges = [0, 1, 2, 3].map(i => ({
+    a: cs[i]!, b: cs[(i + 1) % 4]!,
+    len: Math.hypot(cs[(i + 1) % 4]!.x - cs[i]!.x, cs[(i + 1) % 4]!.y - cs[i]!.y),
+  }));
+  const sorted = [...edges].sort((x, y) => x.len - y.len);
+  const short1 = sorted[0]!, short2 = sorted[1]!;
+  const mid = (e: typeof short1) => ({ x: (e.a.x + e.b.x) / 2, y: (e.a.y + e.b.y) / 2 });
+  const m1 = mid(short1);
+  const m2 = mid(short2);
+  return m1.y < m2.y || (m1.y === m2.y && m1.x < m2.x) ? { start: m1, end: m2 } : { start: m2, end: m1 };
+}
+
+/** 2D line-segment intersection between two midlines. Returns the
+ *  intersection point if the segments cross, else null. */
+function midlineIntersection(
+  aStart: { x: number; y: number },
+  aEnd: { x: number; y: number },
+  otherStick: RfyStick,
+): { x: number; y: number } | null {
+  const o = midlineFromOutline(otherStick);
+  if (!o) return null;
+  const x1 = aStart.x, y1 = aStart.y, x2 = aEnd.x, y2 = aEnd.y;
+  const x3 = o.start.x, y3 = o.start.y, x4 = o.end.x, y4 = o.end.y;
+  const denom = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
+  if (Math.abs(denom) < 1e-6) return null;  // parallel
+  const t = ((x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4)) / denom;
+  const u = -((x1 - x2) * (y1 - y3) - (y1 - y2) * (x1 - x3)) / denom;
+  if (t < 0 || t > 1 || u < 0 || u > 1) return null;  // outside both segments
+  return { x: x1 + t * (x2 - x1), y: y1 + t * (y2 - y1) };
 }
 
 /** Default new-op factory — given a tool type and stick context, return a

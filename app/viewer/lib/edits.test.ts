@@ -284,8 +284,10 @@ describe("addStick", () => {
   });
 
   it("produces 4 outline corners forming a rectangle around the midline", () => {
-    // Horizontal stick from (0, 0) to (1000, 0). Default profile.web=70.
-    // Expected corners: midline ± 35 in y on each end.
+    // Horizontal stick from (0, 0) to (1000, 0). Default profile has
+    // lFlange=41, rFlange=38; max(lFlange, rFlange) = 41 → halfThickness 20.5.
+    // (Detailer convention — verified vs codec synthesize-plans.ts:496.
+    //  This is NOT profile.web — that's the depth into the page.)
     const doc = makeDoc([]);
     const next = addStick(doc, 0, 0, {
       start: { x: 0, y: 0 },
@@ -294,13 +296,13 @@ describe("addStick", () => {
     const stick = next.project.plans[0]!.frames[0]!.sticks[0]!;
     expect(stick.outlineCorners).toBeDefined();
     expect(stick.outlineCorners!.length).toBe(4);
-    // Two corners should be at y=+35 and two at y=-35 (perpendicular
-    // to length axis). Don't assume ordering.
+    // Two corners at y=+20.5 and two at y=-20.5 (perpendicular to length axis).
+    // Don't assume ordering.
     const ys = stick.outlineCorners!.map((c) => c.y).sort((a, b) => a - b);
-    expect(ys[0]).toBeCloseTo(-35);
-    expect(ys[1]).toBeCloseTo(-35);
-    expect(ys[2]).toBeCloseTo(35);
-    expect(ys[3]).toBeCloseTo(35);
+    expect(ys[0]).toBeCloseTo(-20.5);
+    expect(ys[1]).toBeCloseTo(-20.5);
+    expect(ys[2]).toBeCloseTo(20.5);
+    expect(ys[3]).toBeCloseTo(20.5);
   });
 
   it("respects the optional profile override", () => {

@@ -355,21 +355,23 @@ children.push(num(10, "💾 Save: when the document is dirty (yellow ● marker 
 children.push(h2("10.2  What it edits — and what it doesn't"));
 children.push(callout("The Wall Editor edits PER-JOB data — the .rfy file for ONE specific job. It does NOT edit any rules. Saving in the Wall Editor never touches default*, never touches your named rulesets, never changes what the encoder does next time you import a different XML. Two completely separate save targets."));
 
-children.push(h2("10.3  Tool-op shapes (visual key)"));
-children.push(body("Each tool-op type is drawn as its actual physical shape so you can read the wall picture at a glance:"));
+children.push(h2("10.3  Tool-op shapes + colors (visual key)"));
+children.push(body("Each tool-op type is drawn as its actual physical shape AND outlined in a distinct color so you can identify it at a glance. The color and CSV label appear in the legend at the bottom of the sidebar (collapsible)."));
 children.push(...ref([
-  ["InnerDimple", "Small dome circle with a lighter highlight — pre-punched indent."],
-  ["Swage", "Oval bump 14mm × 6mm with highlight — stiffening rib."],
-  ["LipNotch", "V-cut on each lip edge — appears at every stud crossing."],
-  ["LeftFlange / RightFlange", "Single-side V-cut variant of LipNotch."],
-  ["LeftPartialFlange / RightPartialFlange", "Half-depth V-cut on one side."],
-  ["InnerNotch (WEB NOTCH)", "Rectangular notch in the web — fitment cutout."],
-  ["Web (BOLT HOLES)", "Filled circle through the web — pass-through bolt hole."],
-  ["Bolt (ANCHOR)", "Larger filled circle with darker inner ring — anchor bolt into slab."],
-  ["ScrewHoles (ANCHOR cluster)", "Three small filled circles — chord-pair screw cluster."],
-  ["InnerService (SERVICE HOLE)", "Oval slot 10mm × 5mm — cable / pipe pass-through."],
-  ["Chamfer / TrussChamfer", "Triangular corner cut — diagonal stick ends."],
+  ["LipNotch  (red)", "V-cut on each lip edge — appears at every stud crossing on plates. CSV label: LIP NOTCH."],
+  ["LeftFlange  (orange-red)", "Single-side V-cut on the left lip. CSV label: LIP NOTCH."],
+  ["RightFlange  (pink)", "Single-side V-cut on the right lip. CSV label: LIP NOTCH."],
+  ["LeftPartialFlange / RightPartialFlange  (light pink / coral)", "Half-depth V-cut on one side. CSV label: LIP NOTCH."],
+  ["InnerDimple  (yellow)", "Pre-punched dome bump — interior alignment / connection point. CSV label: INNER DIMPLE."],
+  ["Swage  (orange)", "Oval bump 14mm × 6mm — stiffening rib on web face. CSV label: SWAGE."],
+  ["InnerNotch  (purple)", "Rectangular notch IN the web face — fitment cutout. CSV label: WEB NOTCH."],
+  ["Web  (cyan)", "Hole through the web for bolting fasteners. CSV label: BOLT HOLES."],
+  ["Bolt  (blue)", "Larger hole with darker inner ring — anchor bolt into slab. CSV label: ANCHOR."],
+  ["ScrewHoles  (green)", "Cluster of three small holes — chord-pair screw cluster. CSV label: ANCHOR."],
+  ["InnerService  (teal)", "Oval slot 10mm × 5mm — cable / pipe pass-through. CSV label: SERVICE HOLE."],
+  ["Chamfer / TrussChamfer  (lime)", "Triangular corner cut — diagonal stick ends (Kb / W). CSV label: FULL CHAMFER."],
 ]));
+children.push(callout("Color conventions: reds/pinks = lip-edge cuts, yellow/orange = shape deformation (dimples/swages), purple = web notches, blues = web holes, greens = screw clusters + corner cuts, teal = service slots."));
 
 children.push(h2("10.4  Build approach (locked in)"));
 children.push(...ref([
