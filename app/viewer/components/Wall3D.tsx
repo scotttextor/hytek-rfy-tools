@@ -54,7 +54,7 @@ export function Wall3D() {
 
   if (!doc || !frame) {
     return (
-      <div className="flex-1 bg-zinc-950 relative overflow-hidden flex items-center justify-center">
+      <div className="w-full h-full bg-zinc-950 relative overflow-hidden flex items-center justify-center">
         <div className="text-center">
           <div className="text-zinc-600 text-sm uppercase tracking-wider mb-2">3D View</div>
           <div className="text-zinc-400">Drop a .rfy file to load a job</div>
@@ -64,7 +64,10 @@ export function Wall3D() {
   }
 
   return (
-    <div className="flex-1 bg-zinc-950 relative overflow-hidden">
+    // w-full h-full (not flex-1) so the Canvas's parent has explicit
+    // dimensions. r3f Canvas defaults to width:100%/height:100% which
+    // needs a sized parent — flex-1 on a non-flex parent gives 0.
+    <div className="w-full h-full bg-zinc-950 relative overflow-hidden">
       <Canvas
         shadows
         // Click empty canvas → deselect. Stops on mesh clicks because

@@ -284,7 +284,7 @@ export function Wall() {
   const onCanvasClick = () => selectStick(null);
 
   return (
-    <div className="flex-1 bg-zinc-950 relative overflow-hidden">
+    <div className="w-full h-full bg-zinc-950 relative overflow-hidden">
       {!doc && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <div className="text-center">
