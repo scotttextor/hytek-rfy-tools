@@ -430,16 +430,19 @@ function parsePlans(xmlText: string): ProjectMeta & { plans: RawPlan[] } {
             }
           } else {
             // DIAGONAL W → trim 2mm at end along the W's direction
-            const W_DIAGONAL_TRIM_MM = 2.0;
-            const dz = end.z - start.z;
-            const len = Math.sqrt(dx*dx + dy*dy + dz*dz);
-            if (len > W_DIAGONAL_TRIM_MM * 2) {
-              const ux = dx / len, uy = dy / len, uz = dz / len;
-              end = {
-                x: end.x - ux * W_DIAGONAL_TRIM_MM,
-                y: end.y - uy * W_DIAGONAL_TRIM_MM,
-                z: end.z - uz * W_DIAGONAL_TRIM_MM,
-              };
+            // (skip on LIN/TB2B — see guard above).
+            if (!isLINPlanForW && !isTB2BPlanForW) {
+              const W_DIAGONAL_TRIM_MM = 2.0;
+              const dz = end.z - start.z;
+              const len = Math.sqrt(dx*dx + dy*dy + dz*dz);
+              if (len > W_DIAGONAL_TRIM_MM * 2) {
+                const ux = dx / len, uy = dy / len, uz = dz / len;
+                end = {
+                  x: end.x - ux * W_DIAGONAL_TRIM_MM,
+                  y: end.y - uy * W_DIAGONAL_TRIM_MM,
+                  z: end.z - uz * W_DIAGONAL_TRIM_MM,
+                };
+              }
             }
           }
         }
