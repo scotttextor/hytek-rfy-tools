@@ -12,7 +12,7 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@hytek/rfy-codec": "github:scotttextor/hytek-rfy-codec#c565049",
+    "@hytek/rfy-codec": "github:scotttextor/hytek-rfy-codec#89d93f1",
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.6.1",
     "fast-xml-parser": "^5.7.2",
