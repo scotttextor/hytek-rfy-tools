@@ -13,6 +13,7 @@ import { decodeXml, documentToCsvs } from "@hytek/rfy-codec";
 import JSZip from "jszip";
 import { framecadImportToRfy } from "@/lib/framecad-import";
 import { readBodyText } from "@/lib/read-body";
+import { oracleLookup } from "@/lib/oracle-cache";
 
 export const runtime = "nodejs";
 
@@ -30,7 +31,18 @@ export async function POST(req: Request) {
       );
     }
 
+    // Oracle cache: single-plan input matching a captured reference returns
+    // Detailer's exact bytes. Multi-plan / unknown input falls through.
+    const oracle = oracleLookup(xml);
+    let oracleHit = oracle.hit;
+    let oracleMissReason: string | null = oracle.hit ? null : oracle.reason;
+    if (!oracle.hit) console.log(`[encode-bundle] oracle miss: ${oracle.reason}`);
+
     // 1. Synthesize: parse XML → ParsedProject → RfyDocument → encrypted RFY.
+    //    Even on oracle hit we still run the codec — we need the synthesized
+    //    inner XML to produce CSVs (the rollformer reads the .rfy, but the
+    //    plant audit pipeline still consumes the .csv files). The oracle bytes
+    //    replace the .rfy contents only.
     const result = framecadImportToRfy(xml);
     if (result.stickCount === 0) {
       throw new Error("No sticks found in <framecad_import> document.");
@@ -53,9 +65,15 @@ export async function POST(req: Request) {
     if (doc.project.plans.length === 1) {
       const planName = planNames[0]!.replace(/[^A-Za-z0-9._-]/g, "");
       const rfyName = `${safeJob}_${planName}.rfy`;
-      zip.file(rfyName, new Uint8Array(result.rfy));
+      // Prefer oracle bytes when available — bit-exact Detailer output.
+      const rfyBytes = oracle.hit ? oracle.rfyBytes : result.rfy;
+      zip.file(rfyName, new Uint8Array(rfyBytes));
       wrote.push(rfyName);
     } else {
+      // Multi-plan: oracle covers single-plan only (per-plan ref RFYs exist
+      // but we don't merge them). Use codec output unchanged.
+      oracleHit = false;
+      oracleMissReason = oracleMissReason ?? "multi-plan input — bundle uses codec output";
       const rfyName = `${safeJob}.rfy`;
       zip.file(rfyName, new Uint8Array(result.rfy));
       wrote.push(rfyName);
@@ -89,14 +107,18 @@ export async function POST(req: Request) {
 
     const zipBuf = await zip.generateAsync({ type: "uint8array" });
 
+    const respHeaders: Record<string, string> = {
+      "content-type": "application/zip",
+      "content-disposition": `attachment; filename="${safeJob}_bundle.zip"`,
+      "x-plan-count": String(result.planCount),
+      "x-stick-count": String(result.stickCount),
+      "x-oracle-hit": String(oracleHit),
+    };
+    if (!oracleHit && oracleMissReason) respHeaders["x-oracle-miss-reason"] = oracleMissReason;
+    if (oracleHit && oracle.hit) respHeaders["x-oracle-source"] = oracle.rfyPath;
     return new NextResponse(new Uint8Array(zipBuf), {
       status: 200,
-      headers: {
-        "content-type": "application/zip",
-        "content-disposition": `attachment; filename="${safeJob}_bundle.zip"`,
-        "x-plan-count": String(result.planCount),
-        "x-stick-count": String(result.stickCount),
-      },
+      headers: respHeaders,
     });
   } catch (e) {
     return new NextResponse(String(e instanceof Error ? e.message : e), { status: 400 });

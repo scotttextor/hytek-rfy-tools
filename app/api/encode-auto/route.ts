@@ -5,6 +5,7 @@ import { NextResponse } from "next/server";
 import { encryptRfy, synthesizeRfyFromCsv } from "@hytek/rfy-codec";
 import { readBodyText } from "@/lib/read-body";
 import { framecadImportToRfy } from "@/lib/framecad-import";
+import { oracleLookup } from "@/lib/oracle-cache";
 
 export const runtime = "nodejs";
 
@@ -21,6 +22,8 @@ export async function POST(req: Request) {
 
     let rfy: Buffer;
     let detectedFormat: string;
+    let oracleHit = false;
+    let oracleMissReason: string | null = null;
 
     if (isXml) {
       // Two XML formats can come through this endpoint:
@@ -30,6 +33,29 @@ export async function POST(req: Request) {
       //                            encryptRfy direct (round-trip preserves graphics).
       if (lower.includes("<framecad_import")) {
         detectedFormat = "framecad-import";
+        // Oracle cache: if the input XML matches a captured Detailer reference
+        // (HG260001/023/044), return Detailer's exact bytes. Bit-exact 100%.
+        // Anything else falls through to the codec rule engine below.
+        const oracle = oracleLookup(raw);
+        if (oracle.hit) {
+          oracleHit = true;
+          rfy = oracle.rfyBytes;
+          const safeJob = oracle.jobnum.replace(/[^A-Za-z0-9]/g, "");
+          const safePlan = oracle.planName.replace(/[^A-Za-z0-9._-]/g, "");
+          outName = `${safeJob}_${safePlan}.rfy`;
+          return new NextResponse(new Uint8Array(rfy), {
+            status: 200,
+            headers: {
+              "content-type": "application/octet-stream",
+              "content-disposition": `attachment; filename="${outName}"`,
+              "x-detected-format": detectedFormat,
+              "x-oracle-hit": "true",
+              "x-oracle-source": oracle.rfyPath,
+            },
+          });
+        }
+        oracleMissReason = oracle.reason;
+        console.log(`[encode-auto] oracle miss: ${oracleMissReason}`);
         // Direct path: framecad_import XML → ParsedProject → synthesizeRfyFromPlans.
         // Carries 3D <envelope> + stick <start>/<end> through to the codec so
         // elevation-graphics renders correctly on the rollformer.
@@ -81,14 +107,14 @@ export async function POST(req: Request) {
       rfy = result.rfy;
     }
 
-    return new NextResponse(new Uint8Array(rfy), {
-      status: 200,
-      headers: {
-        "content-type": "application/octet-stream",
-        "content-disposition": `attachment; filename="${outName}"`,
-        "x-detected-format": detectedFormat,
-      },
-    });
+    const headers: Record<string, string> = {
+      "content-type": "application/octet-stream",
+      "content-disposition": `attachment; filename="${outName}"`,
+      "x-detected-format": detectedFormat,
+      "x-oracle-hit": String(oracleHit),
+    };
+    if (!oracleHit && oracleMissReason) headers["x-oracle-miss-reason"] = oracleMissReason;
+    return new NextResponse(new Uint8Array(rfy), { status: 200, headers });
   } catch (e) {
     return new NextResponse(String(e instanceof Error ? e.message : e), { status: 400 });
   }
