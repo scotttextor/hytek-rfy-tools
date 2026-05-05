@@ -239,8 +239,22 @@ function parsePlans(xmlText: string): ProjectMeta & { plans: RawPlan[] } {
         // as wall plates. Verified 2026-05-01 against HG260044 GF-TIN PC7-1/B1:
         // input length 2640 → Detailer emits length 2632 (= 8mm trim total =
         // 4mm/end, matching the F325iT 70mm setup's EndClearance=4).
-        const isFullWidthPlate = usageLower === "topplate" || usageLower === "bottomplate"
-                              || usageLower === "topchord" || usageLower === "bottomchord";
+        //
+        // EXCEPT for LIN (Linear Truss) and TB2B (back-to-back) plans —
+        // chord lengths are kept raw (no 4mm/end EndClearance trim).
+        // Verified vs LINEAR_TRUSS_TESTING ref B1 len 3677.55 == raw XML
+        // length, and HG260001_PK10/TN6-1: T3 ref-len 1303.8 = raw XML.
+        // (Mirrors the diff harness's pre-trim guard at
+        //  hytek-rfy-codec/scripts/diff-vs-detailer.mjs lines 259-262.)
+        const isLINPlanForTrim = /-LIN-/i.test(plan.name);
+        const isTB2BPlanForTrim = /-TB2B-/i.test(plan.name);
+        const isTrussChordOnSpecialPlan =
+          (isLINPlanForTrim || isTB2BPlanForTrim) &&
+          (usageLower === "topchord" || usageLower === "bottomchord");
+        const isFullWidthPlate = !isTrussChordOnSpecialPlan && (
+          usageLower === "topplate" || usageLower === "bottomplate"
+          || usageLower === "topchord" || usageLower === "bottomchord"
+        );
         // Detect raised 89mm B-plate: z ≈ elevation + 61.5 (above-door sill).
         // These get 1mm/end trim (not 4mm) and header-style ops (no slab anchors).
         // Verified vs HG260012 L1001/B2 (z=51861.5, elevation=51800, 61.5 above floor).
