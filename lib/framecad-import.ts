@@ -26,6 +26,7 @@ import {
   type ParsedProject, type ParsedPlan, type ParsedFrame, type ParsedStick,
   type FrameBasis,
   type Vec3,
+  type ServiceAction,
 } from "@hytek/rfy-codec";
 import type { RfyToolingOp } from "@hytek/rfy-codec";
 
@@ -63,6 +64,11 @@ interface RawFrame {
   type: string;
   envelope: [Vec3, Vec3, Vec3, Vec3] | null;
   sticks: RawStick[];
+  /** Parsed `<tool_action name="Service">` z-lines for this frame (world-3D).
+   *  Consumed by the codec's wall-service simplifier
+   *  (`simplifyWallServiceInProject`) to emit dynamic InnerService ops on
+   *  vertical wall studs. Empty when the frame has no Service tool_actions. */
+  serviceActions: ServiceAction[];
 }
 
 interface RawPlan {
@@ -120,7 +126,7 @@ function parsePlans(xmlText: string): ProjectMeta & { plans: RawPlan[] } {
     attributeNamePrefix: "@_",
     parseAttributeValue: true,
     parseTagValue: false,
-    isArray: (name) => ["plan", "frame", "stick", "vertex"].includes(name),
+    isArray: (name) => ["plan", "frame", "stick", "vertex", "tool_action"].includes(name),
   });
   const doc = parser.parse(xmlText);
   const root = doc.framecad_import;
@@ -169,11 +175,36 @@ function parsePlans(xmlText: string): ProjectMeta & { plans: RawPlan[] } {
         }
       }
 
+      // Parse <tool_action name="Service"> z-lines from Detailer's input XML.
+      // The codec's wall-service simplifier (simplifyWallServiceInProject in
+      // @hytek/rfy-codec) consumes these to emit per-stud InnerService ops on
+      // vertical wall studs of LBW/NLBW plans, replacing the static @296/@446
+      // rule. Cross-corpus parity gain: +2.61pp / +483 ops vs the static rule
+      // alone. See @hytek/rfy-codec/docs/service-z-line-design.md +
+      // simplify-wall-service-design.md for the selection rule and corpus
+      // evidence. Migrated by Agent V (2026-05-05) from the diff harness.
+      const serviceActions: ServiceAction[] = [];
+      for (const ta of (frameNode.tool_action ?? []) as Array<{
+        "@_name"?: string;
+        start?: string | { "#text"?: string };
+        end?: string | { "#text"?: string };
+      }>) {
+        const name = String(ta["@_name"] ?? "");
+        if (name !== "Service") continue;
+        const startText = typeof ta.start === "string" ? ta.start : ta.start?.["#text"] ?? "0,0,0";
+        const endText = typeof ta.end === "string" ? ta.end : ta.end?.["#text"] ?? "0,0,0";
+        serviceActions.push({
+          start: parseTriple(startText),
+          end: parseTriple(endText),
+        });
+      }
+
       const frame: RawFrame = {
         name: String(frameNode["@_name"] ?? "F1"),
         type: String(frameNode["@_type"] ?? ""),
         envelope,
         sticks: [],
+        serviceActions,
       };
       // Frame z range — used to detect plate-end vs stud-end of Kb braces.
       const envZs = envelopeRaw.map(v => v.z);
@@ -664,6 +695,11 @@ export function framecadImportToParsedProject(xmlText: string): ParsedProject {
         name: frame.name,
         envelope: frame.envelope,
         sticks: outSticks,
+        // Carry serviceActions through to the codec so
+        // simplifyWallServiceInProject can run inside synthesizeRfyFromPlans.
+        // Without this, wall studs on LBW/NLBW plans would still receive the
+        // static InnerService @296/@446 rule that this dispatch replaces.
+        serviceActions: frame.serviceActions,
       });
     }
     outPlans.push({ name: plan.name, frames: outFrames });
