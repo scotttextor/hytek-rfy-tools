@@ -74,12 +74,23 @@ export function Wall3D() {
         // Stick3D calls e.stopPropagation in its onClick.
         onPointerMissed={() => selectStick(null)}
       >
+        {/* Camera up = (0, -1, 0) so Y-DOWN frame data (matching the 2D
+            SVG convention where lower-y appears at the visual top) renders
+            right-side-up. Without this flip, every frame appears mirrored
+            top-to-bottom relative to the 2D view — Scott flagged
+            2026-05-05.
+
+            OrbitControls reads camera.up, so orbit rotation stays
+            consistent: the user spins around the Y-down axis, which
+            visually behaves like "spinning around the vertical screen
+            axis" because that axis is now pointing screen-down. */}
         <PerspectiveCamera
           makeDefault
           fov={45}
           near={1}
           far={cameraDistance * 10}
           position={[cameraTarget[0], cameraTarget[1], cameraDistance]}
+          up={[0, -1, 0]}
         />
         <OrbitControls
           ref={(r) => { orbitRef.current = r as unknown as typeof orbitRef.current; }}
@@ -93,14 +104,17 @@ export function Wall3D() {
         {/* Ambient + directional lighting. The directional light gives the
             steel meshes a clear specular highlight so the C-section flange
             edges read at any rotation. */}
+        {/* Lights — Y components inverted to match the camera-up flip
+            above, so the key light still appears to come from "above"
+            visually (i.e. screen-up = world -Y now). */}
         <ambientLight intensity={0.5} />
         <directionalLight
-          position={[cameraDistance * 0.6, cameraDistance * 0.6, cameraDistance * 0.8]}
+          position={[cameraDistance * 0.6, -cameraDistance * 0.6, cameraDistance * 0.8]}
           intensity={1.2}
           castShadow
         />
         <directionalLight
-          position={[-cameraDistance * 0.4, -cameraDistance * 0.3, cameraDistance * 0.4]}
+          position={[-cameraDistance * 0.4, cameraDistance * 0.3, cameraDistance * 0.4]}
           intensity={0.5}
         />
 

@@ -37,26 +37,30 @@ export function Stick3D({ stick, stickKey, selected, onSelect }: Stick3DProps) {
   if (!m || !geometry) return null;
 
   // Position + orient the stick in 3D world space.
-  //   - stickMidline.start / end are 2D elevation coords (mm). We
-  //     interpret them as XY in 3D, with Z=0 being the elevation plane.
-  //   - The stick is extruded along +Z in profile-extrude space, so we
-  //     rotate so the extrusion axis aligns with (start → end) in XY,
-  //     then translate the start point to the midline.start position.
-  //   - Because the cross-section is centred on its web (y=0 in
-  //     profile coords), the extrusion sits ON the elevation plane —
-  //     i.e. the stick has visible depth INTO the page (the web
-  //     dimension), which is exactly what we want for a 3D view.
-  const angle = m.angle;  // angle of (end - start) in 2D XY
-  // We need to rotate the geometry so its +Z extrusion points along (start → end).
-  // ExtrudeGeometry's depth runs in +Z. Default we extrude in +Z.
-  // Rotate -90° about Y to put the extrusion direction into +X, then
-  // rotate further so +X aligns with our angle. Net: rotate so the
-  // mesh's local +Z points along (cos(angle), sin(angle), 0).
+  //
+  // Profile axes (from lib/profile-extrude.ts):
+  //   profile +X = flange depth (out of the C, towards the lips)
+  //   profile +Y = web height (along the long dimension of the C-section)
+  //   profile +Z = extrusion direction (along stick length)
+  //
+  // For an "On Flat" elevation view (the standard wall/joist/truss
+  // convention per the FrameCAD manual section 4.4), we want:
+  //   profile +X → world +Z   (flange depth points TOWARDS the viewer)
+  //   profile +Z → world stickAxis  (extrusion follows stick length)
+  //   profile +Y is derived: Y = Z × X (right-handed)
+  //
+  // Without explicit rotation about the length axis, the previous
+  // setFromUnitVectors approach picked an arbitrary perpendicular —
+  // chord webs ended up facing sideways while web members stayed
+  // flat, producing the inconsistent rendering Scott flagged
+  // 2026-05-05 on the TIN truss view.
+  const angle = m.angle;
   const quat = useMemo(() => {
-    const target = new THREE.Vector3(Math.cos(angle), Math.sin(angle), 0).normalize();
-    const q = new THREE.Quaternion();
-    q.setFromUnitVectors(new THREE.Vector3(0, 0, 1), target);
-    return q;
+    const stickAxis = new THREE.Vector3(Math.cos(angle), Math.sin(angle), 0);
+    const flangeDir = new THREE.Vector3(0, 0, 1);  // always towards viewer
+    const webHeightDir = new THREE.Vector3().crossVectors(stickAxis, flangeDir);  // = Z × X = Y
+    const m4 = new THREE.Matrix4().makeBasis(flangeDir, webHeightDir, stickAxis);
+    return new THREE.Quaternion().setFromRotationMatrix(m4);
   }, [angle]);
 
   const colour = selected ? "#FFCB05" : "#a8a8b0";
