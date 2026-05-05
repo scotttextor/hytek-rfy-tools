@@ -409,14 +409,24 @@ function parsePlans(xmlText: string): ProjectMeta & { plans: RawPlan[] } {
           const dx = end.x - start.x;
           const dy = end.y - start.y;
           const horizontalDelta = Math.sqrt(dx * dx + dy * dy);
+          // LIN (Linear Truss) and TB2B (back-to-back) plans keep raw XML
+          // W-stick lengths — no vertical extension, no diagonal trim.
+          // Verified vs LINEAR_TRUSS_TESTING ref W3 len 190 == raw XML, and
+          // HG260001_PK10/TN6-1: W10/W12/W14 vertical and W11/W13 diagonal
+          // ref lengths == raw XML. (Mirrors diff harness guards at
+          //  hytek-rfy-codec/scripts/diff-vs-detailer.mjs lines 327-353.)
+          const isLINPlanForW = /-LIN-/i.test(plan.name);
+          const isTB2BPlanForW = /-TB2B-/i.test(plan.name);
           if (horizontalDelta < 1.0) {
-            // VERTICAL W → extend by lip depth
-            const lipDepth = profile.r_lip > 0 ? profile.r_lip : 11;
-            const dz = end.z - start.z;
-            const lenZ = Math.abs(dz);
-            if (lenZ > 0.1) {
-              const sign = dz > 0 ? 1 : -1;
-              end = { x: end.x, y: end.y, z: end.z + sign * lipDepth };
+            // VERTICAL W → extend by lip depth (skip on LIN/TB2B)
+            if (!isLINPlanForW && !isTB2BPlanForW) {
+              const lipDepth = profile.r_lip > 0 ? profile.r_lip : 11;
+              const dz = end.z - start.z;
+              const lenZ = Math.abs(dz);
+              if (lenZ > 0.1) {
+                const sign = dz > 0 ? 1 : -1;
+                end = { x: end.x, y: end.y, z: end.z + sign * lipDepth };
+              }
             }
           } else {
             // DIAGONAL W → trim 2mm at end along the W's direction
