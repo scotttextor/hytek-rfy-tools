@@ -14,6 +14,7 @@ import { framecadImportToParsedProject } from "./framecad-import";
 // hytek-rfy-codec repo. This test is only meaningful when both repos
 // are checked out side-by-side.
 const TB2B_XML = "C:/Users/Scott/CLAUDE CODE/hytek-rfy-codec/test-corpus/HG250082_FLAGSTONE_OSHC/TRUSSES-GF-TB2B-89.115.xml";
+const LBW_XML = "C:/Users/Scott/CLAUDE CODE/hytek-rfy-codec/test-corpus/HG250082_FLAGSTONE_OSHC/UPPER-GF-LBW-89.075.xml";
 
 interface Vec3 { x: number; y: number; z: number }
 
@@ -128,32 +129,40 @@ describe("TB2B pre-trim guards — Agent Q migration", () => {
     if (!assertedAny) console.warn("No TB2B diagonal-W sticks found in fixture; chord/vertical coverage still asserted.");
   });
 
-  // Negative-case sanity: a non-LIN/non-TB2B plan in the same fixture should
-  // STILL apply the chord 4mm/end trim. This guards against the migration
-  // accidentally suppressing trims globally.
-  it("non-LIN/non-TB2B chords still get the 4mm/end trim", () => {
-    const wallPlan = project.plans.find(p => !/-LIN-/i.test(p.name) && !/-TB2B-/i.test(p.name));
-    if (!wallPlan) {
-      console.warn("Fixture has no non-LIN/non-TB2B plan; negative case skipped.");
+  // Negative-case sanity: a non-LIN/non-TB2B plan should STILL apply the
+  // 4mm/end EndClearance trim to wall plates. Guards against this migration
+  // accidentally suppressing the trim globally.
+  it("non-LIN/non-TB2B wall plates still get the 4mm/end trim", () => {
+    if (!existsSync(LBW_XML)) {
+      console.warn(`SKIP — LBW XML not present at ${LBW_XML}`);
       return;
     }
-    let foundTrimmedChord = false;
+    const lbwXml = readFileSync(LBW_XML, "utf8");
+    const lbwProject = framecadImportToParsedProject(lbwXml);
+    const lbwRaw = parseRawStickLengths(lbwXml);
+
+    const wallPlan = lbwProject.plans.find(p => !/-LIN-/i.test(p.name) && !/-TB2B-/i.test(p.name));
+    expect(wallPlan).toBeDefined();
+    if (!wallPlan) return;
+
+    let foundTrimmedPlate = false;
     for (const frame of wallPlan.frames) {
       for (const stick of frame.sticks) {
         const u = String(stick.usage ?? "").toLowerCase();
         if (u !== "topplate" && u !== "bottomplate") continue;
         const parsedLen = dist3(stick.start, stick.end);
-        const rawLen = rawLengths.get(`${frame.name}/${stick.name}`);
+        const rawLen = lbwRaw.get(`${frame.name}/${stick.name}`);
         if (rawLen === undefined) continue;
         // Wall plates on a normal plan should be trimmed by ~8mm total
-        // (4mm/end). We only need ONE example to confirm trims still fire.
-        if (Math.abs(rawLen - parsedLen - 8) < 0.5) {
-          foundTrimmedChord = true;
+        // (4mm/end EndClearance for the F325iT 70/89mm setups). One
+        // matching example is enough to confirm the trim still fires.
+        if (Math.abs((rawLen - parsedLen) - 8) < 0.5) {
+          foundTrimmedPlate = true;
           break;
         }
       }
-      if (foundTrimmedChord) break;
+      if (foundTrimmedPlate) break;
     }
-    expect(foundTrimmedChord).toBe(true);
+    expect(foundTrimmedPlate).toBe(true);
   });
 });
