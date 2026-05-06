@@ -37,3 +37,6 @@ next-env.d.ts
 .vercel
 
 .vercel
+
+# Detailer driver scratch space (screenshots, test RFYs)
+tmp_detailer_test/

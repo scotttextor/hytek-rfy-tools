@@ -129,6 +129,31 @@ If license issues persist:
 3. The Activate Online button may need a one-time manual click before headless
    batch processing works
 
+## Status as of 2026-05-06 11:35
+
+**Working:**
+- Detailer launches cleanly (license valid until 28/09/2026 on this PC)
+- `Alt+F → i → x` opens TdlgImport (Detailer's custom XML import dialog — NOT the standard Windows file picker)
+- Click "Add" button → standard Windows Open dialog appears
+- Type XML path + Enter → file picker closes, plan appears in TdlgImport's CheckListBox
+
+**NOT yet working:**
+- Click "Import" button on TdlgImport → dialog closes silently, no project loaded, no popup, no error
+- Suspected cause: machine setup combo defaults to "Demo Machine Setup" which doesn't have WebHole/BoltHole tools. Initial test triggered an error dialog confirming this. After setting combos to "F325iT 70mm", error gone but import still doesn't proceed.
+- May be a focus / timing issue when clicking Import
+- The 64-bit Python automating 32-bit Detailer has known limitations (warning emitted by pywinauto)
+
+**To finish the driver, manual steps to verify in Detailer GUI:**
+
+1. Open Detailer manually, do a single XML import end-to-end with the right machine setup. Note the EXACT click sequence.
+2. Verify the TCheckListBox auto-checks the plan when added (or whether it requires manual checking).
+3. Check if the Import button has any keyboard accelerator (e.g. Alt+I) that's more reliable than mouse click.
+4. After successful import, try Export → RFY and capture the export dialog flow.
+
+Once those flows are verified manually, plug the exact sequence into `scripts/detailer-batch.py`.
+
+**Alternative approach worth trying:** Detailer ships with `.vbsx` script files in `ScriptsX/`. These are FrameCAD's own VBScript-style automation. There may be a way to invoke Detailer with a script file as a CLI arg that does import+export non-interactively. The .vbsx files like `Auto Frame.vbsx` are worth inspecting.
+
 ## Troubleshooting
 
 ### "Detailer launched but PID not found"
