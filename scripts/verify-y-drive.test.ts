@@ -153,14 +153,23 @@ interface JobReport {
   skipReason?: string;
 }
 
+/**
+ * Match an XML's plan name to reference RFYs.
+ * - Exact match → "matches"
+ * - PK#-prefixed reference matching same plan name → "pkPrefixed" (single-pack
+ *   case — same content, just renamed by Detailer with a pack index). Treated
+ *   as a regular match: byte-compare against the codec output.
+ * - Multiple PK#- variants → "trueSplit": codec doesn't pack-split, so we
+ *   can't byte-compare cleanly. Flagged as not-comparable.
+ */
 function matchXmlToRfys(
   xml: XmlEntry,
   rfys: RfyEntry[],
-): { matches: RfyEntry[]; split: RfyEntry[] } {
-  if (!xml.planName) return { matches: [], split: [] };
+): { matches: RfyEntry[]; pkPrefixed: RfyEntry[]; trueSplit: RfyEntry[] } {
+  if (!xml.planName) return { matches: [], pkPrefixed: [], trueSplit: [] };
   const xmlPlan = xml.planName.toUpperCase();
   const matches: RfyEntry[] = [];
-  const split: RfyEntry[] = [];
+  const pkCandidates: RfyEntry[] = [];
   for (const r of rfys) {
     const refPlan = r.planName.toUpperCase();
     if (refPlan === xmlPlan) {
@@ -168,11 +177,18 @@ function matchXmlToRfys(
     } else {
       const pkMatch = refPlan.match(/^PK\d+-(.+)$/);
       if (pkMatch && pkMatch[1] === xmlPlan) {
-        split.push(r);
+        pkCandidates.push(r);
       }
     }
   }
-  return { matches, split };
+  // If only ONE PK-prefixed variant, it's a single-pack rename — treat as match.
+  // If multiple, it's a true multi-pack split — codec can't reproduce this shape.
+  if (pkCandidates.length === 1) {
+    return { matches, pkPrefixed: pkCandidates, trueSplit: [] };
+  } else if (pkCandidates.length > 1) {
+    return { matches, pkPrefixed: [], trueSplit: pkCandidates };
+  }
+  return { matches, pkPrefixed: [], trueSplit: [] };
 }
 
 function verifyJob(job: { jobnum: string; dir: string; builder: string }): JobReport {
@@ -200,19 +216,21 @@ function verifyJob(job: { jobnum: string; dir: string; builder: string }): JobRe
 
   for (const xml of inspect.xmls) {
     if (!xml.planName) continue;
-    const { matches, split } = matchXmlToRfys(xml, inspect.rfys);
-    if (matches.length === 0 && split.length === 0) {
+    const { matches, pkPrefixed, trueSplit } = matchXmlToRfys(xml, inspect.rfys);
+    // Use exact match if available; else fall back to single PK-prefixed match.
+    const comparableRefs = matches.length > 0 ? matches : pkPrefixed;
+    if (comparableRefs.length === 0 && trueSplit.length === 0) {
       jobReport.pairs.push({ plan: xml.planName, status: "no-reference", reason: "no matching RFY in rollformer dir" });
       jobReport.summary.noReference++;
       jobReport.summary.total++;
       continue;
     }
-    if (matches.length === 0 && split.length > 0) {
+    if (comparableRefs.length === 0 && trueSplit.length > 0) {
       jobReport.pairs.push({
         plan: xml.planName,
         status: "split-only",
-        reason: `XML maps to ${split.length} pack-split RFYs (codec doesn't pack-split)`,
-        splitCount: split.length,
+        reason: `XML maps to ${trueSplit.length} pack-split RFYs (codec doesn't pack-split)`,
+        splitCount: trueSplit.length,
       });
       jobReport.summary.splitOnly++;
       jobReport.summary.total++;
@@ -237,7 +255,7 @@ function verifyJob(job: { jobnum: string; dir: string; builder: string }): JobRe
       jobReport.summary.total++;
       continue;
     }
-    const ref = matches[0]!;
+    const ref = comparableRefs[0]!;
     let refBytes: Buffer;
     try { refBytes = readFileSync(ref.path); }
     catch (e) {
@@ -268,7 +286,7 @@ function verifyJob(job: { jobnum: string; dir: string; builder: string }): JobRe
       reason,
       ourSize: codecBytes.length,
       refSize: refBytes.length,
-      multipleRefs: matches.length > 1 ? matches.map(r => r.planName) : undefined,
+      multipleRefs: comparableRefs.length > 1 ? comparableRefs.map(r => r.planName) : undefined,
     });
     jobReport.summary.total++;
   }
