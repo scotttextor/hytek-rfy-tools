@@ -143,6 +143,10 @@ interface ReferenceEntry {
 const INDEX = new Map<string, ReferenceEntry>();
 let INITIALIZED = false;
 let INIT_ERROR: string | null = null;
+/** Last mtime of <DETAILER_PREROLLED_CACHE>/_index.json when we built INDEX.
+ *  Used to detect external cache writes (orchestrator, async runner, route)
+ *  and trigger a rebuild without a server restart. */
+let LAST_PREROLLED_INDEX_MTIME = 0;
 
 function indexKey(jobnum: string, planName: string): string {
   return `${jobnum.toUpperCase()}__${planName.toUpperCase()}`;
@@ -197,10 +201,32 @@ function quickScanXml(xmlText: string): {
   return { jobnum, plans };
 }
 
-/** Walk JOB_LOCATIONS once, populate INDEX. Tolerates missing dirs (logs + skips). */
+/** Read the prerolled cache's _index.json mtime; 0 if missing. */
+function prerolledIndexMtime(): number {
+  try {
+    const idx = join(DETAILER_PREROLLED_CACHE, "_index.json");
+    if (!existsSync(idx)) return 0;
+    return statSync(idx).mtimeMs;
+  } catch {
+    return 0;
+  }
+}
+
+/** Walk JOB_LOCATIONS once, populate INDEX. Tolerates missing dirs (logs + skips).
+ *  Auto-rebuilds when the prerolled cache's _index.json has been updated since
+ *  the last build (orchestrator / async runner / sync route just wrote new
+ *  entries). */
 function buildIndex(): void {
-  if (INITIALIZED) return;
+  // Mtime-based invalidation: if the prerolled _index.json is newer than our
+  // last build, rebuild from scratch.
+  const liveMtime = prerolledIndexMtime();
+  if (INITIALIZED && liveMtime <= LAST_PREROLLED_INDEX_MTIME) return;
+  if (INITIALIZED) {
+    // Stale rebuild — clear and re-walk.
+    INDEX.clear();
+  }
   INITIALIZED = true;
+  LAST_PREROLLED_INDEX_MTIME = liveMtime;
 
   // Collect XML metadata first so we can attach frame counts to RFY entries.
   // Map: jobnum + planName -> { frameCount, xmlPath }
