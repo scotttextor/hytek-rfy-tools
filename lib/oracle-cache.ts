@@ -67,6 +67,26 @@ const JOB_LOCATIONS: JobLocation[] = [
 const HG260044_ONEDRIVE_FALLBACK =
   "C:\\Users\\Scott\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\memory\\reference_data\\HG260044";
 
+// Detailer-pre-rolled cache (populated by scripts/detailer-batch.py). Contains
+// {jobnum}/{plan}.rfy + {plan}.meta.json for every job/plan that's been
+// pre-rolled through Detailer. These bytes ARE Detailer's output by definition,
+// so any input matching a cached entry returns 100% bit-exact match.
+//
+// This is the headless-Detailer-as-oracle path: instead of reverse-engineering
+// Detailer's algorithms, we use Detailer itself as the source of truth, run it
+// once per (jobnum, plan), and serve the cached bytes forever after.
+//
+// Layout:
+//   <root>/<jobnum>/<plan>.rfy        — Detailer-produced RFY (bit-exact)
+//   <root>/<jobnum>/<plan>.meta.json  — { xml_sha256, generated_at, ... }
+//   <root>/_index.json                — full index of entries
+//
+// On cache lookup, the meta.xml_sha256 is checked against the input XML's
+// hash; if they match, the cached RFY is served. If the XML has been edited
+// since the cache was built, we fall through to the rule engine.
+const DETAILER_PREROLLED_CACHE =
+  "C:\\Users\\Scott\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache";
+
 // ---------- Index --------------------------------------------------------
 
 interface ReferenceEntry {
@@ -77,6 +97,12 @@ interface ReferenceEntry {
   expectedFrameCount: number | null;
   /** Source XML path that produced this reference, for diagnostics. */
   sourceXmlPath: string | null;
+  /** SHA-256 of the source XML at cache-build time (only set for Detailer-
+   *  pre-rolled cache entries). When present, the lookup will check the
+   *  input XML's hash against this for stronger validation. */
+  xmlSha256: string | null;
+  /** Where this entry came from. */
+  source: "reference" | "prerolled";
 }
 
 /**
@@ -230,6 +256,8 @@ function buildIndex(): void {
           rfyPath: full,
           expectedFrameCount: meta ? meta.frameCount : null,
           sourceXmlPath: meta ? meta.xmlPath : null,
+          xmlSha256: null,
+          source: "reference",
         });
         foundForJob++;
       }
@@ -240,10 +268,64 @@ function buildIndex(): void {
     }
   }
 
+  // ---- Detailer pre-rolled cache (scripts/detailer-batch.py output) ----
+  let prerolledCount = 0;
+  try {
+    if (existsSync(DETAILER_PREROLLED_CACHE)) {
+      for (const jobnumDir of readdirSync(DETAILER_PREROLLED_CACHE)) {
+        const jobPath = join(DETAILER_PREROLLED_CACHE, jobnumDir);
+        try {
+          if (!statSync(jobPath).isDirectory()) continue;
+        } catch { continue; }
+        if (jobnumDir.startsWith("_")) continue; // skip _index.json, _tmp, etc.
+        for (const name of readdirSync(jobPath)) {
+          if (!name.toLowerCase().endsWith(".rfy")) continue;
+          const planName = name.slice(0, -4);
+          const rfyPath = join(jobPath, name);
+          const metaPath = join(jobPath, `${planName}.meta.json`);
+          let xmlSha256: string | null = null;
+          try {
+            if (existsSync(metaPath)) {
+              const meta = JSON.parse(readFileSync(metaPath, "utf-8"));
+              xmlSha256 = meta.xml_sha256 ?? null;
+            }
+          } catch (e) {
+            console.warn(`[oracle-cache] meta read failed: ${metaPath} — ${e}`);
+          }
+          const k = indexKey(jobnumDir, planName);
+          // Pre-rolled cache wins over reference cache when both exist —
+          // pre-rolled is keyed by content hash, more authoritative.
+          INDEX.set(k, {
+            jobnum: jobnumDir,
+            planName,
+            rfyPath,
+            expectedFrameCount: null, // pre-rolled doesn't track frame count separately
+            sourceXmlPath: null,
+            xmlSha256,
+            source: "prerolled",
+          });
+          prerolledCount++;
+        }
+      }
+    }
+  } catch (e) {
+    console.warn(`[oracle-cache] pre-rolled scan error: ${e}`);
+  }
+
   console.log(
-    `[oracle-cache] indexed ${INDEX.size} reference RFYs from ${JOB_LOCATIONS.length} jobs ` +
-    `(xml scanned: ${xmlsScanned}, skipped: ${xmlsSkipped}, missing rfy dirs: ${rfyDirsMissing})`
+    `[oracle-cache] indexed ${INDEX.size} entries: ` +
+    `${INDEX.size - prerolledCount} reference RFYs (${JOB_LOCATIONS.length} jobs) + ${prerolledCount} pre-rolled. ` +
+    `xml scanned=${xmlsScanned}, skipped=${xmlsSkipped}, missing rfy dirs=${rfyDirsMissing}`
   );
+}
+
+/** SHA-256 of a UTF-8 string (Node.js built-in crypto). */
+function sha256OfString(s: string): string {
+  // Lazy require to keep this file usable in environments without crypto module.
+  // (Should always be present in Node.)
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { createHash } = require("node:crypto");
+  return createHash("sha256").update(s).digest("hex");
 }
 
 // ---------- Public API ---------------------------------------------------
@@ -304,6 +386,17 @@ export function oracleLookup(xmlText: string): OracleResult {
       hit: false,
       reason: `frame count mismatch for ${scan.jobnum}/${plan.name}: input has ${plan.frameCount}, reference has ${entry.expectedFrameCount}`,
     };
+  }
+  // Pre-rolled cache: validate XML hash. If the source XML has changed since
+  // the cache was built, skip — the cached RFY no longer matches this input.
+  if (entry.source === "prerolled" && entry.xmlSha256) {
+    const inputHash = sha256OfString(xmlText);
+    if (inputHash !== entry.xmlSha256) {
+      return {
+        hit: false,
+        reason: `pre-rolled cache stale: input hash ${inputHash.slice(0, 12)} != cached ${entry.xmlSha256.slice(0, 12)} — re-run detailer-batch.py for this job`,
+      };
+    }
   }
   let bytes: Buffer;
   try {
@@ -414,6 +507,10 @@ export function oracleLookupPerPlan(xmlText: string): PerPlanLookupResult {
       if (!firstMissReason) firstMissReason = reason;
       continue;
     }
+    // Pre-rolled cache hash validation. We can't validate per-plan against the
+    // packed XML easily (only the multi-plan hash is meaningful), so we trust
+    // the lookup if the entry exists. Per-plan hash validation happens in the
+    // single-plan oracleLookup() above.
     let bytes: Buffer;
     try {
       bytes = readFileSync(entry.rfyPath);
