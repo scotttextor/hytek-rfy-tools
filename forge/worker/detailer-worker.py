@@ -452,29 +452,95 @@ def export_rfy(app, main, rfy_out_path, deadline):
         _snapshot_visible_windows(app, "save_dlg_missing")
         _emit("gate_failed", gate="Save_dialog_not_found")
         return False
-    _emit("gate_passed", gate="Save_dialog_found")
+    _emit("gate_passed", gate="Save_dialog_found", title=save_dlg.window_text())
 
-    # Filename combo
+    # ENUMERATE SAVE DIALOG STRUCTURE for diagnosis
+    children_info = []
+    for c in save_dlg.descendants():
+        try:
+            cls = c.class_name()
+            txt = (c.window_text() or "")[:50]
+            r = c.rectangle()
+            children_info.append({"cls": cls, "text": txt, "w": r.width(), "h": r.height()})
+        except Exception:
+            pass
+    _emit("save_dlg_children", count=len(children_info), children=children_info[:25])
+
+    # Try to find filename Edit (inner edit child of ComboBoxEx32, OR a direct Edit)
+    # Standard Win32 save dialog has an Edit with control id 1148 inside ComboBoxEx32
+    save_edit = None
     save_combo = None
     for c in save_dlg.descendants():
         try:
             cls = c.class_name()
-            if (cls == "Edit" or "ComboBox" in cls) and c.rectangle().width() > 100:
+            if cls == "ComboBoxEx32":
                 save_combo = c
+                # Find inner Edit child
+                for cc in c.descendants():
+                    try:
+                        if cc.class_name() == "Edit":
+                            save_edit = cc
+                            break
+                    except Exception:
+                        pass
+                if save_edit:
+                    break
+        except Exception:
+            pass
+    # Fallback: any wide Edit in the dialog
+    if not save_edit:
+        for c in save_dlg.descendants():
+            try:
+                cls = c.class_name()
+                if cls == "Edit" and c.rectangle().width() > 100:
+                    save_edit = c
+                    break
+            except Exception:
+                pass
+    if not save_edit:
+        _emit("gate_failed", gate="save_edit_not_found")
+        return False
+    _emit("gate_passed", gate="save_edit_found", combo_found=save_combo is not None)
+
+    # Set the filename DIRECTLY via SetWindowText — no keyboard simulation
+    try:
+        save_edit.set_focus(); time.sleep(0.2)
+        # Triple approach: SetWindowText (works on standard Edit), then verify
+        save_edit.set_edit_text(rfy_out_path)
+        time.sleep(0.3)
+        readback = save_edit.window_text()
+        _emit("save_edit_set", target=rfy_out_path, readback=readback)
+        if rfy_out_path not in readback:
+            # Fallback to clipboard paste if direct set didn't stick
+            save_edit.set_focus(); time.sleep(0.2)
+            pyautogui.hotkey("ctrl", "a"); time.sleep(0.1)
+            pyautogui.press("delete"); time.sleep(0.2)
+            set_clipboard(rfy_out_path)
+            pyautogui.hotkey("ctrl", "v"); time.sleep(0.5)
+            readback2 = save_edit.window_text()
+            _emit("save_edit_paste_fallback", readback=readback2)
+    except Exception as e:
+        _emit("save_edit_set_error", error=str(e))
+
+    # Find and click the Save/OK button explicitly (don't press Enter)
+    save_btn = None
+    for c in save_dlg.descendants():
+        try:
+            cls = c.class_name()
+            txt = c.window_text() or ""
+            if cls == "Button" and txt in ("&Save", "Save", "&Open", "Open", "&OK", "OK"):
+                save_btn = c
+                _emit("save_btn_candidate", cls=cls, text=txt)
                 break
         except Exception:
             pass
-    if not save_combo:
-        return False
-
-    # Set output path via clipboard
-    save_combo.set_focus(); time.sleep(0.2)
-    pyautogui.hotkey("ctrl", "a"); time.sleep(0.1)
-    pyautogui.press("delete"); time.sleep(0.2)
-    set_clipboard(rfy_out_path)
-    pyautogui.hotkey("ctrl", "v"); time.sleep(0.5)
-    _emit("gate_passed", gate="save_path_pasted", path=rfy_out_path)
-    pyautogui.press("enter"); time.sleep(2)
+    if save_btn:
+        save_btn.click_input(); time.sleep(2)
+        _emit("gate_passed", gate="save_button_clicked", text=save_btn.window_text())
+    else:
+        # Fallback to Enter
+        pyautogui.press("enter"); time.sleep(2)
+        _emit("gate_passed", gate="save_enter_pressed_fallback")
 
     _snapshot_visible_windows(app, "after_save_enter")
 
