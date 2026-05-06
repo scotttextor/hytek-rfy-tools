@@ -73,11 +73,25 @@ def resolve_cache_root() -> Path:
 
 
 def sha256_file(path: Path) -> str:
+    """Stream a file through SHA-256, byte-exact (no transformation)."""
     h = hashlib.sha256()
     with open(path, "rb") as f:
         for chunk in iter(lambda: f.read(1 << 20), b""):
             h.update(chunk)
     return h.hexdigest()
+
+
+def sha256_xml_canonical(path: Path) -> str:
+    """SHA-256 of the XML's *trimmed UTF-8 bytes*.
+
+    This matches lib/oracle-cache.ts which hashes a JS string after .trim().
+    Using a canonical form makes hashes round-trip between cache writes
+    (server-side, file path) and lookups (client posts XML via HTTP, which
+    Next.js .trim()s before passing to oracleLookup).
+    """
+    raw = path.read_bytes()
+    text = raw.decode("utf-8", errors="replace").strip()
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 
 _JOBNUM_RE = re.compile(r"<jobnum>\s*\"?\s*([A-Za-z0-9#-]+?)\s*\"?\s*</jobnum>")
@@ -169,7 +183,7 @@ def cache_put(
             f"got jobnum={jobnum!r} plan_name={plan_name!r}"
         )
 
-    xml_sha = sha256_file(xml_p)
+    xml_sha = sha256_xml_canonical(xml_p)
     rfy_size = rfy_p.stat().st_size
 
     job_dir = cache_root / jobnum
@@ -232,9 +246,9 @@ def cache_get(
     except Exception:
         return None
 
-    # Validate xml hash
+    # Validate xml hash (canonical: trimmed UTF-8 bytes)
     if meta.get("xml_sha256"):
-        live_hash = sha256_file(xml_p)
+        live_hash = sha256_xml_canonical(xml_p)
         if live_hash != meta["xml_sha256"]:
             return None  # stale
 
