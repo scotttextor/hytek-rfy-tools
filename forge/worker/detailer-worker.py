@@ -191,13 +191,31 @@ def wait_for_ready_main(app, deadline_sec=STARTUP_POLL_DEADLINE_SEC):
 
 
 def auto_dismiss_popups(app, accept_labels=("&OK", "OK", "&Yes", "Yes", "&Ignore", "Ignore"), timeout=2):
-    """Click OK / Yes / Ignore on any TMessageForm popup. Never Cancel."""
+    """Click OK / Yes / Ignore on any TMessageForm popup. Never Cancel.
+    Logs the popup's static text so we can see what Detailer is saying."""
     deadline = time.time() + timeout
     dismissed = False
     while time.time() < deadline:
         w = find_visible(app, "TMessageForm")
         if not w:
             return dismissed
+        # Capture popup text content
+        popup_title = ""
+        popup_lines = []
+        try:
+            popup_title = w.window_text() or ""
+            for c in w.descendants():
+                try:
+                    cls = c.class_name()
+                    if cls in ("TLabel", "TStaticText", "Static"):
+                        t = c.window_text() or ""
+                        if t:
+                            popup_lines.append(t)
+                except Exception:
+                    pass
+        except Exception:
+            pass
+        _emit("popup_seen", title=popup_title, lines=popup_lines[:6])
         clicked = False
         for label in accept_labels:
             for c in w.descendants():
@@ -207,6 +225,7 @@ def auto_dismiss_popups(app, accept_labels=("&OK", "OK", "&Yes", "Yes", "&Ignore
                         time.sleep(0.4)
                         clicked = True
                         dismissed = True
+                        _emit("popup_dismissed", clicked_label=label)
                         break
                 except Exception:
                     pass
@@ -223,19 +242,39 @@ def set_clipboard(text):
     time.sleep(0.2)
 
 
+def _snapshot_visible_windows(app, label):
+    """Diagnostic: list every visible top-level window with class + title."""
+    snap = []
+    for w in app.windows():
+        try:
+            if w.is_visible():
+                snap.append({"cls": w.class_name(), "title": (w.window_text() or "")[:80]})
+        except Exception:
+            pass
+    _emit("window_snapshot", label=label, count=len(snap), windows=snap)
+
+
 def import_xml(app, main, xml_path, deadline):
     """Drive File > Import > XML. Returns True on success."""
     main.set_focus()
     time.sleep(0.4)
+
+    # Diagnostic snapshot of state BEFORE we drive the menu
+    _snapshot_visible_windows(app, "before_import_menu")
 
     # Open import dialog: Alt+F → i → x
     pyautogui.hotkey("alt", "f"); time.sleep(0.5)
     pyautogui.press("i"); time.sleep(0.4)
     pyautogui.press("x"); time.sleep(1.5)
 
+    # Diagnostic snapshot AFTER menu attempt
+    _snapshot_visible_windows(app, "after_import_menu")
+
     dlg = find_visible(app, "TdlgImport")
     if not dlg:
+        _emit("gate_failed", gate="TdlgImport_not_visible")
         return False
+    _emit("gate_passed", gate="TdlgImport_found")
 
     # Click Add
     add_btn = None
@@ -247,13 +286,17 @@ def import_xml(app, main, xml_path, deadline):
         except Exception:
             pass
     if not add_btn:
+        _emit("gate_failed", gate="Add_button_not_found")
         return False
+    _emit("gate_passed", gate="Add_button_found")
     add_btn.click(); time.sleep(1.5)
 
     # File picker
     file_dlg = find_visible(app, "#32770")
     if not file_dlg:
+        _emit("gate_failed", gate="file_picker_not_visible")
         return False
+    _emit("gate_passed", gate="file_picker_found")
 
     # Find filename combo
     file_combo = None
@@ -266,7 +309,9 @@ def import_xml(app, main, xml_path, deadline):
         except Exception:
             pass
     if not file_combo:
+        _emit("gate_failed", gate="file_combo_not_found")
         return False
+    _emit("gate_passed", gate="file_combo_found")
 
     # Set path via clipboard paste (avoids autocomplete issues with parens)
     file_combo.set_focus(); time.sleep(0.2)
@@ -294,12 +339,15 @@ def import_xml(app, main, xml_path, deadline):
         time.sleep(0.5)
         if not find_visible(app, "#32770"):
             break
+    _emit("gate_passed", gate="file_picker_closed")
 
     # Re-acquire dialog and let plan settle
     time.sleep(2)
     dlg = find_visible(app, "TdlgImport")
     if not dlg:
+        _emit("gate_failed", gate="TdlgImport_lost_after_picker")
         return False
+    _emit("gate_passed", gate="TdlgImport_reacquired")
 
     # Select All to ensure plan is checked
     for c in dlg.descendants():
@@ -320,7 +368,9 @@ def import_xml(app, main, xml_path, deadline):
         except Exception:
             pass
     if not import_btn:
+        _emit("gate_failed", gate="Import_button_not_found")
         return False
+    _emit("gate_passed", gate="Import_button_found")
     r = import_btn.rectangle()
     cx, cy = (r.left + r.right) // 2, (r.top + r.bottom) // 2
     pyautogui.moveTo(cx, cy, duration=0.2); time.sleep(0.3)
@@ -341,12 +391,16 @@ def export_rfy(app, main, rfy_out_path, deadline):
     main.set_focus()
     time.sleep(0.5)
 
+    _snapshot_visible_windows(app, "before_export_menu")
+
     # Open Export submenu and navigate to RFY (item 7, so 6 downs after open)
     pyautogui.hotkey("alt", "f"); time.sleep(0.5)
     pyautogui.press("e"); time.sleep(0.5)
     for _ in range(6):
         pyautogui.press("down"); time.sleep(0.15)
     pyautogui.press("enter"); time.sleep(1.5)
+
+    _snapshot_visible_windows(app, "after_export_menu")
 
     # Wait up to 10s for "Export to File" dialog
     export_dlg = None
@@ -362,7 +416,10 @@ def export_rfy(app, main, rfy_out_path, deadline):
             break
         time.sleep(0.5)
     if not export_dlg:
+        _snapshot_visible_windows(app, "export_dlg_search_failed")
+        _emit("gate_failed", gate="Export_to_File_dlg_not_found")
         return False
+    _emit("gate_passed", gate="Export_to_File_dlg_found", title=export_dlg.window_text(), cls=export_dlg.class_name())
 
     # Click Select All
     for c in export_dlg.descendants():
@@ -384,13 +441,18 @@ def export_rfy(app, main, rfy_out_path, deadline):
         except Exception:
             pass
     if not export_btn:
+        _emit("gate_failed", gate="Export_button_in_dlg_not_found")
         return False
+    _emit("gate_passed", gate="Export_button_in_dlg_found")
     export_btn.click_input(); time.sleep(2)
 
     # Standard Save dialog
     save_dlg = find_visible(app, "#32770")
     if not save_dlg:
+        _snapshot_visible_windows(app, "save_dlg_missing")
+        _emit("gate_failed", gate="Save_dialog_not_found")
         return False
+    _emit("gate_passed", gate="Save_dialog_found")
 
     # Filename combo
     save_combo = None
@@ -411,16 +473,24 @@ def export_rfy(app, main, rfy_out_path, deadline):
     pyautogui.press("delete"); time.sleep(0.2)
     set_clipboard(rfy_out_path)
     pyautogui.hotkey("ctrl", "v"); time.sleep(0.5)
+    _emit("gate_passed", gate="save_path_pasted", path=rfy_out_path)
     pyautogui.press("enter"); time.sleep(2)
+
+    _snapshot_visible_windows(app, "after_save_enter")
 
     # Wait for "Export Successful" popup, dismiss + verify file landed
     output = Path(rfy_out_path)
+    last_snap_time = time.time()
     while time.time() < deadline:
         time.sleep(0.5)
         auto_dismiss_popups(app, timeout=0.3)
         if output.exists() and output.stat().st_size > 0:
             time.sleep(0.5)
             return True
+        # Periodic window snapshot during long waits so we can see what's blocking
+        if time.time() - last_snap_time > 15:
+            _snapshot_visible_windows(app, f"export_wait_t{int(time.time() - last_snap_time)}")
+            last_snap_time = time.time()
 
     # If our exact filename isn't there, look for ANY new RFY in the output dir
     out_dir = output.parent
