@@ -172,14 +172,57 @@ def find_main_window(app: "Application"):
     return None
 
 
+def _find_visible(app, cls):
+    for w in app.windows():
+        try:
+            if w.is_visible() and w.class_name() == cls:
+                return w
+        except Exception: pass
+    return None
+
+
+def _project_tree_has_children(main_win) -> bool:
+    """Detect successful import. Check several signals.
+
+    Detailer does NOT change main_win.window_text() on import (stays
+    'untitled.fcp' for an untitled-but-imported project). So we look for:
+      1. Any descendant whose text starts with 'HG' (the project name appears
+         in Project Tree)
+      2. Or TTreeView with non-empty children
+      3. Or new windows (canvas painted)
+    """
+    try:
+        for c in main_win.descendants():
+            try:
+                t = c.window_text() or ""
+                # Project Tree node label looks like 'HG260017 LOT 925 (42)...'
+                if t.startswith("HG") and len(t) > 5:
+                    return True
+                # GF/FF/etc. plan nodes
+                if t.startswith(("GF-", "FF-", "RF-")) and len(t) > 5:
+                    return True
+            except Exception: pass
+    except Exception: pass
+    return False
+
+
 def xml_to_rfy(xml_path: str, output_dir: str, app: Optional["Application"] = None) -> str:
     """Convert one XML to one RFY via Detailer GUI automation.
 
-    Returns the absolute path to the written RFY.
+    Updated 2026-05-06 with the actual flow from manual verification:
+    1. Alt+F → i → x → TdlgImport (Detailer's custom XML import dialog)
+    2. Click 'Add' → standard #32770 file picker → type path → Enter
+    3. Click 'Import' on TdlgImport → Detailer imports (auto-selects machine
+       setup from XML profile; no need to manually set combos)
+    4. Detection: Project Tree populates (NOT title bar — Detailer leaves
+       title as 'untitled.fcp' for imports)
+    5. Alt+F → e → r → 'Export to File' dialog (TdlgExport custom Detailer
+       dialog with frame grid)
+    6. Click 'Select All' → click 'Export' button
+    7. Standard Save dialog → set path → click Save
+    8. RFY lands at the path
 
-    NOTE: this performs UI automation. Don't touch keyboard/mouse while it
-    runs. If multiple XMLs are converted in sequence, reuse the same `app`
-    instance to avoid the Detailer launch overhead each time.
+    Returns the absolute path to the written RFY.
     """
     if not HAS_DRIVER_DEPS:
         raise RuntimeError(
@@ -200,70 +243,292 @@ def xml_to_rfy(xml_path: str, output_dir: str, app: Optional["Application"] = No
     main.set_focus()
     time.sleep(0.4)
 
-    # ---- Import XML via File menu ----
-    pyautogui.hotkey("alt", "f")
-    time.sleep(0.4)
-    pyautogui.press("i")    # Import
-    time.sleep(0.3)
-    pyautogui.press("x")    # XML
-    time.sleep(1.0)
+    # =================== IMPORT ===================
+    pyautogui.hotkey("alt", "f"); time.sleep(0.4)
+    pyautogui.press("i"); time.sleep(0.3)
+    pyautogui.press("x"); time.sleep(1.5)
 
-    open_dlg = app.window(title_re=".*Open.*|.*Import.*", class_name="#32770")
-    open_dlg.wait("visible", timeout=15)
-    file_edit = open_dlg.child_window(class_name="Edit", control_id=0x47C)
-    file_edit.set_edit_text(xml_path)
-    open_dlg.child_window(title="Open", class_name="Button").click()
-    # Project import can take 5-30s for large frames
-    time.sleep(8)
+    dlg = _find_visible(app, "TdlgImport")
+    if not dlg:
+        raise RuntimeError("TdlgImport did not appear after Alt+F→i→x")
 
-    # ---- Export RFY via File menu ----
-    main.set_focus()
-    pyautogui.hotkey("alt", "f")
-    time.sleep(0.4)
-    pyautogui.press("e")    # Export
-    time.sleep(0.3)
-    pyautogui.press("r")    # RFY
-    time.sleep(1.0)
+    # Click 'Add' button
+    add_btn = None
+    for c in dlg.descendants():
+        try:
+            if c.class_name() == "TButton" and c.window_text() == "Add":
+                add_btn = c; break
+        except Exception: pass
+    if not add_btn:
+        raise RuntimeError("'Add' button not found on TdlgImport")
+    add_btn.click(); time.sleep(1.5)
 
-    save_dlg = app.window(title_re=".*Save.*|.*Export.*", class_name="#32770")
-    save_dlg.wait("visible", timeout=15)
+    # Standard file picker
+    file_dlg = _find_visible(app, "#32770")
+    if not file_dlg:
+        raise RuntimeError("File picker (#32770) did not appear after clicking Add")
+
+    # Find filename combo + paste path
+    file_combo = None
+    for c in file_dlg.descendants():
+        try:
+            cls = c.class_name()
+            if (cls == "Edit" or "ComboBox" in cls) and c.rectangle().width() > 100:
+                file_combo = c; break
+        except Exception: pass
+    if not file_combo:
+        raise RuntimeError("Filename combo not found in file picker")
+    file_combo.set_focus(); time.sleep(0.2)
+    pyautogui.hotkey("ctrl", "a"); time.sleep(0.1)
+    pyautogui.press("delete"); time.sleep(0.1)
+    pyautogui.typewrite(xml_path, interval=0.005); time.sleep(0.8)
+
+    # Click 'Open' button explicitly instead of pressing Enter (paths with
+    # parens like '(17)' confuse Enter handling in some Windows file dialogs).
+    open_btn = None
+    for c in file_dlg.descendants():
+        try:
+            cls = c.class_name()
+            if cls == "Button" and c.window_text() in ("&Open", "Open"):
+                open_btn = c; break
+        except Exception: pass
+    if open_btn:
+        open_btn.click_input(); time.sleep(2)
+    else:
+        pyautogui.press("enter"); time.sleep(2)
+
+    # Wait for picker to close
+    for _ in range(20):
+        time.sleep(0.5)
+        if not _find_visible(app, "#32770"):
+            break
+
+    # Wait a full 3s for Detailer to register the added plan in the CheckListBox.
+    # Without this, clicking Import too quickly causes silent failure.
+    time.sleep(3)
+
+    # Click 'Import' on TdlgImport
+    dlg = _find_visible(app, "TdlgImport")
+    if not dlg:
+        raise RuntimeError("TdlgImport disappeared after file picker close")
+
+    # Ensure all plans in the CheckListBox are checked (Select All button).
+    for c in dlg.descendants():
+        try:
+            if c.class_name() == "TButton" and c.window_text() == "Select All":
+                c.click_input(); time.sleep(0.5); break
+        except Exception: pass
+
+    import_btn = None
+    for c in dlg.descendants():
+        try:
+            if c.class_name() == "TButton" and c.window_text() == "Import":
+                import_btn = c; break
+        except Exception: pass
+    if not import_btn:
+        raise RuntimeError("'Import' button not found on TdlgImport")
+    # Move mouse to the button and click via OS-level pyautogui (more reliable
+    # for 32-bit apps automated from 64-bit Python).
+    r = import_btn.rectangle()
+    cx, cy = (r.left + r.right) // 2, (r.top + r.bottom) // 2
+    pyautogui.moveTo(cx, cy, duration=0.3); time.sleep(0.4)
+    pyautogui.click(); time.sleep(3)
+
+    # Wait for import to complete + check for popups
+    deadline = time.time() + 60
+    imported = False
+    error_text = None
+    while time.time() < deadline:
+        time.sleep(0.5)
+        # If a TMessageForm popup appears, capture its text + abort import
+        for w in app.windows():
+            try:
+                if w.is_visible() and w.class_name() == "TMessageForm":
+                    title = w.window_text()
+                    btns = []
+                    for c in w.descendants():
+                        try:
+                            if c.class_name() == "TButton":
+                                btns.append(c.window_text())
+                        except Exception: pass
+                    error_text = f"Popup '{title}' with buttons {btns}"
+                    # Capture screenshot for diagnostics
+                    try:
+                        r = w.rectangle()
+                        screenshot_path = str(Path(output_dir) / "import-popup.png")
+                        pyautogui.screenshot(region=(r.left, r.top, r.width(), r.height())).save(screenshot_path)
+                        error_text += f" — screenshot: {screenshot_path}"
+                    except Exception: pass
+                    # Click Cancel (or first button) to dismiss WITHOUT proceeding
+                    for c in w.descendants():
+                        try:
+                            if c.class_name() == "TButton" and c.window_text() in ("&Cancel", "Cancel"):
+                                c.click(); time.sleep(0.5); break
+                        except Exception: pass
+                    break
+            except Exception: pass
+        if error_text:
+            break
+        # Detection: TdlgImport gone AND no error popup = import succeeded.
+        # We can't reliably enumerate Project Tree contents (Delphi TTreeView
+        # internal nodes aren't standard WinAPI children), but if TdlgImport
+        # closed without errors, Detailer accepted the import.
+        if not _find_visible(app, "TdlgImport"):
+            time.sleep(2)  # let canvas paint
+            imported = True
+            break
+    if error_text:
+        raise RuntimeError(f"Import error: {error_text}")
+    if not imported:
+        raise RuntimeError("Import did not complete within 60s")
+
+    # =================== EXPORT ===================
+    # Menu navigation: Alt+F → e (opens Export submenu, cursor lands on first
+    # item which is NOT RFY). Per manual probe 2026-05-06, RFY is two items
+    # below the default landing. So: down → down → Enter.
+    main.set_focus(); time.sleep(0.5)
+    pyautogui.hotkey("alt", "f"); time.sleep(0.5)
+    pyautogui.press("e"); time.sleep(0.5)  # opens Export submenu
+    pyautogui.press("down"); time.sleep(0.2)
+    pyautogui.press("down"); time.sleep(0.2)
+    pyautogui.press("enter"); time.sleep(1.5)
+
+    # 'Export to File' dialog (custom Detailer, not standard Save).
+    # Wait up to 10s for it to appear.
+    export_dlg = None
+    for _ in range(20):
+        for w in app.windows():
+            try:
+                if w.is_visible() and "Export" in w.window_text():
+                    cls = w.class_name()
+                    # Skip the main window which has 'Export' in some menu state
+                    if cls != "TfrmContainer" and cls != "TApplication":
+                        export_dlg = w; break
+            except Exception: pass
+        if export_dlg: break
+        time.sleep(0.5)
+    if not export_dlg:
+        # Diagnostic dump
+        print("  [diagnostic] visible windows after Export menu:")
+        for w in app.windows():
+            try:
+                if w.is_visible():
+                    print(f"    class={w.class_name()!r}  text={w.window_text()!r}")
+            except Exception: pass
+        try:
+            full = pyautogui.screenshot()
+            diag_path = str(Path(output_dir) / "export-failure-state.png")
+            full.save(diag_path)
+            print(f"  [diagnostic] full screenshot: {diag_path}")
+        except Exception: pass
+        raise RuntimeError("'Export' dialog did not appear after Alt+F+e+r")
+
+    # Click 'Select All' button to ensure all frames selected
+    for c in export_dlg.descendants():
+        try:
+            if c.class_name() == "TButton" and c.window_text() == "Select All":
+                c.click_input(); time.sleep(0.5); break
+        except Exception: pass
+
+    # Click 'Export' button. Delphi VCL uses TButton, TBitBtn, or TSpeedButton.
+    # Try all three classes; match 'Export' exactly, then 'Export' substring
+    # excluding 'Options'.
+    export_btn = None
+    all_buttons = []  # for diagnostics
+    button_classes = ("TButton", "TBitBtn", "TSpeedButton", "TBmpButton")
+    for c in export_dlg.descendants():
+        try:
+            cls = c.class_name()
+            if cls in button_classes:
+                t = c.window_text()
+                all_buttons.append(f"{cls}:{t!r}")
+                if t in ("Export", "&Export"):
+                    export_btn = c; break
+        except Exception: pass
+    if not export_btn:
+        for c in export_dlg.descendants():
+            try:
+                cls = c.class_name()
+                if cls in button_classes:
+                    t = c.window_text()
+                    if "Export" in t and "Options" not in t:
+                        export_btn = c; break
+            except Exception: pass
+    if not export_btn:
+        # Last resort: click via known coords (fragile but works on this PC).
+        # From Scott's screenshot the Export button is at roughly (872, 1042).
+        # Probe FALLBACK only if all_buttons is empty.
+        print(f"  [diagnostic] Export dialog buttons by class: {all_buttons[:20]}")
+        # Print all descendants so we can identify the right class
+        all_desc = []
+        for c in export_dlg.descendants():
+            try:
+                cls = c.class_name(); t = c.window_text()[:30] if c.window_text() else ""
+                if t:
+                    all_desc.append(f"{cls}:{t!r}")
+            except: pass
+        print(f"  [diagnostic] all descendants with text: {all_desc[:30]}")
+        raise RuntimeError(f"'Export' button not found")
+    export_btn.click_input(); time.sleep(2)
+
+    # Standard Save dialog
+    save_dlg = _find_visible(app, "#32770")
+    if not save_dlg:
+        raise RuntimeError("Save dialog (#32770) did not appear after Export click")
+
+    # Filename combo
+    save_combo = None
+    for c in save_dlg.descendants():
+        try:
+            cls = c.class_name()
+            if (cls == "Edit" or "ComboBox" in cls) and c.rectangle().width() > 100:
+                save_combo = c; break
+        except Exception: pass
+    if not save_combo:
+        raise RuntimeError("Filename combo not found in save dialog")
     rfy_basename = Path(xml_path).stem + ".rfy"
     rfy_out = str(Path(output_dir) / rfy_basename)
-    save_edit = save_dlg.child_window(class_name="Edit", control_id=0x47C)
-    save_edit.set_edit_text(rfy_out)
-    save_dlg.child_window(title="Save", class_name="Button").click()
-    time.sleep(2)
+    save_combo.set_focus(); time.sleep(0.2)
+    pyautogui.hotkey("ctrl", "a"); time.sleep(0.1)
+    pyautogui.press("delete"); time.sleep(0.1)
+    pyautogui.typewrite(rfy_out, interval=0.005); time.sleep(0.5)
+    pyautogui.press("enter"); time.sleep(2)
 
     # Confirm overwrite if prompted
     try:
-        confirm = app.window(title_re=".*Confirm.*|.*overwrite.*", class_name="#32770")
-        if confirm.exists(timeout=2):
-            confirm.child_window(title="Yes", class_name="Button").click()
-    except Exception:
-        pass
+        confirm = _find_visible(app, "#32770")
+        if confirm and confirm.handle != save_dlg.handle:
+            for c in confirm.descendants():
+                try:
+                    if c.class_name() == "Button" and c.window_text() in ("&Yes", "Yes"):
+                        c.click_input(); time.sleep(0.5); break
+                except Exception: pass
+    except Exception: pass
 
+    # Wait for the RFY to land
     deadline = time.time() + 30
     while time.time() < deadline:
-        if Path(rfy_out).exists():
+        if Path(rfy_out).exists() and Path(rfy_out).stat().st_size > 0:
             break
         time.sleep(0.5)
     if not Path(rfy_out).exists():
         raise RuntimeError(f"RFY was not produced at {rfy_out}")
 
-    # ---- Close project to return to ready state ----
-    pyautogui.hotkey("alt", "f")
-    time.sleep(0.3)
-    pyautogui.press("c")
-    time.sleep(1)
-    try:
-        for w in app.windows():
-            if w.is_visible() and w.class_name() == "#32770":
-                no_btn = w.child_window(title="No", class_name="Button")
-                if no_btn.exists():
-                    no_btn.click()
-                    break
-    except Exception:
-        pass
+    # =================== CLEANUP — close project ===================
+    main.set_focus(); time.sleep(0.3)
+    pyautogui.hotkey("alt", "f"); time.sleep(0.3)
+    pyautogui.press("c"); time.sleep(1)
+    # Discard 'save changes?' if prompted
+    for w in app.windows():
+        try:
+            if w.is_visible() and w.class_name() == "TMessageForm":
+                for c in w.descendants():
+                    try:
+                        if c.class_name() == "TButton" and c.window_text() in ("&No", "No"):
+                            c.click(); time.sleep(0.5); break
+                    except Exception: pass
+                break
+        except Exception: pass
 
     return rfy_out
 
