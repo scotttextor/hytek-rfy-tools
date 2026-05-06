@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-type Mode = "encode-bundle" | "decode-bundle" | "encode-auto" | "rfy-to-csv" | "csv-to-rfy";
+type Mode = "encode-bundle" | "decode-bundle" | "encode-auto" | "rfy-to-csv" | "csv-to-rfy" | "forge-encode";
 
 const MODE_LABELS: Record<Mode, { title: string; subtitle: string; from: string; accept: string; endpoint: string }> = {
   "encode-bundle": {
@@ -39,6 +39,13 @@ const MODE_LABELS: Record<Mode, { title: string; subtitle: string; from: string;
     from: ".csv",
     accept: ".csv",
     endpoint: "/api/rfy-from-csv",
+  },
+  "forge-encode": {
+    title: "FrameCAD XML → RFY (via Detailer)",
+    subtitle: "Forge mode: cache hit returns Detailer-bit-exact bytes instantly; cache miss spawns Detailer locally (~50s). Local-only — needs Python + Detailer + license.",
+    from: ".xml",
+    accept: ".xml",
+    endpoint: "/api/forge/encode",
   },
 };
 
@@ -211,6 +218,11 @@ export default function Page() {
       <div className="grid sm:grid-cols-2 gap-6">
         <ConverterCard mode="rfy-to-csv" />
         <ConverterCard mode="csv-to-rfy" />
+      </div>
+
+      <h3 className="text-xs uppercase tracking-wider text-yellow-400 mt-10 mb-3">Forge — Detailer-as-oracle (local only)</h3>
+      <div className="grid sm:grid-cols-1 gap-6">
+        <ConverterCard mode="forge-encode" />
       </div>
 
       <section className="mt-10 rounded-xl border border-zinc-700 bg-zinc-900/50 p-5 text-sm text-zinc-400">
