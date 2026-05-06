@@ -44,7 +44,8 @@ from pathlib import Path
 # Constants
 EXE_PATH = r"C:\Program Files (x86)\FRAMECAD\Detailer\Version 5\FRAMECAD Detailer.exe"
 TIMEOUT_SEC = 180
-LAUNCH_SETTLE_SEC = 8
+LAUNCH_SETTLE_SEC = 15
+STARTUP_POLL_DEADLINE_SEC = 45  # total wait for main window with valid license title
 
 # Exit code taxonomy
 EX_OK              = 0
@@ -131,6 +132,7 @@ def license_dialog_present(app):
 
 
 def find_main_window(app):
+    """Return the visible TfrmContainer-style main window if present (one shot)."""
     for w in app.windows():
         try:
             cls = w.class_name()
@@ -139,6 +141,53 @@ def find_main_window(app):
         except Exception:
             pass
     return None
+
+
+def wait_for_ready_main(app, deadline_sec=STARTUP_POLL_DEADLINE_SEC):
+    """
+    Poll until we have a visible Tfrm* main window whose title contains
+    'License valid'. Tolerates startup race where license-notice or empty
+    windows briefly appear before the real main window settles.
+
+    Returns (main_win, title) on success, (None, observation_str) on timeout.
+
+    Observation strings start with one of:
+      LICENSE_BLOCKED  — TfrmLicenseNotice persists (online activation failed,
+                         most commonly because user is on a VPN that blocks
+                         FrameCAD's licensing server)
+      UI_NOT_READY     — no Tfrm* main window appeared in time
+      UI_TITLE_BAD     — main window appeared but title lacks 'License valid'
+    """
+    end = time.time() + deadline_sec
+    last_obs = "UI_NOT_READY: no windows seen yet"
+    persistent_license_since = None
+    while time.time() < end:
+        # Hard fail only if TfrmLicenseNotice dialog persists >5s
+        if license_dialog_present(app):
+            persistent_license_since = persistent_license_since or time.time()
+            if time.time() - persistent_license_since > 5:
+                return None, (
+                    "LICENSE_BLOCKED: TfrmLicenseNotice persisted >5s. "
+                    "Detailer's online activation failed. Most likely cause: "
+                    "user is on a VPN that blocks FrameCAD's licensing server. "
+                    "Disconnect VPN, then retry."
+                )
+        else:
+            persistent_license_since = None
+
+        main = find_main_window(app)
+        if main is not None:
+            try:
+                title = main.window_text() or ""
+            except Exception:
+                title = ""
+            if "License valid" in title:
+                return main, title
+            last_obs = f"UI_TITLE_BAD: main window title lacks 'License valid': {title!r}"
+        else:
+            last_obs = "UI_NOT_READY: no Tfrm* main window yet"
+        time.sleep(0.5)
+    return None, f"{last_obs} (timeout after {deadline_sec}s)"
 
 
 def auto_dismiss_popups(app, accept_labels=("&OK", "OK", "&Yes", "Yes", "&Ignore", "Ignore"), timeout=2):
@@ -423,22 +472,20 @@ def main():
         app, pid = launch_and_wait()
         _emit("launch_done", elapsed_ms=int((time.time() - t0) * 1000), pid=pid)
 
-        if license_dialog_present(app):
-            _emit_error(EX_LICENSE_BAD, "Detailer license dialog up — invalid/expired")
-            return EX_LICENSE_BAD
-
-        main_win = find_main_window(app)
-        if not main_win:
-            _emit_error(EX_UI_NOT_DETECTED, "No main window after launch")
+        # Robust startup wait: poll up to STARTUP_POLL_DEADLINE_SEC for a real
+        # main window with "License valid" in its title. Handles the startup
+        # race where TfrmLicenseNotice briefly flashes or windows aren't ready.
+        main_win, observation = wait_for_ready_main(app)
+        if main_win is None:
+            elapsed = int((time.time() - t0) * 1000)
+            if observation.startswith("LICENSE_BLOCKED"):
+                _emit_error(EX_LICENSE_BAD, observation, elapsed_ms=elapsed)
+                return EX_LICENSE_BAD
+            _emit_error(EX_UI_NOT_DETECTED, observation, elapsed_ms=elapsed)
             return EX_UI_NOT_DETECTED
 
         title = main_win.window_text()
         _emit("main_window_found", title=title, elapsed_ms=int((time.time() - t0) * 1000))
-
-        # Verify license is valid (title contains "License valid")
-        if "License valid" not in title:
-            _emit_error(EX_LICENSE_BAD, f"Main title lacks 'License valid': {title!r}")
-            return EX_LICENSE_BAD
 
         if not import_xml(app, main_win, xml_path, deadline):
             elapsed = int((time.time() - t0) * 1000)
