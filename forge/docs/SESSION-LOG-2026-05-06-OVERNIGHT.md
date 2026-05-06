@@ -121,29 +121,39 @@ requests without restarting the Next.js server.
 
 ## Cache state at end of session
 
-16 entries (15 from initial + 1 from async miss-path test). All validated.
+**22 entries**, all validated. ~6 MB total content.
 
 ```
-HG250124 GF-LBW-70.075   43488 B   (XML jobnum collision in HG260014 dir)
-HG260002 GF-LBW-89.075  659824 B
-HG260005 GF-LBW-70.075  161792 B
-HG260010 GF-LBW-70.075  133072 B
-HG260016 GF-LBW-89.075  277376 B
-HG260017 GF-LBW-70.075   75536 B
-HG260017 GF-NLBW-70.075 150144 B   (added via async miss-path test)
-HG260023 GF-LBW-70.075   76688 B
-HG260024 GF-LBW-89.075  312576 B
-HG260028 GF-LBW-89.075  557776 B
-HG260032 GF-LBW-70.075  336544 B
-HG260040 GF-LBW-70.075  323104 B
-HG260043 GF-RP-89.115   103104 B
-HG260044 GF-LBW-70.075  310464 B
-HG260045 GF-LBW-70.075  632672 B
-HG260052 GF-LBW-70.075  273120 B
+HG250124 GF-LBW-70.075       43488 B   (XML jobnum collision in HG260014 dir)
+HG260001 GF-LBW-70.075      366448 B
+HG260002 GF-LBW-89.075      659824 B
+HG260003 GF-LBW-89.075      287920 B
+HG260004 GF-LBW-70.075       82896 B
+HG260005 GF-LBW-70.075      161792 B
+HG260006 GF-LBW-70.075      292480 B
+HG260010 GF-LBW-70.075      133072 B
+HG260012 TH01-GF-LBW-89.075  29648 B
+HG260016 GF-LBW-89.075      277376 B
+HG260017 GF-LBW-70.075       75536 B
+HG260017 GF-NLBW-70.075     150144 B   (from async miss-path test)
+HG260022 GF-LBW-89.075      231184 B
+HG260023 GF-LBW-70.075       76688 B
+HG260024 GF-LBW-89.075      312576 B
+HG260028 GF-LBW-89.075      557776 B
+HG260032 GF-LBW-70.075      336544 B
+HG260040 GF-LBW-70.075      323104 B
+HG260043 GF-RP-89.115       103104 B
+HG260044 GF-LBW-70.075      310464 B
+HG260045 GF-LBW-70.075      632672 B
+HG260052 GF-LBW-70.075      273120 B
 ```
 
-A third batch (HG260060-HG260070) was kicked off in background just before
-session end — those entries may have landed by morning.
+This represents most of the LBW/NLBW/RP-typed XMLs Y: drive currently exposes
+across CORAL HOMES + (a few) other builders. As more jobs flow through HYTEK's
+estimating system → Detailer XML output, run the orchestrator to keep the
+cache current.
+
+`python forge/health-check.py` → ALL GREEN.
 
 ## What I deliberately did NOT do
 
