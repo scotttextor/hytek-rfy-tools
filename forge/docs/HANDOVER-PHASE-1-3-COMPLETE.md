@@ -1,8 +1,8 @@
-# Forge Handover — Phases 1–3 COMPLETE
+# Forge Handover — Phases 1–4 COMPLETE
 
 **Session:** 2026-05-06 (overnight, work-PC, Scott left it running autonomously)
 **Predecessor doc:** `HANDOVER-2026-05-06.md` (Phase 1.1 was blocked there)
-**Current head:** see `git log -5` — last commits start with `forge/`
+**Current head:** see `git log -5` — last commits start with `forge/` or `ui:`
 
 ## What's working
 
@@ -79,23 +79,16 @@ Once both fixed: 45 s/job, deterministic, no retries needed for the test fixture
 - **Cache location**: resolves automatically to `OneDrive - Textor Metal Industries`
   on either PC. Override with `FORGE_CACHE_DIR=...` if needed.
 
-## What's next (Phase 4+)
+## What's next (Phase 5+)
 
-### Phase 4: Worker queue / serve-on-miss
+### Phase 4 — DONE this session
 
-Right now the Next.js route falls back to the rule-engine codec on cache miss
-(82 % parity). Phase 4 would:
-1. On miss, enqueue a Detailer run via the orchestrator.
-2. Either:
-   - **Sync mode**: block ~50 s and return Detailer's bytes (good UX for
-     interactive single jobs).
-   - **Async mode**: 202 Accepted + job ID; client polls for completion.
-3. Subsequent identical XML hits the freshly-written cache entry.
+- Sync mode: `POST /api/forge/encode` — cache hit → instant, miss → spawn worker (~50 s blocking).
+- Async mode: `POST /api/forge/encode/async` returns 202 + job id; `GET /api/forge/jobs/[id]` polls; `?result=1` fetches RFY bytes when status=done.
+- Per-job runner: `forge/queue/runner.py`. State + I/O under `<cache_root>/_queue/<id>/`.
+- UI: `/` home page got a "Forge — Detailer-as-oracle (local only)" card hitting the sync route.
 
-Implementation sketch:
-- `app/api/forge/enqueue/route.ts` — accepts XML, returns job ID, spawns worker
-- `app/api/forge/status/[id]/route.ts` — returns pending/done/failed + RFY bytes
-- File-based job queue under `<cache_root>/_queue/` (jobid.{json,rfy})
+End-to-end async test verified 2026-05-06: HG260017 XML → state.json transitioned pending→done in 50 s, 75,536-byte RFY produced, cache_put succeeded.
 
 ### Phase 5: Geometric engine (long-term)
 
@@ -119,6 +112,13 @@ dependency" endgame; Detailer's May 2026 EOL gives us the deadline.
 | `forge/worker/license_watcher.py` | Polls + emails Scott when Detailer activation comes back. |
 | `forge/orchestrator/detailer-orchestrator.py` | Multi-job runner, retry, resume, summary JSON. |
 | `forge/cache/store.py` | Cache writer + CLI (put/get/index/root). |
-| `forge/cache/oracle-cache-hit.test.ts` | End-to-end cache hit test. |
-| `lib/oracle-cache.ts` | TS reader. Now env-resolves cache root. |
-| `app/api/encode-auto/route.ts` | Already calls oracleLookup; gets cache hits free. |
+| `forge/cache/validate.py` | Walks cache, reports integrity issues. |
+| `forge/cache/test_store.py` | Python unit tests (7, all passing). |
+| `forge/cache/oracle-cache-hit.test.ts` | End-to-end cache hit test (vitest). |
+| `forge/queue/runner.py` | Per-job runner for the async API mode. |
+| `lib/oracle-cache.ts` | TS reader. Env-resolves cache root. |
+| `lib/forge-paths.ts` | Shared TS path resolver (cache root + queue dir). |
+| `app/api/encode-auto/route.ts` | Existing route; calls oracleLookup; cache hits free. |
+| `app/api/forge/encode/route.ts` | Phase 4 sync — cache or Detailer-blocking. |
+| `app/api/forge/encode/async/route.ts` | Phase 4 async — 202 + job id, runner detached. |
+| `app/api/forge/jobs/[id]/route.ts` | Phase 4 status + result endpoint. |
