@@ -99,6 +99,13 @@ describe.skipIf(!RUN)("three-way-compare", () => {
       codec: c,
     };
     writeFileSync("tmp_detailer_test/THREE-WAY-COMPARE.json", JSON.stringify(out, null, 2));
+
+    // Save all 3 inner XMLs for the spreadsheet builder
+    const refInner = decryptRfy(refBytes);
+    const nowInner = decryptRfy(detailerNowBytes);
+    writeFileSync("tmp_detailer_test/COMPARE-1-y-drive-ref.xml", refInner);
+    writeFileSync("tmp_detailer_test/COMPARE-2-detailer-now.xml", nowInner);
+    writeFileSync("tmp_detailer_test/COMPARE-3-codec.xml", codecResult.xml);
     console.log("\nFull data saved to: tmp_detailer_test/THREE-WAY-COMPARE.json");
   });
 });
