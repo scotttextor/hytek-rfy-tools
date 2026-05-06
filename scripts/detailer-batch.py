@@ -685,6 +685,10 @@ def build_cache(
     total_skipped = 0
     total_failed = 0
 
+    # Plan types that Detailer cannot export to RFY (no rollformer output).
+    # These match the "no-reference" cases in scripts/verify-y-drive.test.ts.
+    SKIP_PLAN_PREFIXES = ("GF-CP-", "GF-MH-", "GF-FJ-", "GF-Pan", "GF-Roo")
+
     for jobnum, builder, jobdir in jobs:
         xmls = find_xmls_for_job(jobdir)
         if not xmls:
@@ -693,6 +697,11 @@ def build_cache(
         os.makedirs(job_cache_dir, exist_ok=True)
         for xml_path, plan in xmls:
             total_xmls += 1
+            # Skip plan types that don't have RFY output
+            if any(plan.startswith(pfx) for pfx in SKIP_PLAN_PREFIXES):
+                print(f"[{total_done+total_failed+total_skipped+1}/{total_xmls}] {jobnum} {plan} ... [skip: not roll-formed]")
+                total_skipped += 1
+                continue
             rfy_out = os.path.join(job_cache_dir, f"{plan}.rfy")
             meta_out = os.path.join(job_cache_dir, f"{plan}.meta.json")
 
@@ -717,7 +726,10 @@ def build_cache(
 
             print(f"[{total_done+total_failed+1}/{total_xmls}] {jobnum} {plan} ...", end="", flush=True)
             try:
-                tmp_dir = os.path.join(cache_dir, "_tmp")
+                # Use a SHORT path with no spaces/parens/OneDrive — Detailer's
+                # Save dialog flakes on long paths with special chars.
+                tmp_dir = r"C:\tmp\detailer-batch"
+                os.makedirs(tmp_dir, exist_ok=True)
                 produced = xml_to_rfy(xml_path, tmp_dir, app=app)
                 shutil.move(produced, rfy_out)
                 meta = {
