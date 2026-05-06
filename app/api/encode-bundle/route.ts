@@ -77,19 +77,59 @@ export async function POST(req: Request) {
     const zip = new JSZip();
     const wrote: string[] = [];
 
-    // RFY file(s). Single plan → use the plan name; multi-plan → one combined RFY.
+    // RFY file(s).
+    //
+    // Single plan: use the plan name. Oracle hit → Detailer-bit-exact bytes;
+    //              miss → codec output.
+    //
+    // Multi-plan: emit ONE FILE PER PLAN matching Detailer's actual output
+    //             structure ({jobnum}_{planName}.rfy). For each plan, oracle
+    //             hit → reference bytes; miss → fallback to the combined
+    //             codec RFY for that plan only is NOT trivial (would require
+    //             slicing ParsedProject and re-encoding). We compromise: if
+    //             ALL plans hit, emit per-plan oracle bytes (bit-exact); if
+    //             ANY miss, emit per-plan oracle bytes for the hits AND a
+    //             combined codec .rfy for the misses, so the user always gets
+    //             every plan's output.
     if (doc.project.plans.length === 1) {
       const planName = planNames[0]!.replace(/[^A-Za-z0-9._-]/g, "");
       const rfyName = `${safeJob}_${planName}.rfy`;
-      // Prefer oracle bytes when available — bit-exact Detailer output.
       const rfyBytes = oracle.hit ? oracle.rfyBytes : result.rfy;
       zip.file(rfyName, new Uint8Array(rfyBytes));
       wrote.push(rfyName);
-    } else {
-      // Multi-plan: oracle covers single-plan only (per-plan ref RFYs exist
-      // but we don't merge them). Use codec output unchanged.
+    } else if (perPlan.allHit && perPlan.totalPlans > 0) {
+      // Bit-exact path: every plan in the packed XML maps to a captured
+      // reference. Emit per-plan files matching Detailer's structure.
+      for (const r of perPlan.results) {
+        const safePlanName = r.planName.replace(/[^A-Za-z0-9._-]/g, "");
+        const rfyName = `${safeJob}_${safePlanName}.rfy`;
+        zip.file(rfyName, new Uint8Array(r.rfyBytes!));
+        wrote.push(rfyName);
+      }
+      oracleHit = true;
+      oracleMissReason = null;
+    } else if (perPlanHits > 0) {
+      // Partial: some plans hit, some don't. Emit per-plan oracle files for
+      // the hits + the combined codec RFY (which contains all plans, possibly
+      // duplicating the hit ones with codec-derived content). The rollformer
+      // operator picks the per-plan files for the hits.
+      for (const r of perPlan.results) {
+        if (!r.hit) continue;
+        const safePlanName = r.planName.replace(/[^A-Za-z0-9._-]/g, "");
+        const rfyName = `${safeJob}_${safePlanName}.rfy`;
+        zip.file(rfyName, new Uint8Array(r.rfyBytes!));
+        wrote.push(rfyName);
+      }
+      // Codec combined RFY for the misses.
+      const combinedName = `${safeJob}.rfy`;
+      zip.file(combinedName, new Uint8Array(result.rfy));
+      wrote.push(combinedName);
       oracleHit = false;
-      oracleMissReason = oracleMissReason ?? "multi-plan input — bundle uses codec output";
+      oracleMissReason = `partial: ${perPlanHits}/${perPlan.totalPlans} plans hit cache; combined codec .rfy included for misses`;
+    } else {
+      // No cache hits anywhere. Codec output unchanged.
+      oracleHit = false;
+      oracleMissReason = oracleMissReason ?? perPlan.firstMissReason ?? "multi-plan input — no cache hits";
       const rfyName = `${safeJob}.rfy`;
       zip.file(rfyName, new Uint8Array(result.rfy));
       wrote.push(rfyName);
@@ -132,6 +172,10 @@ export async function POST(req: Request) {
     };
     if (!oracleHit && oracleMissReason) respHeaders["x-oracle-miss-reason"] = oracleMissReason;
     if (oracleHit && oracle.hit) respHeaders["x-oracle-source"] = oracle.rfyPath;
+    if (perPlan.totalPlans > 1) {
+      respHeaders["x-oracle-per-plan-hits"] = String(perPlanHits);
+      respHeaders["x-oracle-per-plan-total"] = String(perPlan.totalPlans);
+    }
     return new NextResponse(new Uint8Array(zipBuf), {
       status: 200,
       headers: respHeaders,

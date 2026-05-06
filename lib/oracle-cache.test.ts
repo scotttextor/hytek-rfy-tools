@@ -16,6 +16,7 @@ import { readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import {
   oracleLookup,
+  oracleLookupPerPlan,
   oracleIndexSnapshot,
   _resetOracleCacheForTests,
 } from "./oracle-cache";
@@ -176,6 +177,74 @@ describe("oracle-cache", () => {
       return;
     }
     expect(result.reason).toMatch(/frame count mismatch/);
+  });
+
+  // ---------- Per-plan multi-plan tests ----------
+
+  it("oracleLookupPerPlan: multi-plan packed HG260001 XML — every plan hits cache", () => {
+    if (!Y_DRIVE_AVAILABLE) return;
+    const packedXmlPath = join(HG260001_PACKED_DIR, "2-Panels-LBW-70.xml");
+    if (!existsSync(packedXmlPath)) {
+      console.warn(`Skipping: ${packedXmlPath} not present`);
+      return;
+    }
+    const packed = readFileSync(packedXmlPath, "utf-8");
+    const result = oracleLookupPerPlan(packed);
+    expect(result.jobnum).toBe("HG260001");
+    expect(result.totalPlans).toBeGreaterThanOrEqual(1);
+    // Every plan in this packed XML should have a captured reference.
+    expect(result.allHit).toBe(true);
+    expect(result.results.every(r => r.hit)).toBe(true);
+    // Every hit's bytes must equal the on-disk RFY.
+    for (const r of result.results) {
+      if (!r.hit) continue;
+      expect(r.rfyBytes).toBeDefined();
+      expect(r.rfyPath).toBeDefined();
+      const onDisk = readFileSync(r.rfyPath!);
+      expect(r.rfyBytes!.equals(onDisk)).toBe(true);
+    }
+  });
+
+  it("oracleLookupPerPlan: single-plan input still produces a 1-result", () => {
+    if (!Y_DRIVE_AVAILABLE) return;
+    const packedXmlPath = join(HG260001_PACKED_DIR, "2-Panels-LBW-70.xml");
+    if (!existsSync(packedXmlPath)) return;
+    const packed = readFileSync(packedXmlPath, "utf-8");
+    const single = extractSinglePlanXml(packed, "PK4-GF-LBW-70.075");
+    if (!single) return;
+    const result = oracleLookupPerPlan(single);
+    expect(result.totalPlans).toBe(1);
+    expect(result.results).toHaveLength(1);
+    expect(result.results[0]!.hit).toBe(true);
+    expect(result.allHit).toBe(true);
+  });
+
+  it("oracleLookupPerPlan: unknown jobnum produces all-miss results", () => {
+    const fakeXml = `<?xml version="1.0" encoding="UTF-8"?>
+<framecad_import name="FAKE">
+  <jobnum>HG999999</jobnum>
+  <plan name="GF-LBW-70.075">
+    <frame name="F1" type="ExternalWall"></frame>
+  </plan>
+  <plan name="GF-NLBW-89.075">
+    <frame name="F2" type="ExternalWall"></frame>
+  </plan>
+</framecad_import>`;
+    const result = oracleLookupPerPlan(fakeXml);
+    expect(result.jobnum).toBe("HG999999");
+    expect(result.totalPlans).toBe(2);
+    expect(result.allHit).toBe(false);
+    expect(result.results.every(r => !r.hit)).toBe(true);
+    expect(result.firstMissReason).toMatch(/no reference for HG999999/);
+  });
+
+  it("oracleLookupPerPlan: disabled via env returns immediate empty result", () => {
+    process.env.DISABLE_ORACLE_CACHE = "1";
+    const fakeXml = `<?xml version="1.0"?>
+<framecad_import><jobnum>HG260001</jobnum><plan name="GF-LBW-70.075"><frame name="F"/></plan></framecad_import>`;
+    const result = oracleLookupPerPlan(fakeXml);
+    expect(result.allHit).toBe(false);
+    expect(result.firstMissReason).toMatch(/disabled/);
   });
 
   it("disables via DISABLE_ORACLE_CACHE=1", () => {
