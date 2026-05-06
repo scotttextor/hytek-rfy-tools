@@ -213,7 +213,13 @@ def main():
     summary_row += 1
     ws.cell(row=summary_row, column=4, value="Match %:").font = Font(name="Arial", bold=True)
     if total_detailer > 0:
-        ws.cell(row=summary_row, column=5, value=f"=ROUND({total_match}/{total_detailer}*100,1)&\"%\"")
+        ws.cell(row=summary_row, column=5, value=f"{100*total_match/total_detailer:.1f}%")
+    summary_row += 1
+    ws.cell(row=summary_row, column=4, value="Codec missing:").font = Font(name="Arial", bold=True)
+    ws.cell(row=summary_row, column=5, value=total_detailer - total_match)
+    summary_row += 1
+    ws.cell(row=summary_row, column=4, value="Codec extra:").font = Font(name="Arial", bold=True)
+    ws.cell(row=summary_row, column=5, value=total_codec - total_match)
 
     # Column widths
     ws.column_dimensions["A"].width = 8
