@@ -1,15 +1,15 @@
 {
-  "timestamp": "2026-05-06T01:28:59.744Z",
+  "timestamp": "2026-05-06T01:31:47.093Z",
   "jobsScanned": 70,
   "jobsWithReferences": 22,
   "totals": {
     "total": 164,
     "bitExact": 0,
     "sizeMatch": 0,
-    "mismatch": 93,
+    "mismatch": 0,
     "splitOnly": 36,
     "noRef": 35,
-    "codecErr": 0
+    "codecErr": 93
   },
   "reports": [
     {
@@ -20,20 +20,18 @@
       "pairs": [
         {
           "plan": "GF-TB2B-70.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=256192B ref=1376B Δ=254816",
-          "ourSize": 256192,
-          "refSize": 1376
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         }
       ],
       "summary": {
         "total": 1,
         "bitExact": 0,
         "sizeMatch": 0,
-        "mismatches": 1,
+        "mismatches": 0,
         "splitOnly": 0,
         "noReference": 0,
-        "codecError": 0
+        "codecError": 1
       }
     },
     {
@@ -122,10 +120,8 @@
         },
         {
           "plan": "GF-RP-70.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=37760B ref=67008B Δ=-29248",
-          "ourSize": 37760,
-          "refSize": 67008
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-TB2B-70.075",
@@ -135,27 +131,23 @@
         },
         {
           "plan": "GF-TIN-70.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=38112B ref=71504B Δ=-33392",
-          "ourSize": 38112,
-          "refSize": 71504
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-TIN-70.095",
-          "status": "byte-mismatch",
-          "reason": "size: ours=3968B ref=7504B Δ=-3536",
-          "ourSize": 3968,
-          "refSize": 7504
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         }
       ],
       "summary": {
         "total": 9,
         "bitExact": 0,
         "sizeMatch": 0,
-        "mismatches": 3,
+        "mismatches": 0,
         "splitOnly": 3,
         "noReference": 3,
-        "codecError": 0
+        "codecError": 3
       }
     },
     {
@@ -166,31 +158,23 @@
       "pairs": [
         {
           "plan": "GF-CP-70.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=29808B ref=49872B Δ=-20064",
-          "ourSize": 29808,
-          "refSize": 49872
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-LBW-89.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=373248B ref=646176B Δ=-272928",
-          "ourSize": 373248,
-          "refSize": 646176
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-NLBW-89.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=193200B ref=317184B Δ=-123984",
-          "ourSize": 193200,
-          "refSize": 317184
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-RP-70.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=45936B ref=91232B Δ=-45296",
-          "ourSize": 45936,
-          "refSize": 91232
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.coerceEnvelopeToRect) is not a function"
         },
         {
           "plan": "GF-TB2B-70.075",
@@ -200,55 +184,43 @@
         },
         {
           "plan": "GF-TB2B-70.095",
-          "status": "byte-mismatch",
-          "reason": "size: ours=38272B ref=62656B Δ=-24384",
-          "ourSize": 38272,
-          "refSize": 62656
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-TIN-70.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=99696B ref=224768B Δ=-125072",
-          "ourSize": 99696,
-          "refSize": 224768
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-TIN-70.095",
-          "status": "byte-mismatch",
-          "reason": "size: ours=24112B ref=57600B Δ=-33488",
-          "ourSize": 24112,
-          "refSize": 57600
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-TIN-70.115",
-          "status": "byte-mismatch",
-          "reason": "size: ours=9376B ref=20832B Δ=-11456",
-          "ourSize": 9376,
-          "refSize": 20832
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-TIN-89.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=21568B ref=39504B Δ=-17936",
-          "ourSize": 21568,
-          "refSize": 39504
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-TIN-89.115",
-          "status": "byte-mismatch",
-          "reason": "size: ours=10848B ref=19568B Δ=-8720",
-          "ourSize": 10848,
-          "refSize": 19568
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         }
       ],
       "summary": {
         "total": 11,
         "bitExact": 0,
         "sizeMatch": 0,
-        "mismatches": 10,
+        "mismatches": 0,
         "splitOnly": 1,
         "noReference": 0,
-        "codecError": 0
+        "codecError": 10
       }
     },
     {
@@ -270,10 +242,8 @@
         },
         {
           "plan": "GF-LBW-89.095",
-          "status": "byte-mismatch",
-          "reason": "size: ours=13760B ref=24048B Δ=-10288",
-          "ourSize": 13760,
-          "refSize": 24048
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-MH-70.075",
@@ -288,10 +258,8 @@
         },
         {
           "plan": "GF-RP-70.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=52896B ref=95360B Δ=-42464",
-          "ourSize": 52896,
-          "refSize": 95360
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.coerceEnvelopeToRect) is not a function"
         },
         {
           "plan": "GF-TB2B-70.075",
@@ -301,41 +269,33 @@
         },
         {
           "plan": "GF-TB2B-70.095",
-          "status": "byte-mismatch",
-          "reason": "size: ours=7552B ref=12400B Δ=-4848",
-          "ourSize": 7552,
-          "refSize": 12400
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-TB2B-70.115",
-          "status": "byte-mismatch",
-          "reason": "size: ours=10432B ref=18128B Δ=-7696",
-          "ourSize": 10432,
-          "refSize": 18128
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-TIN-70.095",
-          "status": "byte-mismatch",
-          "reason": "size: ours=23424B ref=43600B Δ=-20176",
-          "ourSize": 23424,
-          "refSize": 43600
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-TIN-89.095",
-          "status": "byte-mismatch",
-          "reason": "size: ours=5536B ref=11376B Δ=-5840",
-          "ourSize": 5536,
-          "refSize": 11376
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         }
       ],
       "summary": {
         "total": 11,
         "bitExact": 0,
         "sizeMatch": 0,
-        "mismatches": 6,
+        "mismatches": 0,
         "splitOnly": 3,
         "noReference": 2,
-        "codecError": 0
+        "codecError": 6
       }
     },
     {
@@ -369,17 +329,13 @@
         },
         {
           "plan": "GF-NLBW-89.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=5248B ref=7824B Δ=-2576",
-          "ourSize": 5248,
-          "refSize": 7824
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-RP-70.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=29152B ref=47616B Δ=-18464",
-          "ourSize": 29152,
-          "refSize": 47616
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-TB2B-70.075",
@@ -395,27 +351,23 @@
         },
         {
           "plan": "GF-TIN-70.095",
-          "status": "byte-mismatch",
-          "reason": "size: ours=32400B ref=61680B Δ=-29280",
-          "ourSize": 32400,
-          "refSize": 61680
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-TIN-70.115",
-          "status": "byte-mismatch",
-          "reason": "size: ours=5824B ref=9344B Δ=-3520",
-          "ourSize": 5824,
-          "refSize": 9344
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         }
       ],
       "summary": {
         "total": 10,
         "bitExact": 0,
         "sizeMatch": 0,
-        "mismatches": 4,
+        "mismatches": 0,
         "splitOnly": 5,
         "noReference": 1,
-        "codecError": 0
+        "codecError": 4
       }
     },
     {
@@ -426,45 +378,33 @@
       "pairs": [
         {
           "plan": "GF-LBW-70.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=93104B ref=163360B Δ=-70256",
-          "ourSize": 93104,
-          "refSize": 163360
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-LBW-70.095",
-          "status": "byte-mismatch",
-          "reason": "size: ours=48880B ref=84816B Δ=-35936",
-          "ourSize": 48880,
-          "refSize": 84816
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-LBW-89.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=38672B ref=66192B Δ=-27520",
-          "ourSize": 38672,
-          "refSize": 66192
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-NLBW-70.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=54448B ref=88992B Δ=-34544",
-          "ourSize": 54448,
-          "refSize": 88992
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-NLBW-89.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=14544B ref=23056B Δ=-8512",
-          "ourSize": 14544,
-          "refSize": 23056
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-RP-70.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=12688B ref=21632B Δ=-8944",
-          "ourSize": 12688,
-          "refSize": 21632
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-TB2B-70.075",
@@ -474,20 +414,18 @@
         },
         {
           "plan": "GF-TIN-70.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=24400B ref=46688B Δ=-22288",
-          "ourSize": 24400,
-          "refSize": 46688
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         }
       ],
       "summary": {
         "total": 8,
         "bitExact": 0,
         "sizeMatch": 0,
-        "mismatches": 7,
+        "mismatches": 0,
         "splitOnly": 1,
         "noReference": 0,
-        "codecError": 0
+        "codecError": 7
       }
     },
     {
@@ -520,10 +458,8 @@
         },
         {
           "plan": "GF-RP-70.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=8592B ref=14944B Δ=-6352",
-          "ourSize": 8592,
-          "refSize": 14944
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-TB2B-70.075",
@@ -536,10 +472,10 @@
         "total": 6,
         "bitExact": 0,
         "sizeMatch": 0,
-        "mismatches": 1,
+        "mismatches": 0,
         "splitOnly": 3,
         "noReference": 2,
-        "codecError": 0
+        "codecError": 1
       }
     },
     {
@@ -635,10 +571,8 @@
         },
         {
           "plan": "GF-RP-70.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=94048B ref=173920B Δ=-79872",
-          "ourSize": 94048,
-          "refSize": 173920
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.coerceEnvelopeToRect) is not a function"
         },
         {
           "plan": "GF-TB2B-70.075",
@@ -648,34 +582,28 @@
         },
         {
           "plan": "GF-TIN-70.095",
-          "status": "byte-mismatch",
-          "reason": "size: ours=43904B ref=85392B Δ=-41488",
-          "ourSize": 43904,
-          "refSize": 85392
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-TIN-70.115",
-          "status": "byte-mismatch",
-          "reason": "size: ours=15568B ref=27152B Δ=-11584",
-          "ourSize": 15568,
-          "refSize": 27152
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-TIN-89.095",
-          "status": "byte-mismatch",
-          "reason": "size: ours=13232B ref=26944B Δ=-13712",
-          "ourSize": 13232,
-          "refSize": 26944
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         }
       ],
       "summary": {
         "total": 11,
         "bitExact": 0,
         "sizeMatch": 0,
-        "mismatches": 4,
+        "mismatches": 0,
         "splitOnly": 5,
         "noReference": 2,
-        "codecError": 0
+        "codecError": 4
       }
     },
     {
@@ -787,10 +715,8 @@
         },
         {
           "plan": "GF-LBW-70.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=25136B ref=40928B Δ=-15792",
-          "ourSize": 25136,
-          "refSize": 40928
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-LBW-89.075",
@@ -811,48 +737,38 @@
         },
         {
           "plan": "GF-NLBW-89.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=9232B ref=14144B Δ=-4912",
-          "ourSize": 9232,
-          "refSize": 14144
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-RP-70.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=47056B ref=85056B Δ=-38000",
-          "ourSize": 47056,
-          "refSize": 85056
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-TB2B-70.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=130016B ref=41440B Δ=88576",
-          "ourSize": 130016,
-          "refSize": 41440
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-TIN-70.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=10288B ref=21216B Δ=-10928",
-          "ourSize": 10288,
-          "refSize": 21216
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-TIN-89.095",
-          "status": "byte-mismatch",
-          "reason": "size: ours=5616B ref=12352B Δ=-6736",
-          "ourSize": 5616,
-          "refSize": 12352
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         }
       ],
       "summary": {
         "total": 10,
         "bitExact": 0,
         "sizeMatch": 0,
-        "mismatches": 6,
+        "mismatches": 0,
         "splitOnly": 2,
         "noReference": 2,
-        "codecError": 0
+        "codecError": 6
       }
     },
     {
@@ -902,10 +818,8 @@
         },
         {
           "plan": "GF-RP-70.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=53360B ref=94320B Δ=-40960",
-          "ourSize": 53360,
-          "refSize": 94320
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.coerceEnvelopeToRect) is not a function"
         },
         {
           "plan": "GF-TB2B-70.075",
@@ -915,34 +829,28 @@
         },
         {
           "plan": "GF-TIN-70.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=2896B ref=4896B Δ=-2000",
-          "ourSize": 2896,
-          "refSize": 4896
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-TIN-89.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=3152B ref=5072B Δ=-1920",
-          "ourSize": 3152,
-          "refSize": 5072
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-TIN-89.115",
-          "status": "byte-mismatch",
-          "reason": "size: ours=10080B ref=23216B Δ=-13136",
-          "ourSize": 10080,
-          "refSize": 23216
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         }
       ],
       "summary": {
         "total": 9,
         "bitExact": 0,
         "sizeMatch": 0,
-        "mismatches": 4,
+        "mismatches": 0,
         "splitOnly": 3,
         "noReference": 2,
-        "codecError": 0
+        "codecError": 4
       }
     },
     {
@@ -958,17 +866,13 @@
         },
         {
           "plan": "GF-LBW-70.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=44736B ref=74320B Δ=-29584",
-          "ourSize": 44736,
-          "refSize": 74320
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-LBW-70.095",
-          "status": "byte-mismatch",
-          "reason": "size: ours=127824B ref=212592B Δ=-84768",
-          "ourSize": 127824,
-          "refSize": 212592
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-MH-70.075",
@@ -977,24 +881,18 @@
         },
         {
           "plan": "GF-NLBW-70.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=92784B ref=164672B Δ=-71888",
-          "ourSize": 92784,
-          "refSize": 164672
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-NLBW-89.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=8944B ref=13152B Δ=-4208",
-          "ourSize": 8944,
-          "refSize": 13152
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-RP-70.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=47376B ref=84400B Δ=-37024",
-          "ourSize": 47376,
-          "refSize": 84400
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-TB2B-70.075",
@@ -1004,34 +902,28 @@
         },
         {
           "plan": "GF-TB2B-70.095",
-          "status": "byte-mismatch",
-          "reason": "size: ours=21504B ref=34576B Δ=-13072",
-          "ourSize": 21504,
-          "refSize": 34576
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-TIN-70.095",
-          "status": "byte-mismatch",
-          "reason": "size: ours=10448B ref=21456B Δ=-11008",
-          "ourSize": 10448,
-          "refSize": 21456
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-TIN-70.115",
-          "status": "byte-mismatch",
-          "reason": "size: ours=7280B ref=15872B Δ=-8592",
-          "ourSize": 7280,
-          "refSize": 15872
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         }
       ],
       "summary": {
         "total": 11,
         "bitExact": 0,
         "sizeMatch": 0,
-        "mismatches": 8,
+        "mismatches": 0,
         "splitOnly": 1,
         "noReference": 2,
-        "codecError": 0
+        "codecError": 8
       }
     },
     {
@@ -1126,10 +1018,8 @@
       "pairs": [
         {
           "plan": "GF-LBW-89.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=132496B ref=230464B Δ=-97968",
-          "ourSize": 132496,
-          "refSize": 230464
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-TB2B-70.075",
@@ -1147,10 +1037,10 @@
         "total": 3,
         "bitExact": 0,
         "sizeMatch": 0,
-        "mismatches": 1,
+        "mismatches": 0,
         "splitOnly": 1,
         "noReference": 1,
-        "codecError": 0
+        "codecError": 1
       }
     },
     {
@@ -1166,10 +1056,8 @@
         },
         {
           "plan": "GF-LBW-70.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=45344B ref=74144B Δ=-28800",
-          "ourSize": 45344,
-          "refSize": 74144
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-LBW-70.095",
@@ -1179,10 +1067,8 @@
         },
         {
           "plan": "GF-LBW-89.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=6864B ref=11168B Δ=-4304",
-          "ourSize": 6864,
-          "refSize": 11168
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-MH-70.075",
@@ -1191,24 +1077,18 @@
         },
         {
           "plan": "GF-NLBW-70.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=149216B ref=272576B Δ=-123360",
-          "ourSize": 149216,
-          "refSize": 272576
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-NLBW-89.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=13456B ref=20880B Δ=-7424",
-          "ourSize": 13456,
-          "refSize": 20880
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-RP-70.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=56592B ref=104400B Δ=-47808",
-          "ourSize": 56592,
-          "refSize": 104400
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-TB2B-70.075",
@@ -1218,27 +1098,23 @@
         },
         {
           "plan": "GF-TIN-70.095",
-          "status": "byte-mismatch",
-          "reason": "size: ours=28144B ref=55104B Δ=-26960",
-          "ourSize": 28144,
-          "refSize": 55104
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-TIN-70.115",
-          "status": "byte-mismatch",
-          "reason": "size: ours=5488B ref=11600B Δ=-6112",
-          "ourSize": 5488,
-          "refSize": 11600
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         }
       ],
       "summary": {
         "total": 11,
         "bitExact": 0,
         "sizeMatch": 0,
-        "mismatches": 7,
+        "mismatches": 0,
         "splitOnly": 2,
         "noReference": 2,
-        "codecError": 0
+        "codecError": 7
       }
     },
     {
@@ -1249,45 +1125,33 @@
       "pairs": [
         {
           "plan": "GF-CP-70.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=4608B ref=6448B Δ=-1840",
-          "ourSize": 4608,
-          "refSize": 6448
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.coerceEnvelopeToRect) is not a function"
         },
         {
           "plan": "GF-LBW-89.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=184128B ref=305584B Δ=-121456",
-          "ourSize": 184128,
-          "refSize": 305584
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-LBW-89.095",
-          "status": "byte-mismatch",
-          "reason": "size: ours=42144B ref=73152B Δ=-31008",
-          "ourSize": 42144,
-          "refSize": 73152
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-NLBW-70.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=7616B ref=11056B Δ=-3440",
-          "ourSize": 7616,
-          "refSize": 11056
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-NLBW-89.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=51888B ref=84016B Δ=-32128",
-          "ourSize": 51888,
-          "refSize": 84016
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-RP-70.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=16096B ref=30240B Δ=-14144",
-          "ourSize": 16096,
-          "refSize": 30240
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-TB2B-70.075",
@@ -1297,20 +1161,18 @@
         },
         {
           "plan": "GF-TIN-70.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=11296B ref=19008B Δ=-7712",
-          "ourSize": 11296,
-          "refSize": 19008
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         }
       ],
       "summary": {
         "total": 8,
         "bitExact": 0,
         "sizeMatch": 0,
-        "mismatches": 7,
+        "mismatches": 0,
         "splitOnly": 1,
         "noReference": 0,
-        "codecError": 0
+        "codecError": 7
       }
     },
     {
@@ -1387,17 +1249,13 @@
       "pairs": [
         {
           "plan": "GF-LBW-89.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=312608B ref=534640B Δ=-222032",
-          "ourSize": 312608,
-          "refSize": 534640
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-NLBW-89.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=165808B ref=262688B Δ=-96880",
-          "ourSize": 165808,
-          "refSize": 262688
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-TB2B-70.075",
@@ -1409,10 +1267,10 @@
         "total": 3,
         "bitExact": 0,
         "sizeMatch": 0,
-        "mismatches": 2,
+        "mismatches": 0,
         "splitOnly": 0,
         "noReference": 1,
-        "codecError": 0
+        "codecError": 2
       }
     },
     {
@@ -1496,17 +1354,13 @@
         },
         {
           "plan": "GF-NLBW-89.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=5008B ref=7392B Δ=-2384",
-          "ourSize": 5008,
-          "refSize": 7392
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-RP-70.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=66912B ref=123008B Δ=-56096",
-          "ourSize": 66912,
-          "refSize": 123008
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-TB2B-70.075",
@@ -1516,27 +1370,23 @@
         },
         {
           "plan": "GF-TIN-70.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=16688B ref=30864B Δ=-14176",
-          "ourSize": 16688,
-          "refSize": 30864
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-TIN-70.115",
-          "status": "byte-mismatch",
-          "reason": "size: ours=5376B ref=12240B Δ=-6864",
-          "ourSize": 5376,
-          "refSize": 12240
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         }
       ],
       "summary": {
         "total": 9,
         "bitExact": 0,
         "sizeMatch": 0,
-        "mismatches": 4,
+        "mismatches": 0,
         "splitOnly": 3,
         "noReference": 2,
-        "codecError": 0
+        "codecError": 4
       }
     },
     {
@@ -1666,45 +1516,33 @@
       "pairs": [
         {
           "plan": "GF-CP-70.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=8800B ref=13520B Δ=-4720",
-          "ourSize": 8800,
-          "refSize": 13520
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-LBW-70.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=186432B ref=327776B Δ=-141344",
-          "ourSize": 186432,
-          "refSize": 327776
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-LBW-89.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=6352B ref=10640B Δ=-4288",
-          "ourSize": 6352,
-          "refSize": 10640
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-NLBW-70.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=129248B ref=202016B Δ=-72768",
-          "ourSize": 129248,
-          "refSize": 202016
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-NLBW-89.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=10288B ref=15104B Δ=-4816",
-          "ourSize": 10288,
-          "refSize": 15104
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-RP-70.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=52240B ref=100064B Δ=-47824",
-          "ourSize": 52240,
-          "refSize": 100064
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-TB2B-70.075",
@@ -1714,27 +1552,23 @@
         },
         {
           "plan": "GF-TIN-70.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=8176B ref=14528B Δ=-6352",
-          "ourSize": 8176,
-          "refSize": 14528
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-TIN-70.095",
-          "status": "byte-mismatch",
-          "reason": "size: ours=5040B ref=10224B Δ=-5184",
-          "ourSize": 5040,
-          "refSize": 10224
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         }
       ],
       "summary": {
         "total": 9,
         "bitExact": 0,
         "sizeMatch": 0,
-        "mismatches": 8,
+        "mismatches": 0,
         "splitOnly": 1,
         "noReference": 0,
-        "codecError": 0
+        "codecError": 8
       }
     },
     {
@@ -1779,17 +1613,13 @@
       "pairs": [
         {
           "plan": "GF-CP-89.115",
-          "status": "byte-mismatch",
-          "reason": "size: ours=27248B ref=52288B Δ=-25040",
-          "ourSize": 27248,
-          "refSize": 52288
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.coerceEnvelopeToRect) is not a function"
         },
         {
           "plan": "GF-RP-89.115",
-          "status": "byte-mismatch",
-          "reason": "size: ours=64400B ref=102048B Δ=-37648",
-          "ourSize": 64400,
-          "refSize": 102048
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-TIN-89.095",
@@ -1801,10 +1631,10 @@
         "total": 3,
         "bitExact": 0,
         "sizeMatch": 0,
-        "mismatches": 2,
+        "mismatches": 0,
         "splitOnly": 0,
         "noReference": 1,
-        "codecError": 0
+        "codecError": 2
       }
     },
     {
@@ -1815,45 +1645,33 @@
       "pairs": [
         {
           "plan": "GF-CP-70.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=5760B ref=8512B Δ=-2752",
-          "ourSize": 5760,
-          "refSize": 8512
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.coerceEnvelopeToRect) is not a function"
         },
         {
           "plan": "GF-LBW-70.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=181376B ref=314512B Δ=-133136",
-          "ourSize": 181376,
-          "refSize": 314512
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-MH-70.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=3808B ref=5616B Δ=-1808",
-          "ourSize": 3808,
-          "refSize": 5616
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-NLBW-70.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=138784B ref=222784B Δ=-84000",
-          "ourSize": 138784,
-          "refSize": 222784
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-NLBW-89.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=4528B ref=6480B Δ=-1952",
-          "ourSize": 4528,
-          "refSize": 6480
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-RP-70.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=47264B ref=83200B Δ=-35936",
-          "ourSize": 47264,
-          "refSize": 83200
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-TB2B-70.075",
@@ -1863,27 +1681,23 @@
         },
         {
           "plan": "GF-TIN-70.075",
-          "status": "byte-mismatch",
-          "reason": "size: ours=26016B ref=55104B Δ=-29088",
-          "ourSize": 26016,
-          "refSize": 55104
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         },
         {
           "plan": "GF-TIN-70.095",
-          "status": "byte-mismatch",
-          "reason": "size: ours=8432B ref=17760B Δ=-9328",
-          "ourSize": 8432,
-          "refSize": 17760
+          "status": "codec-error",
+          "reason": "codec threw: (0 , __vite_ssr_import_1__.getMachineSetupForProfile) is not a function"
         }
       ],
       "summary": {
         "total": 9,
         "bitExact": 0,
         "sizeMatch": 0,
-        "mismatches": 8,
+        "mismatches": 0,
         "splitOnly": 1,
         "noReference": 0,
-        "codecError": 0
+        "codecError": 8
       }
     },
     {
