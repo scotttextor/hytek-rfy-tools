@@ -1,0 +1,100 @@
+{
+  "timestamp": "2026-05-06T01:11:16.127Z",
+  "jobsScanned": 1,
+  "jobsWithReferences": 1,
+  "totals": {
+    "total": 11,
+    "bitExact": 0,
+    "sizeMatch": 0,
+    "mismatch": 3,
+    "splitOnly": 6,
+    "noRef": 2,
+    "codecErr": 0
+  },
+  "reports": [
+    {
+      "jobnum": "HG260017",
+      "builder": "CORAL HOMES",
+      "xmlCount": 11,
+      "rfyCount": 11,
+      "pairs": [
+        {
+          "plan": "GF-CP-70.075",
+          "status": "no-reference",
+          "reason": "no matching RFY in rollformer dir"
+        },
+        {
+          "plan": "GF-LBW-70.075",
+          "status": "split-only",
+          "reason": "XML maps to 1 pack-split RFYs (codec doesn't pack-split)",
+          "splitCount": 1
+        },
+        {
+          "plan": "GF-LBW-70.095",
+          "status": "split-only",
+          "reason": "XML maps to 1 pack-split RFYs (codec doesn't pack-split)",
+          "splitCount": 1
+        },
+        {
+          "plan": "GF-MH-70.075",
+          "status": "no-reference",
+          "reason": "no matching RFY in rollformer dir"
+        },
+        {
+          "plan": "GF-NLBW-70.075",
+          "status": "split-only",
+          "reason": "XML maps to 1 pack-split RFYs (codec doesn't pack-split)",
+          "splitCount": 1
+        },
+        {
+          "plan": "GF-NLBW-89.075",
+          "status": "split-only",
+          "reason": "XML maps to 1 pack-split RFYs (codec doesn't pack-split)",
+          "splitCount": 1
+        },
+        {
+          "plan": "GF-RP-70.075",
+          "status": "byte-mismatch",
+          "reason": "size: ours=47056B ref=84400B Δ=-37344",
+          "ourSize": 47056,
+          "refSize": 84400
+        },
+        {
+          "plan": "GF-TB2B-70.075",
+          "status": "split-only",
+          "reason": "XML maps to 3 pack-split RFYs (codec doesn't pack-split)",
+          "splitCount": 3
+        },
+        {
+          "plan": "GF-TB2B-70.095",
+          "status": "split-only",
+          "reason": "XML maps to 1 pack-split RFYs (codec doesn't pack-split)",
+          "splitCount": 1
+        },
+        {
+          "plan": "GF-TIN-70.095",
+          "status": "byte-mismatch",
+          "reason": "size: ours=10480B ref=21456B Δ=-10976",
+          "ourSize": 10480,
+          "refSize": 21456
+        },
+        {
+          "plan": "GF-TIN-70.115",
+          "status": "byte-mismatch",
+          "reason": "size: ours=7280B ref=15872B Δ=-8592",
+          "ourSize": 7280,
+          "refSize": 15872
+        }
+      ],
+      "summary": {
+        "total": 11,
+        "bitExact": 0,
+        "sizeMatch": 0,
+        "mismatches": 3,
+        "splitOnly": 6,
+        "noReference": 2,
+        "codecError": 0
+      }
+    }
+  ]
+}
