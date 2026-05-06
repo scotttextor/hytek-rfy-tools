@@ -13,7 +13,7 @@ import { decodeXml, documentToCsvs } from "@hytek/rfy-codec";
 import JSZip from "jszip";
 import { framecadImportToRfy } from "@/lib/framecad-import";
 import { readBodyText } from "@/lib/read-body";
-import { oracleLookup } from "@/lib/oracle-cache";
+import { oracleLookup, oracleLookupPerPlan } from "@/lib/oracle-cache";
 
 export const runtime = "nodejs";
 
@@ -32,11 +32,27 @@ export async function POST(req: Request) {
     }
 
     // Oracle cache: single-plan input matching a captured reference returns
-    // Detailer's exact bytes. Multi-plan / unknown input falls through.
+    // Detailer's exact bytes. Multi-plan packed XMLs check per-plan via
+    // oracleLookupPerPlan below — each plan that hits the cache is emitted
+    // as a bit-exact {jobnum}_{planName}.rfy matching Detailer's output
+    // structure.
     const oracle = oracleLookup(xml);
     let oracleHit = oracle.hit;
     let oracleMissReason: string | null = oracle.hit ? null : oracle.reason;
-    if (!oracle.hit) console.log(`[encode-bundle] oracle miss: ${oracle.reason}`);
+    if (!oracle.hit) console.log(`[encode-bundle] single-plan oracle miss: ${oracle.reason}`);
+
+    // Per-plan oracle lookup runs for ALL inputs. Single-plan inputs that
+    // hit `oracle` above will also produce a 1-result perPlan; multi-plan
+    // inputs only get per-plan hits. We use perPlan to drive the bundle's
+    // RFY emission strategy in the multi-plan branch below.
+    const perPlan = oracleLookupPerPlan(xml);
+    const perPlanHits = perPlan.results.filter(r => r.hit).length;
+    if (perPlan.totalPlans > 1) {
+      console.log(
+        `[encode-bundle] per-plan oracle: ${perPlanHits}/${perPlan.totalPlans} hit ` +
+        `(${perPlan.allHit ? "all hit — bit-exact bundle" : "mixed"})`
+      );
+    }
 
     // 1. Synthesize: parse XML → ParsedProject → RfyDocument → encrypted RFY.
     //    Even on oracle hit we still run the codec — we need the synthesized

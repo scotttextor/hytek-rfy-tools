@@ -321,6 +321,127 @@ export function oracleLookup(xmlText: string): OracleResult {
   };
 }
 
+// ---------- Per-plan API (multi-plan packed XML support) ----------------
+
+export interface PerPlanResult {
+  planName: string;
+  frameCount: number;
+  hit: boolean;
+  rfyBytes?: Buffer;
+  rfyPath?: string;
+  reason?: string;
+}
+export interface PerPlanLookupResult {
+  jobnum: string | null;
+  totalPlans: number;
+  /** Per-plan hits/misses in input order. */
+  results: PerPlanResult[];
+  /** True iff every plan hit the cache. Convenience for "fully-cached" path. */
+  allHit: boolean;
+  /** Reason returned when allHit is false (first miss reason or env disable). */
+  firstMissReason: string | null;
+}
+
+/**
+ * Per-plan oracle lookup for multi-plan packed XMLs.
+ *
+ * Unlike `oracleLookup` (single-plan only), this iterates every <plan>
+ * element in the XML and returns a per-plan hit/miss. Useful for
+ * /api/encode-bundle to emit bit-exact per-plan {jobnum}_{plan}.rfy files
+ * matching Detailer's actual output structure.
+ *
+ * Plans that miss fall through to the caller's codec-encoding path.
+ */
+export function oracleLookupPerPlan(xmlText: string): PerPlanLookupResult {
+  if (process.env.DISABLE_ORACLE_CACHE === "1") {
+    return {
+      jobnum: null,
+      totalPlans: 0,
+      results: [],
+      allHit: false,
+      firstMissReason: "cache disabled via DISABLE_ORACLE_CACHE=1",
+    };
+  }
+  buildIndex();
+  if (INIT_ERROR) {
+    return {
+      jobnum: null,
+      totalPlans: 0,
+      results: [],
+      allHit: false,
+      firstMissReason: `index init error: ${INIT_ERROR}`,
+    };
+  }
+
+  const scan = quickScanXml(xmlText);
+  if (!scan.jobnum) {
+    return {
+      jobnum: null,
+      totalPlans: 0,
+      results: [],
+      allHit: false,
+      firstMissReason: "no <jobnum> in input XML",
+    };
+  }
+  if (scan.plans.length === 0) {
+    return {
+      jobnum: scan.jobnum,
+      totalPlans: 0,
+      results: [],
+      allHit: false,
+      firstMissReason: "no <plan> in input XML",
+    };
+  }
+
+  const results: PerPlanResult[] = [];
+  let allHit = true;
+  let firstMissReason: string | null = null;
+
+  for (const plan of scan.plans) {
+    const k = indexKey(scan.jobnum, plan.name);
+    const entry = INDEX.get(k);
+    if (!entry) {
+      const reason = `no reference for ${scan.jobnum} / ${plan.name}`;
+      results.push({ planName: plan.name, frameCount: plan.frameCount, hit: false, reason });
+      allHit = false;
+      if (!firstMissReason) firstMissReason = reason;
+      continue;
+    }
+    if (entry.expectedFrameCount !== null && entry.expectedFrameCount !== plan.frameCount) {
+      const reason = `frame count mismatch for ${scan.jobnum}/${plan.name}: input has ${plan.frameCount}, reference has ${entry.expectedFrameCount}`;
+      results.push({ planName: plan.name, frameCount: plan.frameCount, hit: false, reason });
+      allHit = false;
+      if (!firstMissReason) firstMissReason = reason;
+      continue;
+    }
+    let bytes: Buffer;
+    try {
+      bytes = readFileSync(entry.rfyPath);
+    } catch (e) {
+      const reason = `reference unreadable: ${entry.rfyPath} (${e})`;
+      results.push({ planName: plan.name, frameCount: plan.frameCount, hit: false, reason });
+      allHit = false;
+      if (!firstMissReason) firstMissReason = reason;
+      continue;
+    }
+    results.push({
+      planName: plan.name,
+      frameCount: plan.frameCount,
+      hit: true,
+      rfyBytes: bytes,
+      rfyPath: entry.rfyPath,
+    });
+  }
+
+  return {
+    jobnum: scan.jobnum,
+    totalPlans: scan.plans.length,
+    results,
+    allHit,
+    firstMissReason,
+  };
+}
+
 /** For diagnostics / tests — returns a snapshot of the index. */
 export function oracleIndexSnapshot(): {
   enabled: boolean;
