@@ -44,6 +44,14 @@ ROOT = Path(__file__).resolve().parent.parent.parent
 WORKER = ROOT / "forge" / "worker" / "detailer-worker.py"
 PROJECTS_ROOT = r"Y:\(17) 2026 HYTEK PROJECTS"
 
+# Make forge/cache importable
+sys.path.insert(0, str(ROOT / "forge"))
+try:
+    from cache.store import cache_put, resolve_cache_root  # type: ignore
+except Exception:
+    cache_put = None  # cache write is best-effort; orchestrator still works without it
+    resolve_cache_root = None
+
 # Worker exit code taxonomy (mirrored from worker)
 EX_OK              = 0
 EX_LICENSE_BAD     = 1
@@ -276,6 +284,8 @@ def main():
                     help="Skip jobs whose rfy_out already exists with size>0")
     ap.add_argument("--no-halt-on-license-bad", action="store_true",
                     help="Continue past license-bad exits instead of aborting (default: halt)")
+    ap.add_argument("--no-cache-write", action="store_true",
+                    help="Don't write successful results into the Forge cache (default: write)")
     args = ap.parse_args()
 
     out_dir = Path(args.out_dir).resolve()
@@ -331,6 +341,15 @@ def main():
         }
         summary.append(entry)
         if res["rc"] == EX_OK:
+            # Write into the Forge cache (best-effort)
+            if not args.no_cache_write and cache_put is not None:
+                try:
+                    cache_entry = cache_put(item["xml_path"], item["rfy_out"])
+                    entry["cached_at"] = cache_entry["generated_at"]
+                    entry["cache_xml_sha256"] = cache_entry["xml_sha256"]
+                except Exception as e:
+                    entry["cache_write_error"] = str(e)
+                    print(f"  warn: cache write failed: {e}", file=sys.stderr)
             print(f"  OK  ({res['elapsed_sec']}s, {res['rfy_size']:,} bytes, "
                   f"{len(attempts)} attempt(s))", file=sys.stderr)
         else:

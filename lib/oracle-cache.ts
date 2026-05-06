@@ -67,16 +67,18 @@ const JOB_LOCATIONS: JobLocation[] = [
 const HG260044_ONEDRIVE_FALLBACK =
   "C:\\Users\\Scott\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\memory\\reference_data\\HG260044";
 
-// Detailer-pre-rolled cache (populated by scripts/detailer-batch.py). Contains
+// Detailer-pre-rolled cache (populated by forge/orchestrator/detailer-orchestrator.py
+// → forge/cache/store.py, or the legacy scripts/detailer-batch.py). Contains
 // {jobnum}/{plan}.rfy + {plan}.meta.json for every job/plan that's been
 // pre-rolled through Detailer. These bytes ARE Detailer's output by definition,
 // so any input matching a cached entry returns 100% bit-exact match.
 //
-// This is the headless-Detailer-as-oracle path: instead of reverse-engineering
-// Detailer's algorithms, we use Detailer itself as the source of truth, run it
-// once per (jobnum, plan), and serve the cached bytes forever after.
+// This is the headless-Detailer-as-oracle path (Forge): instead of reverse-
+// engineering Detailer's algorithms, we use Detailer itself as the source of
+// truth, run it once per (jobnum, plan), and serve the cached bytes forever
+// after.
 //
-// Layout:
+// Layout (matches forge/cache/store.py):
 //   <root>/<jobnum>/<plan>.rfy        — Detailer-produced RFY (bit-exact)
 //   <root>/<jobnum>/<plan>.meta.json  — { xml_sha256, generated_at, ... }
 //   <root>/_index.json                — full index of entries
@@ -84,8 +86,37 @@ const HG260044_ONEDRIVE_FALLBACK =
 // On cache lookup, the meta.xml_sha256 is checked against the input XML's
 // hash; if they match, the cached RFY is served. If the XML has been edited
 // since the cache was built, we fall through to the rule engine.
-const DETAILER_PREROLLED_CACHE =
-  "C:\\Users\\Scott\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache";
+//
+// Path resolution (mirrors resolve_cache_root() in forge/cache/store.py):
+//   1. FORGE_CACHE_DIR env var
+//   2. Any %USERPROFILE%/OneDrive*/CLAUDE DATA FILE/detailer-oracle-cache that exists
+//   3. Hardcoded Scott home-PC fallback
+const DETAILER_PREROLLED_CACHE = (() => {
+  const envPath = process.env.FORGE_CACHE_DIR;
+  if (envPath) return envPath;
+  const home = process.env.USERPROFILE || process.env.HOME;
+  if (home) {
+    try {
+      const entries = readdirSync(home);
+      // Prefer "OneDrive - <suffix>" (work account) over plain "OneDrive"
+      const oneDrives = entries
+        .filter((e) => e.startsWith("OneDrive"))
+        .sort((a, b) => (a === "OneDrive" ? 1 : 0) - (b === "OneDrive" ? 1 : 0));
+      for (const e of oneDrives) {
+        const candidate = join(home, e, "CLAUDE DATA FILE", "detailer-oracle-cache");
+        if (existsSync(candidate)) return candidate;
+      }
+      if (oneDrives.length > 0) {
+        // Nothing exists yet — return the preferred path for forward-compat.
+        return join(home, oneDrives[0]!, "CLAUDE DATA FILE", "detailer-oracle-cache");
+      }
+    } catch {
+      // ignore
+    }
+  }
+  // Legacy fallback to Scott's home-PC absolute path.
+  return "C:\\Users\\Scott\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache";
+})();
 
 // ---------- Index --------------------------------------------------------
 
