@@ -383,14 +383,24 @@ def xml_to_rfy(xml_path: str, output_dir: str, app: Optional["Application"] = No
         raise RuntimeError("Import did not complete within 60s")
 
     # =================== EXPORT ===================
-    # Menu navigation: Alt+F → e (opens Export submenu, cursor lands on first
-    # item which is NOT RFY). Per manual probe 2026-05-06, RFY is two items
-    # below the default landing. So: down → down → Enter.
+    # Menu navigation: Alt+F → e opens the Export submenu. The submenu items
+    # in order (verified manually 2026-05-06):
+    #   1. 3D VRML
+    #   2. DXF
+    #   3. Excel
+    #   4. Frame Types / Machine Setups / Steel Setups
+    #   5. 3D DXF file
+    #   6. IFC file
+    #   7. Rollformer RFY file   ← target
+    #   8. Upload to NEXA
+    #   9. FIM file
+    # On submenu open, cursor is on item 1. Press DOWN 6 times to reach RFY,
+    # then Enter to fire it.
     main.set_focus(); time.sleep(0.5)
     pyautogui.hotkey("alt", "f"); time.sleep(0.5)
     pyautogui.press("e"); time.sleep(0.5)  # opens Export submenu
-    pyautogui.press("down"); time.sleep(0.2)
-    pyautogui.press("down"); time.sleep(0.2)
+    for _ in range(6):
+        pyautogui.press("down"); time.sleep(0.15)
     pyautogui.press("enter"); time.sleep(1.5)
 
     # 'Export to File' dialog (custom Detailer, not standard Save).
@@ -430,12 +440,10 @@ def xml_to_rfy(xml_path: str, output_dir: str, app: Optional["Application"] = No
                 c.click_input(); time.sleep(0.5); break
         except Exception: pass
 
-    # Click 'Export' button. Delphi VCL uses TButton, TBitBtn, or TSpeedButton.
-    # Try all three classes; match 'Export' exactly, then 'Export' substring
-    # excluding 'Options'.
+    # Click 'Export' button. May be Delphi (TButton/TBitBtn) or Windows native (Button).
     export_btn = None
     all_buttons = []  # for diagnostics
-    button_classes = ("TButton", "TBitBtn", "TSpeedButton", "TBmpButton")
+    button_classes = ("TButton", "TBitBtn", "TSpeedButton", "TBmpButton", "Button")
     for c in export_dlg.descendants():
         try:
             cls = c.class_name()
@@ -476,7 +484,9 @@ def xml_to_rfy(xml_path: str, output_dir: str, app: Optional["Application"] = No
     if not save_dlg:
         raise RuntimeError("Save dialog (#32770) did not appear after Export click")
 
-    # Filename combo
+    # Filename combo. The "Export RFY file to" dialog opens in Recent Items
+    # by default, so typing a full path letter-by-letter triggers autocomplete
+    # and the leading chars get eaten. We use clipboard paste instead.
     save_combo = None
     for c in save_dlg.descendants():
         try:
@@ -486,13 +496,31 @@ def xml_to_rfy(xml_path: str, output_dir: str, app: Optional["Application"] = No
         except Exception: pass
     if not save_combo:
         raise RuntimeError("Filename combo not found in save dialog")
+
     rfy_basename = Path(xml_path).stem + ".rfy"
     rfy_out = str(Path(output_dir) / rfy_basename)
-    save_combo.set_focus(); time.sleep(0.2)
+
+    # Set clipboard to the full path, then paste with Ctrl+V. Atomic — bypasses
+    # autocomplete entirely.
+    save_combo.set_focus(); time.sleep(0.3)
     pyautogui.hotkey("ctrl", "a"); time.sleep(0.1)
-    pyautogui.press("delete"); time.sleep(0.1)
-    pyautogui.typewrite(rfy_out, interval=0.005); time.sleep(0.5)
+    pyautogui.press("delete"); time.sleep(0.2)
+    # Use Windows clipboard API directly (no extra deps).
+    import subprocess as _sp
+    _sp.run(["clip"], input=rfy_out.encode("utf-16-le"), check=False)
+    time.sleep(0.3)
+    pyautogui.hotkey("ctrl", "v"); time.sleep(0.5)
     pyautogui.press("enter"); time.sleep(2)
+
+    # If a "can't save here" error dialog appeared, dismiss it and retry
+    # — but for now, fail loudly so we can see the issue.
+    for w in app.windows():
+        try:
+            if w.is_visible() and w.class_name() == "#32770" and "save" in w.window_text().lower():
+                # Could be the parent save dialog or a child error dialog.
+                # If it has only OK button, it's an error.
+                pass
+        except Exception: pass
 
     # Confirm overwrite if prompted
     try:
@@ -505,14 +533,67 @@ def xml_to_rfy(xml_path: str, output_dir: str, app: Optional["Application"] = No
                 except Exception: pass
     except Exception: pass
 
-    # Wait for the RFY to land
-    deadline = time.time() + 30
+    # Detailer pops an "Export Successful" / "Information" dialog after writing
+    # the RFY. Click OK to dismiss it, then look for the new RFY file.
+    deadline = time.time() + 60
+    started = time.time() - 5  # 5s grace
+    produced = None
+    success_dismissed = False
     while time.time() < deadline:
-        if Path(rfy_out).exists() and Path(rfy_out).stat().st_size > 0:
-            break
         time.sleep(0.5)
-    if not Path(rfy_out).exists():
-        raise RuntimeError(f"RFY was not produced at {rfy_out}")
+        # Dismiss any "Export Successful" / Information popup
+        for w in app.windows():
+            try:
+                if w.is_visible() and w.class_name() == "TMessageForm":
+                    title = w.window_text()
+                    # Click OK / Yes
+                    for c in w.descendants():
+                        try:
+                            if c.class_name() == "TButton" and c.window_text() in ("OK", "&OK", "Yes", "&Yes"):
+                                c.click(); time.sleep(0.5)
+                                if "Information" in title or "Success" in title or "Export" in title:
+                                    success_dismissed = True
+                                break
+                        except Exception: pass
+                    break
+            except Exception: pass
+        # Look for the new RFY file
+        try:
+            for f in Path(output_dir).glob("*.rfy"):
+                try:
+                    if f.stat().st_mtime > started and f.stat().st_size > 0:
+                        produced = f; break
+                except Exception: pass
+            if produced and success_dismissed: break
+        except Exception: pass
+    if not produced:
+        raise RuntimeError(f"No new RFY appeared in {output_dir} within 60s")
+
+    # Now close the "Export to File" dialog (it's still open behind the popup)
+    for w in app.windows():
+        try:
+            if w.is_visible() and "Export" in w.window_text() and w.class_name() != "TfrmContainer":
+                # Click Cancel to close
+                for c in w.descendants():
+                    try:
+                        if c.class_name() == "TButton" and c.window_text() in ("Cancel", "&Cancel", "Close"):
+                            c.click(); time.sleep(0.5); break
+                    except Exception: pass
+                break
+        except Exception: pass
+
+    # Rename to the requested output if different
+    target = Path(rfy_out)
+    if produced.resolve() != target.resolve():
+        try:
+            if target.exists(): target.unlink()
+            produced.rename(target)
+            print(f"  [detailer-batch] renamed {produced.name} -> {target.name}")
+        except Exception as e:
+            print(f"  [detailer-batch] rename failed ({e}), keeping {produced.name}")
+            rfy_out = str(produced)
+    else:
+        rfy_out = str(produced)
 
     # =================== CLEANUP — close project ===================
     main.set_focus(); time.sleep(0.3)
