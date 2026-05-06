@@ -68,12 +68,133 @@ def find_pid():
     return None
 
 
+def _find_visible_winforms(app, prefix="WindowsForms10.Window.8.app.", title_contains=None):
+    """Find a visible top-level WindowsForms window owned by the Detailer process."""
+    for w in app.windows():
+        try:
+            if not w.is_visible():
+                continue
+            cls = w.class_name() or ""
+            if not cls.startswith(prefix):
+                continue
+            if title_contains is not None and title_contains not in (w.window_text() or ""):
+                continue
+            return w
+        except Exception:
+            pass
+    return None
+
+
+def attempt_sign_in(app):
+    """
+    If TfrmLicenseNotice is up, drive: 'Show License Information' →
+    'I agree' checkbox → 'Sign In'. Returns True if we got through the click
+    sequence, False if any UI element couldn't be found.
+
+    Whether the sign-in actually succeeds depends on whether FrameCAD's
+    licensing server is reachable (VPN-blocked = no). On success, Detailer's
+    main window title shortly changes to contain 'License valid until...'.
+    """
+    notice = None
+    for w in app.windows():
+        try:
+            if w.is_visible() and w.class_name() == "TfrmLicenseNotice":
+                notice = w
+                break
+        except Exception:
+            pass
+    if notice is None:
+        return False  # nothing to do — license dialog not up
+
+    # 1. Click 'Show License Information' on TfrmLicenseNotice
+    show_btn = None
+    for c in notice.descendants():
+        try:
+            if c.class_name() == "TButton" and c.window_text() == "Show License Information":
+                show_btn = c
+                break
+        except Exception:
+            pass
+    if show_btn is None:
+        return False
+    try:
+        show_btn.click()
+    except Exception:
+        return False
+    time.sleep(2.5)
+
+    # 2. Find the WinForms 'FRAMECAD Licensing System' window
+    licsys = None
+    deadline = time.time() + 10
+    while time.time() < deadline:
+        licsys = _find_visible_winforms(app, title_contains="FRAMECAD Licensing System")
+        if licsys is not None:
+            break
+        time.sleep(0.4)
+    if licsys is None:
+        return False
+
+    # 3. Tick 'I agree' — empty-text WinForms BUTTON (~23x21) near the agreement label
+    agree_cb = None
+    for c in licsys.descendants():
+        try:
+            cls = c.class_name() or ""
+            if "WindowsForms10.BUTTON" not in cls:
+                continue
+            txt = c.window_text() or ""
+            if txt:
+                continue
+            r = c.rectangle()
+            if 18 <= r.width() <= 30 and 18 <= r.height() <= 26:
+                agree_cb = c
+                break
+        except Exception:
+            pass
+    if agree_cb is None:
+        return False
+    try:
+        agree_cb.click()
+    except Exception:
+        try:
+            agree_cb.click_input()
+        except Exception:
+            return False
+    time.sleep(0.6)
+
+    # 4. Click 'Sign In' BUTTON
+    sign_in = None
+    for c in licsys.descendants():
+        try:
+            cls = c.class_name() or ""
+            if "WindowsForms10.BUTTON" not in cls:
+                continue
+            if (c.window_text() or "").strip() == "Sign In":
+                sign_in = c
+                break
+        except Exception:
+            pass
+    if sign_in is None:
+        return False
+    try:
+        sign_in.click()
+    except Exception:
+        try:
+            sign_in.click_input()
+        except Exception:
+            return False
+    return True
+
+
 def license_status():
     """
     Return one of:
       "OK"             — main window has 'License valid' in title
-      "BLOCKED"        — TfrmLicenseNotice is up (online activation failed)
+      "BLOCKED"        — TfrmLicenseNotice persists (likely VPN-blocked)
       "UNKNOWN"        — couldn't determine within timeout
+
+    On each poll: launch Detailer, attempt the sign-in click-through, wait
+    up to WAIT_FOR_TITLE_SEC for main window title to show 'License valid',
+    then kill Detailer regardless.
     """
     if not Path(EXE_PATH).exists():
         return "UNKNOWN"
@@ -92,6 +213,10 @@ def license_status():
     time.sleep(LAUNCH_SETTLE_SEC)
     try:
         app = Application(backend="win32").connect(process=pid)
+
+        # If the license dialog is up, drive the sign-in flow once.
+        sign_in_attempted = attempt_sign_in(app)
+
         end = time.time() + WAIT_FOR_TITLE_SEC
         license_seen_since = None
         while time.time() < end:
@@ -108,18 +233,21 @@ def license_status():
                     cls = w.class_name()
                     if cls == "TfrmLicenseNotice":
                         license_dialog = True
-                    elif cls.startswith("Tfrm") and cls != "TfrmLicenseNotice":
+                    elif cls.startswith("Tfrm") and cls not in ("TfrmLicenseNotice",):
                         try:
-                            main_title = w.window_text() or ""
+                            t = w.window_text() or ""
                         except Exception:
-                            pass
+                            t = ""
+                        if t and t != "Framecad detailer":
+                            main_title = t
                 except Exception:
                     pass
             if main_title and "License valid" in main_title:
                 return "OK"
+            # If sign-in fired but dialog still up after a while, mark BLOCKED
             if license_dialog:
                 license_seen_since = license_seen_since or time.time()
-                if time.time() - license_seen_since > 5:
+                if time.time() - license_seen_since > 8:
                     return "BLOCKED"
             time.sleep(0.5)
         return "UNKNOWN"
