@@ -1,5 +1,5 @@
 """
-detailer-batch.py — Drive FRAMECAD Detailer to convert input XML → RFY for many jobs.
+detailer-batch.py — Drive FRAMECAD Detailer to convert input XML -> RFY for many jobs.
 
 This is the production path to 100% bit-exact match: instead of reverse-
 engineering Detailer's algorithms in code, we use Detailer itself as the
@@ -158,7 +158,7 @@ def assert_license_ok() -> "Application":
 
 
 # ---------------------------------------------------------------------------
-# XML → RFY (single-shot)
+# XML -> RFY (single-shot)
 # ---------------------------------------------------------------------------
 
 def find_main_window(app: "Application"):
@@ -210,16 +210,16 @@ def xml_to_rfy(xml_path: str, output_dir: str, app: Optional["Application"] = No
     """Convert one XML to one RFY via Detailer GUI automation.
 
     Updated 2026-05-06 with the actual flow from manual verification:
-    1. Alt+F → i → x → TdlgImport (Detailer's custom XML import dialog)
-    2. Click 'Add' → standard #32770 file picker → type path → Enter
-    3. Click 'Import' on TdlgImport → Detailer imports (auto-selects machine
+    1. Alt+F -> i -> x -> TdlgImport (Detailer's custom XML import dialog)
+    2. Click 'Add' -> standard #32770 file picker -> type path -> Enter
+    3. Click 'Import' on TdlgImport -> Detailer imports (auto-selects machine
        setup from XML profile; no need to manually set combos)
     4. Detection: Project Tree populates (NOT title bar — Detailer leaves
        title as 'untitled.fcp' for imports)
-    5. Alt+F → e → r → 'Export to File' dialog (TdlgExport custom Detailer
+    5. Alt+F -> e -> r -> 'Export to File' dialog (TdlgExport custom Detailer
        dialog with frame grid)
-    6. Click 'Select All' → click 'Export' button
-    7. Standard Save dialog → set path → click Save
+    6. Click 'Select All' -> click 'Export' button
+    7. Standard Save dialog -> set path -> click Save
     8. RFY lands at the path
 
     Returns the absolute path to the written RFY.
@@ -250,7 +250,7 @@ def xml_to_rfy(xml_path: str, output_dir: str, app: Optional["Application"] = No
 
     dlg = _find_visible(app, "TdlgImport")
     if not dlg:
-        raise RuntimeError("TdlgImport did not appear after Alt+F→i→x")
+        raise RuntimeError("TdlgImport did not appear after Alt+F->i->x")
 
     # Click 'Add' button
     add_btn = None
@@ -334,56 +334,39 @@ def xml_to_rfy(xml_path: str, output_dir: str, app: Optional["Application"] = No
     pyautogui.moveTo(cx, cy, duration=0.3); time.sleep(0.4)
     pyautogui.click(); time.sleep(3)
 
-    # Wait for import to complete + check for popups
-    deadline = time.time() + 60
+    # Wait for import to complete; auto-dismiss any TMessageForm popups
+    # (they are benign warnings like "Some imported sections could not be
+    # matched and have been created in the project configuration"). Click
+    # OK / Yes / Ignore in priority order — they all advance the import.
+    # NEVER click Cancel — that aborts the import.
+    deadline = time.time() + 90
     imported = False
-    error_text = None
     while time.time() < deadline:
         time.sleep(0.5)
-        # If a TMessageForm popup appears, capture its text + abort import
+        # Auto-dismiss popups via OK/Yes/Ignore
         for w in app.windows():
             try:
                 if w.is_visible() and w.class_name() == "TMessageForm":
-                    title = w.window_text()
-                    btns = []
-                    for c in w.descendants():
-                        try:
-                            if c.class_name() == "TButton":
-                                btns.append(c.window_text())
-                        except Exception: pass
-                    error_text = f"Popup '{title}' with buttons {btns}"
-                    # Capture screenshot for diagnostics
-                    try:
-                        r = w.rectangle()
-                        screenshot_path = str(Path(output_dir) / "import-popup.png")
-                        pyautogui.screenshot(region=(r.left, r.top, r.width(), r.height())).save(screenshot_path)
-                        error_text += f" — screenshot: {screenshot_path}"
-                    except Exception: pass
-                    # Click Cancel (or first button) to dismiss WITHOUT proceeding
-                    for c in w.descendants():
-                        try:
-                            if c.class_name() == "TButton" and c.window_text() in ("&Cancel", "Cancel"):
-                                c.click(); time.sleep(0.5); break
-                        except Exception: pass
+                    clicked = False
+                    for label in ("&OK", "OK", "&Yes", "Yes", "&Ignore", "Ignore"):
+                        if clicked: break
+                        for c in w.descendants():
+                            try:
+                                if c.class_name() == "TButton" and c.window_text() == label:
+                                    c.click(); time.sleep(0.5); clicked = True; break
+                            except Exception: pass
                     break
             except Exception: pass
-        if error_text:
-            break
-        # Detection: TdlgImport gone AND no error popup = import succeeded.
-        # We can't reliably enumerate Project Tree contents (Delphi TTreeView
-        # internal nodes aren't standard WinAPI children), but if TdlgImport
-        # closed without errors, Detailer accepted the import.
-        if not _find_visible(app, "TdlgImport"):
+        # Detection: TdlgImport gone AND no popup = import done
+        if not _find_visible(app, "TdlgImport") and not _find_visible(app, "TMessageForm"):
             time.sleep(2)  # let canvas paint
             imported = True
             break
-    if error_text:
-        raise RuntimeError(f"Import error: {error_text}")
     if not imported:
-        raise RuntimeError("Import did not complete within 60s")
+        raise RuntimeError("Import did not complete within 90s")
 
     # =================== EXPORT ===================
-    # Menu navigation: Alt+F → e opens the Export submenu. The submenu items
+    # Menu navigation: Alt+F -> e opens the Export submenu. The submenu items
     # in order (verified manually 2026-05-06):
     #   1. 3D VRML
     #   2. DXF
@@ -760,12 +743,19 @@ def build_cache(
                 print(f" OK ({meta['rfy_size']} bytes)")
             except Exception as e:
                 total_failed += 1
-                print(f" FAIL: {e}")
-                # Re-establish app handle in case Detailer crashed
+                # Sanitise non-ascii for Windows console (cp1252)
+                emsg = str(e).encode("ascii", errors="replace").decode("ascii")
+                print(f" FAIL: {emsg}")
+                # Detailer may be in a bad state (modal dialog up, project loaded
+                # but unfinished). Kill + relaunch for clean slate before next
+                # iteration. Slow but reliable.
                 try:
+                    kill_existing_detailer()
+                    time.sleep(2)
                     app = assert_license_ok()
-                except Exception:
-                    print("[detailer-batch] cannot re-acquire Detailer; aborting")
+                except Exception as e2:
+                    emsg2 = str(e2).encode("ascii", errors="replace").decode("ascii")
+                    print(f"[detailer-batch] cannot re-acquire Detailer ({emsg2}); aborting")
                     break
 
     # Write the index
@@ -792,7 +782,7 @@ def build_cache(
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Drive Detailer to convert XMLs → RFYs (single or batch)."
+        description="Drive Detailer to convert XMLs -> RFYs (single or batch)."
     )
     parser.add_argument(
         "--batch",
