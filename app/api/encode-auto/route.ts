@@ -1,19 +1,76 @@
 // Plain Text OR XML → RFY. Auto-detects format from content:
 // - Starts with `<?xml` → XML path → encryptRfy
 // - Otherwise → strip `# ===` headers/comments → synthesizeRfyFromCsv
+//
+// Optional confidence metadata (opt-in via ?withConfidence=1):
+//   When set, instead of returning raw binary, the route returns JSON of the form
+//     {
+//       rfy_base64: string,           // base64-encoded RFY bytes
+//       rfy_size: number,             // length in bytes (for sanity / progress)
+//       filename: string,             // suggested attachment filename
+//       detected_format: "framecad-import" | "xml-schedule" | "plain-text-csv",
+//       oracle_hit: boolean,
+//       oracle_source?: string,       // path of cache file when hit
+//       oracle_miss_reason?: string,  // why cache missed (codec path)
+//       confidence: {
+//         source: "cached" | "codec",     // "cached" = Detailer-truth bytes; not scored
+//         counts?: { high, medium, low, unknown },  // codec-only
+//         total_sticks?: number,                    // codec-only
+//         frames?: ScoredFrame[],                   // codec-only — see lib/forge-confidence.ts
+//         note?: string,                            // explanation when not scored
+//       }
+//     }
+//   For cache hits we return `confidence.source: "cached"` and skip scoring —
+//   Detailer's bytes are ground truth by definition. For codec / synth output
+//   we decode the RFY back to structured ops and score every stick against
+//   the 66k-record corpus (see lib/forge-confidence.ts).
+//
+//   Without ?withConfidence=1 the response is unchanged binary RFY (existing
+//   contract preserved for clients that don't ask for it).
 import { NextResponse } from "next/server";
-import { encryptRfy, synthesizeRfyFromCsv } from "@hytek/rfy-codec";
+import { decode, encryptRfy, synthesizeRfyFromCsv } from "@hytek/rfy-codec";
 import { readBodyText } from "@/lib/read-body";
 import { framecadImportToRfy } from "@/lib/framecad-import";
 import { oracleLookup } from "@/lib/oracle-cache";
+import { scoreDecodedDocument } from "@/lib/forge-confidence";
 
 export const runtime = "nodejs";
+
+interface ConfidenceJsonResponse {
+  rfy_base64: string;
+  rfy_size: number;
+  filename: string;
+  detected_format: "framecad-import" | "xml-schedule" | "plain-text-csv";
+  oracle_hit: boolean;
+  oracle_source?: string;
+  oracle_miss_reason?: string;
+  confidence:
+    | { source: "cached"; note: string }
+    | {
+        source: "codec";
+        counts: { high: number; medium: number; low: number; unknown: number };
+        total_sticks: number;
+        frames: ReturnType<typeof scoreDecodedDocument>["frames"];
+      }
+    | { source: "skipped"; note: string };
+}
+
+function wantsConfidence(req: Request): boolean {
+  // Two opt-in mechanisms (either works). Picking ?withConfidence=1 as primary
+  // since this route already uses headers (x-filename) for client-supplied
+  // metadata and adding more headers risks collisions.
+  const url = new URL(req.url);
+  const qp = url.searchParams.get("withConfidence");
+  if (qp === "1" || qp === "true") return true;
+  return false;
+}
 
 export async function POST(req: Request) {
   try {
     const filename = decodeURIComponent(req.headers.get("x-filename") ?? "input.txt");
     const raw = (await readBodyText(req)).trim();
     if (!raw) throw new Error("Empty input");
+    const withConfidence = wantsConfidence(req);
 
     // Detect format from the first non-whitespace bytes of the body.
     const lower = raw.toLowerCase();
@@ -21,8 +78,9 @@ export async function POST(req: Request) {
     let outName = filename.replace(/\.(txt|csv|xml)$/i, "") + ".rfy";
 
     let rfy: Buffer;
-    let detectedFormat: string;
+    let detectedFormat: "framecad-import" | "xml-schedule" | "plain-text-csv";
     let oracleHit = false;
+    let oracleSourcePath: string | undefined;
     let oracleMissReason: string | null = null;
 
     if (isXml) {
@@ -39,15 +97,41 @@ export async function POST(req: Request) {
         const oracle = oracleLookup(raw);
         if (oracle.hit) {
           oracleHit = true;
+          oracleSourcePath = oracle.rfyPath;
           rfy = oracle.rfyBytes;
           const safeJob = oracle.jobnum.replace(/[^A-Za-z0-9]/g, "");
           const safePlan = oracle.planName.replace(/[^A-Za-z0-9._-]/g, "");
           outName = `${safeJob}_${safePlan}.rfy`;
-          return new NextResponse(new Uint8Array(rfy), {
+          if (!withConfidence) {
+            return new NextResponse(new Uint8Array(rfy), {
+              status: 200,
+              headers: {
+                "content-type": "application/octet-stream",
+                "content-disposition": `attachment; filename="${outName}"`,
+                "x-detected-format": detectedFormat,
+                "x-oracle-hit": "true",
+                "x-oracle-source": oracle.rfyPath,
+              },
+            });
+          }
+          // Cache-hit + confidence requested: skip scoring (Detailer is truth)
+          // and return JSON below via the shared end-of-route path.
+          // Falls through to the JSON-response builder.
+          const body: ConfidenceJsonResponse = {
+            rfy_base64: Buffer.from(rfy).toString("base64"),
+            rfy_size: rfy.length,
+            filename: outName,
+            detected_format: detectedFormat,
+            oracle_hit: true,
+            oracle_source: oracleSourcePath,
+            confidence: {
+              source: "cached",
+              note: "Detailer-produced bytes from oracle cache — scoring skipped (ground truth).",
+            },
+          };
+          return NextResponse.json(body, {
             status: 200,
             headers: {
-              "content-type": "application/octet-stream",
-              "content-disposition": `attachment; filename="${outName}"`,
               "x-detected-format": detectedFormat,
               "x-oracle-hit": "true",
               "x-oracle-source": oracle.rfyPath,
@@ -108,13 +192,55 @@ export async function POST(req: Request) {
     }
 
     const headers: Record<string, string> = {
-      "content-type": "application/octet-stream",
-      "content-disposition": `attachment; filename="${outName}"`,
       "x-detected-format": detectedFormat,
       "x-oracle-hit": String(oracleHit),
     };
     if (!oracleHit && oracleMissReason) headers["x-oracle-miss-reason"] = oracleMissReason;
-    return new NextResponse(new Uint8Array(rfy), { status: 200, headers });
+
+    if (!withConfidence) {
+      // Original binary contract — unchanged.
+      return new NextResponse(new Uint8Array(rfy), {
+        status: 200,
+        headers: {
+          ...headers,
+          "content-type": "application/octet-stream",
+          "content-disposition": `attachment; filename="${outName}"`,
+        },
+      });
+    }
+
+    // Codec / synth path with confidence requested: decode RFY → score sticks.
+    // For <schedule> + plain-text-csv we still run the scorer because both end
+    // up as a real RFY document; if the corpus has no bucket for that profile/
+    // role the scorer returns "unknown" rather than throwing, so this is safe.
+    const body: ConfidenceJsonResponse = {
+      rfy_base64: Buffer.from(rfy).toString("base64"),
+      rfy_size: rfy.length,
+      filename: outName,
+      detected_format: detectedFormat,
+      oracle_hit: false,
+      ...(oracleMissReason ? { oracle_miss_reason: oracleMissReason } : {}),
+      confidence: (() => {
+        try {
+          const decoded = decode(rfy);
+          const scored = scoreDecodedDocument(decoded);
+          return {
+            source: "codec" as const,
+            counts: scored.counts,
+            total_sticks: scored.total_sticks,
+            frames: scored.frames,
+          };
+        } catch (e) {
+          // Decode failure shouldn't break the response — return RFY anyway
+          // and tell the caller scoring was skipped.
+          return {
+            source: "skipped" as const,
+            note: `decode failed during scoring: ${e instanceof Error ? e.message : String(e)}`,
+          };
+        }
+      })(),
+    };
+    return NextResponse.json(body, { status: 200, headers });
   } catch (e) {
     return new NextResponse(String(e instanceof Error ? e.message : e), { status: 400 });
   }

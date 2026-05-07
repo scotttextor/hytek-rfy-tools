@@ -9,6 +9,7 @@ export default defineConfig({
     environment: "node",
     include: [
       "app/viewer/lib/**/*.test.ts",
+      "app/api/**/*.test.ts",
       "lib/**/*.test.ts",
       "scripts/**/*.test.ts",
       "forge/**/*.test.ts",
