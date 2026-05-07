@@ -3,8 +3,16 @@
 // transforms), so we explicitly opt out of jsdom for fast startup.
 
 import { defineConfig } from "vitest/config";
+import { fileURLToPath } from "node:url";
 
 export default defineConfig({
+  resolve: {
+    alias: {
+      // Mirror the tsconfig path alias `@/*` → repo root so route handlers
+      // can be unit-tested without an HTTP server.
+      "@": fileURLToPath(new URL("./", import.meta.url)),
+    },
+  },
   test: {
     environment: "node",
     include: [
