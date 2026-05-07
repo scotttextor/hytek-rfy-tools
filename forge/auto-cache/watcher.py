@@ -96,12 +96,16 @@ def quick_scan(xml_path: Path) -> tuple[str | None, str | None]:
             plan_m.group(1) if plan_m else None)
 
 
-def is_cached(xml_path: Path, cache_root: Path) -> bool:
-    jobnum, plan = quick_scan(xml_path)
+def is_cached_fast(jobnum: str | None, plan: str | None, cache_root: Path) -> bool:
+    """Fast cache-existence check by (jobnum, plan_name) without re-reading
+    or re-hashing the XML. Skips the canonical-hash validation in cache_get
+    (we trust the cache by job/plan alone for the watcher's purposes — full
+    hash validation runs on the encode-route hot path)."""
     if not jobnum or not plan:
         return False
-    res = cache_get(xml_path, jobnum=jobnum, plan_name=plan, cache_root=cache_root)
-    return res is not None and res.get("hit", False)
+    cached_rfy = cache_root / jobnum / f"{plan}.rfy"
+    cached_meta = cache_root / jobnum / f"{plan}.meta.json"
+    return cached_rfy.exists() and cached_meta.exists() and cached_rfy.stat().st_size > 0
 
 
 def load_state(state_path: Path) -> dict:
@@ -179,8 +183,10 @@ def process_xml(
     retries = state["retries"].get(key, 0)
     if retries >= max_retries:
         return f"skipped:max_retries({retries})"
-    if is_cached(xml_path, cache_root):
-        state["last_seen"][key] = time.time()
+    # Cheap (no file read): if last_seen is recent and we marked it cached
+    # before, skip without re-checking. Reset every 24h to re-validate.
+    last = state["last_seen"].get(key, 0)
+    if time.time() - last < 24 * 3600 and state.get("cached_keys", {}).get(key):
         return "cached"
 
     jobnum, plan = quick_scan(xml_path)
@@ -188,6 +194,14 @@ def process_xml(
         state["retries"][key] = retries + 1
         save_state(state_path, state)
         return "skipped:no_jobnum_plan"
+
+    if is_cached_fast(jobnum, plan, cache_root):
+        state["last_seen"][key] = time.time()
+        state.setdefault("cached_keys", {})[key] = True
+        # Save state every 100 cached hits to avoid disk thrash
+        if int(time.time()) % 100 == 0:
+            save_state(state_path, state)
+        return "cached"
 
     log(log_path, f"START {jobnum}/{plan} <- {xml_path.name}")
     tmp_rfy = cache_root / "_auto-cache-tmp" / f"{jobnum}_{plan}.rfy"

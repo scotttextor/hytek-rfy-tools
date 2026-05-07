@@ -1,0 +1,2246 @@
+[
+  {
+    "id": "HG260026__GF-Panels-70",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\AKAM CONSTRUCTIONS\\HG260026 JIMBOOMBA SHOWROOM DEVELOPMENT\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\X-GF-Panels-70.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260026_GF-Panels-70.rfy",
+    "_meta": {
+      "jobnum": "HG260026",
+      "plan_name": "GF-Panels-70",
+      "builder": "AKAM CONSTRUCTIONS",
+      "jobdir": "HG260026 JIMBOOMBA SHOWROOM DEVELOPMENT"
+    }
+  },
+  {
+    "id": "HG260026__GF-Panels-89",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\AKAM CONSTRUCTIONS\\HG260026 JIMBOOMBA SHOWROOM DEVELOPMENT\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\X-GF-Panels-89.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260026_GF-Panels-89.rfy",
+    "_meta": {
+      "jobnum": "HG260026",
+      "plan_name": "GF-Panels-89",
+      "builder": "AKAM CONSTRUCTIONS",
+      "jobdir": "HG260026 JIMBOOMBA SHOWROOM DEVELOPMENT"
+    }
+  },
+  {
+    "id": "HG260026__GF-Roof-89",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\AKAM CONSTRUCTIONS\\HG260026 JIMBOOMBA SHOWROOM DEVELOPMENT\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\X-GF-Roof-89.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260026_GF-Roof-89.rfy",
+    "_meta": {
+      "jobnum": "HG260026",
+      "plan_name": "GF-Roof-89",
+      "builder": "AKAM CONSTRUCTIONS",
+      "jobdir": "HG260026 JIMBOOMBA SHOWROOM DEVELOPMENT"
+    }
+  },
+  {
+    "id": "HG260022__GF-Panels-89",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\BOX AND CO\\HG260022 CUB QC LAB & TEAMS ROOM\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\X-GF-Panels-89.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260022_GF-Panels-89.rfy",
+    "_meta": {
+      "jobnum": "HG260022",
+      "plan_name": "GF-Panels-89",
+      "builder": "BOX AND CO",
+      "jobdir": "HG260022 CUB QC LAB & TEAMS ROOM"
+    }
+  },
+  {
+    "id": "HG260006__GF-CP-70.075",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\BRISBANE HOMES\\HG260006 LOT 13 (432) BECKETT ROAD BRIDGEMAN DOWNS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG260006 LOT 13 (433) BECKETT ROAD BRIDGEMAN DOWNS-GF-CP-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260006_GF-CP-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG260006",
+      "plan_name": "GF-CP-70.075",
+      "builder": "BRISBANE HOMES",
+      "jobdir": "HG260006 LOT 13 (432) BECKETT ROAD BRIDGEMAN DOWNS"
+    }
+  },
+  {
+    "id": "HG260006__GF-NLBW-90.075",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\BRISBANE HOMES\\HG260006 LOT 13 (432) BECKETT ROAD BRIDGEMAN DOWNS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG260006 LOT 13 (433) BECKETT ROAD BRIDGEMAN DOWNS-GF-NLBW-90.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260006_GF-NLBW-90.075.rfy",
+    "_meta": {
+      "jobnum": "HG260006",
+      "plan_name": "GF-NLBW-90.075",
+      "builder": "BRISBANE HOMES",
+      "jobdir": "HG260006 LOT 13 (432) BECKETT ROAD BRIDGEMAN DOWNS"
+    }
+  },
+  {
+    "id": "HG260001__GF-CP-70.075",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\CORAL HOMES\\HG260001 LOT 289 (29) COORA CRESENT CURRIMUNDI\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG260001 LOT 289 COORA CRESCENT CURRIMUNDI 4551-GF-CP-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260001_GF-CP-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG260001",
+      "plan_name": "GF-CP-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG260001 LOT 289 (29) COORA CRESENT CURRIMUNDI"
+    }
+  },
+  {
+    "id": "HG260001__GF-LBW-89.075",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\CORAL HOMES\\HG260001 LOT 289 (29) COORA CRESENT CURRIMUNDI\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG260001 LOT 289 COORA CRESCENT CURRIMUNDI 4551-GF-LBW-89.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260001_GF-LBW-89.075.rfy",
+    "_meta": {
+      "jobnum": "HG260001",
+      "plan_name": "GF-LBW-89.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG260001 LOT 289 (29) COORA CRESENT CURRIMUNDI"
+    }
+  },
+  {
+    "id": "HG260001__GF-MH-70.075",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\CORAL HOMES\\HG260001 LOT 289 (29) COORA CRESENT CURRIMUNDI\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG260001 LOT 289 COORA CRESCENT CURRIMUNDI 4551-GF-MH-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260001_GF-MH-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG260001",
+      "plan_name": "GF-MH-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG260001 LOT 289 (29) COORA CRESENT CURRIMUNDI"
+    }
+  },
+  {
+    "id": "HG260001__GF-TIN-70",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\CORAL HOMES\\HG260001 LOT 289 (29) COORA CRESENT CURRIMUNDI\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\Packed\\X-GF-TIN-70.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260001_GF-TIN-70.rfy",
+    "_meta": {
+      "jobnum": "HG260001",
+      "plan_name": "GF-TIN-70",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG260001 LOT 289 (29) COORA CRESENT CURRIMUNDI"
+    }
+  },
+  {
+    "id": "HG260004__GF-CP-70.075",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\CORAL HOMES\\HG260004 LOT 328 (56) TREELINE CIRCUIT MOOLOOLAH VALLEY\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG260004 LOT 328 (56) TREELINE CIRCUIT MOOLOOLAH VALLEY-GF-CP-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260004_GF-CP-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG260004",
+      "plan_name": "GF-CP-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG260004 LOT 328 (56) TREELINE CIRCUIT MOOLOOLAH VALLEY"
+    }
+  },
+  {
+    "id": "HG260004__GF-Roof-70",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\CORAL HOMES\\HG260004 LOT 328 (56) TREELINE CIRCUIT MOOLOOLAH VALLEY\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\Packed\\X-GF-Roof-70.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260004_GF-Roof-70.rfy",
+    "_meta": {
+      "jobnum": "HG260004",
+      "plan_name": "GF-Roof-70",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG260004 LOT 328 (56) TREELINE CIRCUIT MOOLOOLAH VALLEY"
+    }
+  },
+  {
+    "id": "HG260004__GF-TIN-70",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\CORAL HOMES\\HG260004 LOT 328 (56) TREELINE CIRCUIT MOOLOOLAH VALLEY\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\Packed\\X-GF-TIN-70.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260004_GF-TIN-70.rfy",
+    "_meta": {
+      "jobnum": "HG260004",
+      "plan_name": "GF-TIN-70",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG260004 LOT 328 (56) TREELINE CIRCUIT MOOLOOLAH VALLEY"
+    }
+  },
+  {
+    "id": "HG260010__GF-CP-70.075",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\CORAL HOMES\\HG260010 LOT 11 (2) SUNVIEW PLACE SAMFORD VALLEY\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG260010 LOT 11 SUNVIEW PLACE SAMFORD VALLEY-GF-CP-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260010_GF-CP-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG260010",
+      "plan_name": "GF-CP-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG260010 LOT 11 (2) SUNVIEW PLACE SAMFORD VALLEY"
+    }
+  },
+  {
+    "id": "HG260010__GF-MH-70.075",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\CORAL HOMES\\HG260010 LOT 11 (2) SUNVIEW PLACE SAMFORD VALLEY\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG260010 LOT 11 SUNVIEW PLACE SAMFORD VALLEY-GF-MH-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260010_GF-MH-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG260010",
+      "plan_name": "GF-MH-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG260010 LOT 11 (2) SUNVIEW PLACE SAMFORD VALLEY"
+    }
+  },
+  {
+    "id": "HG260017__GF-CP-70.075",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\CORAL HOMES\\HG260017 LOT 925 (42) STUNNING CRESCENT NARANGBA\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG260017 LOT 925 (42) STUNNING CRESCENT NARANGBA-GF-CP-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260017_GF-CP-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG260017",
+      "plan_name": "GF-CP-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG260017 LOT 925 (42) STUNNING CRESCENT NARANGBA"
+    }
+  },
+  {
+    "id": "HG260017__GF-MH-70.075",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\CORAL HOMES\\HG260017 LOT 925 (42) STUNNING CRESCENT NARANGBA\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG260017 LOT 925 (42) STUNNING CRESCENT NARANGBA-GF-MH-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260017_GF-MH-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG260017",
+      "plan_name": "GF-MH-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG260017 LOT 925 (42) STUNNING CRESCENT NARANGBA"
+    }
+  },
+  {
+    "id": "HG260023__GF-CP-70.075",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\CORAL HOMES\\HG260023 LOT 1165 (69) ATTENBOROUGH DRIVE BANYA\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG260023 LOT 1165 (69) ATTENBOROUGH DRIVE BANYA-GF-CP-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260023_GF-CP-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG260023",
+      "plan_name": "GF-CP-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG260023 LOT 1165 (69) ATTENBOROUGH DRIVE BANYA"
+    }
+  },
+  {
+    "id": "HG260023__GF-MH-70.075",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\CORAL HOMES\\HG260023 LOT 1165 (69) ATTENBOROUGH DRIVE BANYA\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG260023 LOT 1165 (69) ATTENBOROUGH DRIVE BANYA-GF-MH-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260023_GF-MH-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG260023",
+      "plan_name": "GF-MH-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG260023 LOT 1165 (69) ATTENBOROUGH DRIVE BANYA"
+    }
+  },
+  {
+    "id": "HG260023__GF-Roof-70",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\CORAL HOMES\\HG260023 LOT 1165 (69) ATTENBOROUGH DRIVE BANYA\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\Packed\\X-GF-Roof-70.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260023_GF-Roof-70.rfy",
+    "_meta": {
+      "jobnum": "HG260023",
+      "plan_name": "GF-Roof-70",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG260023 LOT 1165 (69) ATTENBOROUGH DRIVE BANYA"
+    }
+  },
+  {
+    "id": "HG260023__GF-TIN-70",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\CORAL HOMES\\HG260023 LOT 1165 (69) ATTENBOROUGH DRIVE BANYA\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\Packed\\X-GF-TIN-70.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260023_GF-TIN-70.rfy",
+    "_meta": {
+      "jobnum": "HG260023",
+      "plan_name": "GF-TIN-70",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG260023 LOT 1165 (69) ATTENBOROUGH DRIVE BANYA"
+    }
+  },
+  {
+    "id": "HG260032__GF-CP-70.075",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\CORAL HOMES\\HG260032 LOT 303 (38) MCLOUGHLIN ROAD MORAYFIELD\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG260032 LOT 303 (38) MCLOUGHLIN ROAD MORAYFIELD-GF-CP-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260032_GF-CP-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG260032",
+      "plan_name": "GF-CP-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG260032 LOT 303 (38) MCLOUGHLIN ROAD MORAYFIELD"
+    }
+  },
+  {
+    "id": "HG260032__GF-MH-70.075",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\CORAL HOMES\\HG260032 LOT 303 (38) MCLOUGHLIN ROAD MORAYFIELD\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG260032 LOT 303 (38) MCLOUGHLIN ROAD MORAYFIELD-GF-MH-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260032_GF-MH-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG260032",
+      "plan_name": "GF-MH-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG260032 LOT 303 (38) MCLOUGHLIN ROAD MORAYFIELD"
+    }
+  },
+  {
+    "id": "HG260032__GF-Roof-70",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\CORAL HOMES\\HG260032 LOT 303 (38) MCLOUGHLIN ROAD MORAYFIELD\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\Packed\\X-GF-Roof-70.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260032_GF-Roof-70.rfy",
+    "_meta": {
+      "jobnum": "HG260032",
+      "plan_name": "GF-Roof-70",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG260032 LOT 303 (38) MCLOUGHLIN ROAD MORAYFIELD"
+    }
+  },
+  {
+    "id": "HG260032__GF-TIN-70",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\CORAL HOMES\\HG260032 LOT 303 (38) MCLOUGHLIN ROAD MORAYFIELD\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\Packed\\X-GF-TIN-70.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260032_GF-TIN-70.rfy",
+    "_meta": {
+      "jobnum": "HG260032",
+      "plan_name": "GF-TIN-70",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG260032 LOT 303 (38) MCLOUGHLIN ROAD MORAYFIELD"
+    }
+  },
+  {
+    "id": "HG260040__GF-Panels-70",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\CORAL HOMES\\HG260040 LOT 7581 (3) MURRAY STREET BANYA\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\Packed\\X-GF-Panels-70.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260040_GF-Panels-70.rfy",
+    "_meta": {
+      "jobnum": "HG260040",
+      "plan_name": "GF-Panels-70",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG260040 LOT 7581 (3) MURRAY STREET BANYA"
+    }
+  },
+  {
+    "id": "HG260040__GF-Panels-89",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\CORAL HOMES\\HG260040 LOT 7581 (3) MURRAY STREET BANYA\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\Packed\\X-GF-Panels-89.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260040_GF-Panels-89.rfy",
+    "_meta": {
+      "jobnum": "HG260040",
+      "plan_name": "GF-Panels-89",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG260040 LOT 7581 (3) MURRAY STREET BANYA"
+    }
+  },
+  {
+    "id": "HG260040__GF-Roof-70",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\CORAL HOMES\\HG260040 LOT 7581 (3) MURRAY STREET BANYA\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\Packed\\X-GF-Roof-70.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260040_GF-Roof-70.rfy",
+    "_meta": {
+      "jobnum": "HG260040",
+      "plan_name": "GF-Roof-70",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG260040 LOT 7581 (3) MURRAY STREET BANYA"
+    }
+  },
+  {
+    "id": "HG260040__GF-TIN-70",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\CORAL HOMES\\HG260040 LOT 7581 (3) MURRAY STREET BANYA\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\Packed\\X-GF-TIN-70.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260040_GF-TIN-70.rfy",
+    "_meta": {
+      "jobnum": "HG260040",
+      "plan_name": "GF-TIN-70",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG260040 LOT 7581 (3) MURRAY STREET BANYA"
+    }
+  },
+  {
+    "id": "HG260045__GF-MH-70.075",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\CORAL HOMES\\HG260045 LOT 38 (11) NEEDLEWOOD ROAD CABOOLTURE\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG260045 LOT 38 (11) NEEDLEWOOD ROAD CABOOLTURE (3)-GF-MH-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260045_GF-MH-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG260045",
+      "plan_name": "GF-MH-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG260045 LOT 38 (11) NEEDLEWOOD ROAD CABOOLTURE"
+    }
+  },
+  {
+    "id": "HG260045__GF-NLBW-70.075",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\CORAL HOMES\\HG260045 LOT 38 (11) NEEDLEWOOD ROAD CABOOLTURE\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG260045 LOT 38 (11) NEEDLEWOOD ROAD CABOOLTURE (3)-GF-NLBW-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260045_GF-NLBW-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG260045",
+      "plan_name": "GF-NLBW-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG260045 LOT 38 (11) NEEDLEWOOD ROAD CABOOLTURE"
+    }
+  },
+  {
+    "id": "HG260052__GF-CP-70.075",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\CORAL HOMES\\HG260052 LOT 922 (50) STUNNING CRESCENT NARANGBA\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG260052 LOT 922 (50) STUNNING CRESCENT NARANGBA (2)-GF-CP-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260052_GF-CP-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG260052",
+      "plan_name": "GF-CP-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG260052 LOT 922 (50) STUNNING CRESCENT NARANGBA"
+    }
+  },
+  {
+    "id": "HG260052__GF-LBW-70.095",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\CORAL HOMES\\HG260052 LOT 922 (50) STUNNING CRESCENT NARANGBA\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG260052 LOT 922 (50) STUNNING CRESCENT NARANGBA (2)-GF-LBW-70.095.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260052_GF-LBW-70.095.rfy",
+    "_meta": {
+      "jobnum": "HG260052",
+      "plan_name": "GF-LBW-70.095",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG260052 LOT 922 (50) STUNNING CRESCENT NARANGBA"
+    }
+  },
+  {
+    "id": "HG260052__GF-LBW-89.075",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\CORAL HOMES\\HG260052 LOT 922 (50) STUNNING CRESCENT NARANGBA\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG260052 LOT 922 (50) STUNNING CRESCENT NARANGBA (2)-GF-LBW-89.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260052_GF-LBW-89.075.rfy",
+    "_meta": {
+      "jobnum": "HG260052",
+      "plan_name": "GF-LBW-89.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG260052 LOT 922 (50) STUNNING CRESCENT NARANGBA"
+    }
+  },
+  {
+    "id": "HG260052__GF-MH-70.075",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\CORAL HOMES\\HG260052 LOT 922 (50) STUNNING CRESCENT NARANGBA\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG260052 LOT 922 (50) STUNNING CRESCENT NARANGBA (2)-GF-MH-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260052_GF-MH-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG260052",
+      "plan_name": "GF-MH-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG260052 LOT 922 (50) STUNNING CRESCENT NARANGBA"
+    }
+  },
+  {
+    "id": "HG260052__GF-NLBW-70.075",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\CORAL HOMES\\HG260052 LOT 922 (50) STUNNING CRESCENT NARANGBA\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG260052 LOT 922 (50) STUNNING CRESCENT NARANGBA (2)-GF-NLBW-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260052_GF-NLBW-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG260052",
+      "plan_name": "GF-NLBW-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG260052 LOT 922 (50) STUNNING CRESCENT NARANGBA"
+    }
+  },
+  {
+    "id": "HG260052__GF-NLBW-89.075",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\CORAL HOMES\\HG260052 LOT 922 (50) STUNNING CRESCENT NARANGBA\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG260052 LOT 922 (50) STUNNING CRESCENT NARANGBA (2)-GF-NLBW-89.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260052_GF-NLBW-89.075.rfy",
+    "_meta": {
+      "jobnum": "HG260052",
+      "plan_name": "GF-NLBW-89.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG260052 LOT 922 (50) STUNNING CRESCENT NARANGBA"
+    }
+  },
+  {
+    "id": "HG260052__GF-RP-70.075",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\CORAL HOMES\\HG260052 LOT 922 (50) STUNNING CRESCENT NARANGBA\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG260052 LOT 922 (50) STUNNING CRESCENT NARANGBA (2)-GF-RP-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260052_GF-RP-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG260052",
+      "plan_name": "GF-RP-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG260052 LOT 922 (50) STUNNING CRESCENT NARANGBA"
+    }
+  },
+  {
+    "id": "HG260052__GF-TB2B-70.075",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\CORAL HOMES\\HG260052 LOT 922 (50) STUNNING CRESCENT NARANGBA\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG260052 LOT 922 (50) STUNNING CRESCENT NARANGBA (2)-GF-TB2B-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260052_GF-TB2B-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG260052",
+      "plan_name": "GF-TB2B-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG260052 LOT 922 (50) STUNNING CRESCENT NARANGBA"
+    }
+  },
+  {
+    "id": "HG260052__GF-TB2B-70.095",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\CORAL HOMES\\HG260052 LOT 922 (50) STUNNING CRESCENT NARANGBA\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG260052 LOT 922 (50) STUNNING CRESCENT NARANGBA (2)-GF-TB2B-70.095.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260052_GF-TB2B-70.095.rfy",
+    "_meta": {
+      "jobnum": "HG260052",
+      "plan_name": "GF-TB2B-70.095",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG260052 LOT 922 (50) STUNNING CRESCENT NARANGBA"
+    }
+  },
+  {
+    "id": "HG260052__GF-TIN-70.075",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\CORAL HOMES\\HG260052 LOT 922 (50) STUNNING CRESCENT NARANGBA\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG260052 LOT 922 (50) STUNNING CRESCENT NARANGBA (2)-GF-TIN-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260052_GF-TIN-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG260052",
+      "plan_name": "GF-TIN-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG260052 LOT 922 (50) STUNNING CRESCENT NARANGBA"
+    }
+  },
+  {
+    "id": "HG260052__GF-TIN-70.115",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\CORAL HOMES\\HG260052 LOT 922 (50) STUNNING CRESCENT NARANGBA\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG260052 LOT 922 (50) STUNNING CRESCENT NARANGBA (2)-GF-TIN-70.115.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260052_GF-TIN-70.115.rfy",
+    "_meta": {
+      "jobnum": "HG260052",
+      "plan_name": "GF-TIN-70.115",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG260052 LOT 922 (50) STUNNING CRESCENT NARANGBA"
+    }
+  },
+  {
+    "id": "HG260052__GF-TIN-89.075",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\CORAL HOMES\\HG260052 LOT 922 (50) STUNNING CRESCENT NARANGBA\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG260052 LOT 922 (50) STUNNING CRESCENT NARANGBA (2)-GF-TIN-89.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260052_GF-TIN-89.075.rfy",
+    "_meta": {
+      "jobnum": "HG260052",
+      "plan_name": "GF-TIN-89.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG260052 LOT 922 (50) STUNNING CRESCENT NARANGBA"
+    }
+  },
+  {
+    "id": "HG260028__GF-TB2B-70.075",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\GFG PROJECTS\\HG260028 FITLAB ALLIED HEALTH\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG260028 FITLAB ALLIED HEALTH-GF-TB2B-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260028_GF-TB2B-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG260028",
+      "plan_name": "GF-TB2B-70.075",
+      "builder": "GFG PROJECTS",
+      "jobdir": "HG260028 FITLAB ALLIED HEALTH"
+    }
+  },
+  {
+    "id": "HG260003__GF-CP-70.075",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\MODISH HOMES\\HG260003 69 GUROMAN DRIVE GREENBANK\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG260003 69 GUROMAN DRIVE GREENBANK-GF-CP-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260003_GF-CP-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG260003",
+      "plan_name": "GF-CP-70.075",
+      "builder": "MODISH HOMES",
+      "jobdir": "HG260003 69 GUROMAN DRIVE GREENBANK"
+    }
+  },
+  {
+    "id": "HG260003__GF-MH-70.075",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\MODISH HOMES\\HG260003 69 GUROMAN DRIVE GREENBANK\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG260003 69 GUROMAN DRIVE GREENBANK-GF-MH-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260003_GF-MH-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG260003",
+      "plan_name": "GF-MH-70.075",
+      "builder": "MODISH HOMES",
+      "jobdir": "HG260003 69 GUROMAN DRIVE GREENBANK"
+    }
+  },
+  {
+    "id": "HG260016__GF-CP-70.075",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\MODISH HOMES\\HG260016 LOT 6 (10) DAVENPORT PLACE KURABY\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG260016 LOT 6 (10) DAVENPORT PLACE KURABY-GF-CP-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260016_GF-CP-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG260016",
+      "plan_name": "GF-CP-70.075",
+      "builder": "MODISH HOMES",
+      "jobdir": "HG260016 LOT 6 (10) DAVENPORT PLACE KURABY"
+    }
+  },
+  {
+    "id": "HG260016__GF-MH-70.075",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\MODISH HOMES\\HG260016 LOT 6 (10) DAVENPORT PLACE KURABY\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG260016 LOT 6 (10) DAVENPORT PLACE KURABY-GF-MH-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260016_GF-MH-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG260016",
+      "plan_name": "GF-MH-70.075",
+      "builder": "MODISH HOMES",
+      "jobdir": "HG260016 LOT 6 (10) DAVENPORT PLACE KURABY"
+    }
+  },
+  {
+    "id": "HG260043__GF-TIN-89.095",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\POWERHOUSE SWITCHROOMS\\HG260043 ELLIOT PUMP STATION\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG260043 ELLIOT PUMP STATION [C]-GF-TIN-89.095.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260043_GF-TIN-89.095.rfy",
+    "_meta": {
+      "jobnum": "HG260043",
+      "plan_name": "GF-TIN-89.095",
+      "builder": "POWERHOUSE SWITCHROOMS",
+      "jobdir": "HG260043 ELLIOT PUMP STATION"
+    }
+  },
+  {
+    "id": "HG260014__GF-CP-70.075",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\PRECISION LIVING\\HG260014 LOT 2825 LOBELLA CRESENT CABOOLTURE\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG260014 LOT 2825 LOBELLA CRESENT CABOOLTURE-GF-CP-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260014_GF-CP-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG260014",
+      "plan_name": "GF-CP-70.075",
+      "builder": "PRECISION LIVING",
+      "jobdir": "HG260014 LOT 2825 LOBELLA CRESENT CABOOLTURE"
+    }
+  },
+  {
+    "id": "HG260014__GF-MH-70.075",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\PRECISION LIVING\\HG260014 LOT 2825 LOBELLA CRESENT CABOOLTURE\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG260014 LOT 2825 LOBELLA CRESENT CABOOLTURE-GF-MH-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260014_GF-MH-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG260014",
+      "plan_name": "GF-MH-70.075",
+      "builder": "PRECISION LIVING",
+      "jobdir": "HG260014 LOT 2825 LOBELLA CRESENT CABOOLTURE"
+    }
+  },
+  {
+    "id": "HG260024__GF-TIN-70.075",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\STYLEMASTER HOMES\\HG260024 JOEITH COURT MIAMI\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG260024 LOT 18 JOEITH COURT MIAMI-GF-TIN-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260024_GF-TIN-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG260024",
+      "plan_name": "GF-TIN-70.075",
+      "builder": "STYLEMASTER HOMES",
+      "jobdir": "HG260024 JOEITH COURT MIAMI"
+    }
+  },
+  {
+    "id": "HG260024__GF-Panels-70",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\STYLEMASTER HOMES\\HG260024 JOEITH COURT MIAMI\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\Packed\\X-GF-Panels-70.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260024_GF-Panels-70.rfy",
+    "_meta": {
+      "jobnum": "HG260024",
+      "plan_name": "GF-Panels-70",
+      "builder": "STYLEMASTER HOMES",
+      "jobdir": "HG260024 JOEITH COURT MIAMI"
+    }
+  },
+  {
+    "id": "HG260024__GF-Panels-89",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\STYLEMASTER HOMES\\HG260024 JOEITH COURT MIAMI\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\Packed\\X-GF-Panels-89.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260024_GF-Panels-89.rfy",
+    "_meta": {
+      "jobnum": "HG260024",
+      "plan_name": "GF-Panels-89",
+      "builder": "STYLEMASTER HOMES",
+      "jobdir": "HG260024 JOEITH COURT MIAMI"
+    }
+  },
+  {
+    "id": "HG260024__GF-Roof-70",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\STYLEMASTER HOMES\\HG260024 JOEITH COURT MIAMI\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\Packed\\X-GF-Roof-70.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260024_GF-Roof-70.rfy",
+    "_meta": {
+      "jobnum": "HG260024",
+      "plan_name": "GF-Roof-70",
+      "builder": "STYLEMASTER HOMES",
+      "jobdir": "HG260024 JOEITH COURT MIAMI"
+    }
+  },
+  {
+    "id": "HG260024__GF-TIN-70",
+    "xml_path": "Y:\\(17) 2026 HYTEK PROJECTS\\STYLEMASTER HOMES\\HG260024 JOEITH COURT MIAMI\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\Packed\\X-GF-TIN-70.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG260024_GF-TIN-70.rfy",
+    "_meta": {
+      "jobnum": "HG260024",
+      "plan_name": "GF-TIN-70",
+      "builder": "STYLEMASTER HOMES",
+      "jobdir": "HG260024 JOEITH COURT MIAMI"
+    }
+  },
+  {
+    "id": "HG250009__GF-TB2B-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\AVONDALE HOMES\\HG250009 LOT 2 (107) GRANDVIEW ROAD PULLENVALE\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250009 LOT 2 (107) GRANDVIEW ROAD PULLENVALE Rev 2-GF-TB2B-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250009_GF-TB2B-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250009",
+      "plan_name": "GF-TB2B-70.075",
+      "builder": "AVONDALE HOMES",
+      "jobdir": "HG250009 LOT 2 (107) GRANDVIEW ROAD PULLENVALE"
+    }
+  },
+  {
+    "id": "HG250009__GF-TB2B-70.095",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\AVONDALE HOMES\\HG250009 LOT 2 (107) GRANDVIEW ROAD PULLENVALE\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250009 LOT 2 (107) GRANDVIEW ROAD PULLENVALE Rev 2-GF-TB2B-70.095.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250009_GF-TB2B-70.095.rfy",
+    "_meta": {
+      "jobnum": "HG250009",
+      "plan_name": "GF-TB2B-70.095",
+      "builder": "AVONDALE HOMES",
+      "jobdir": "HG250009 LOT 2 (107) GRANDVIEW ROAD PULLENVALE"
+    }
+  },
+  {
+    "id": "HG250088__GF-TB2B-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\AVONDALE HOMES\\HG250088 LOT 56 (66) POINCIANA AVENUE RIFLE RANGE\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250088 LOT 56 (66) POINCIANA AVENUE RIFLE RANGE Rev 3-GF-TB2B-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250088_GF-TB2B-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250088",
+      "plan_name": "GF-TB2B-70.075",
+      "builder": "AVONDALE HOMES",
+      "jobdir": "HG250088 LOT 56 (66) POINCIANA AVENUE RIFLE RANGE"
+    }
+  },
+  {
+    "id": "HG250088__GF-TB2B-70.095",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\AVONDALE HOMES\\HG250088 LOT 56 (66) POINCIANA AVENUE RIFLE RANGE\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250088 LOT 56 (66) POINCIANA AVENUE RIFLE RANGE Rev 3-GF-TB2B-70.095.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250088_GF-TB2B-70.095.rfy",
+    "_meta": {
+      "jobnum": "HG250088",
+      "plan_name": "GF-TB2B-70.095",
+      "builder": "AVONDALE HOMES",
+      "jobdir": "HG250088 LOT 56 (66) POINCIANA AVENUE RIFLE RANGE"
+    }
+  },
+  {
+    "id": "HG250030__GF-TB2B-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\BOWE ELECTRICAL\\HG250030 24 BAYVIEW STREET WELLINGTON POINT\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250030 24 BAYVIEW STREET WELLINGTON POINT Rev 6-GF-TB2B-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250030_GF-TB2B-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250030",
+      "plan_name": "GF-TB2B-70.075",
+      "builder": "BOWE ELECTRICAL",
+      "jobdir": "HG250030 24 BAYVIEW STREET WELLINGTON POINT"
+    }
+  },
+  {
+    "id": "HG250030__GF-TIN-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\BOWE ELECTRICAL\\HG250030 24 BAYVIEW STREET WELLINGTON POINT\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250030 24 BAYVIEW STREET WELLINGTON POINT Rev 6-GF-TIN-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250030_GF-TIN-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250030",
+      "plan_name": "GF-TIN-70.075",
+      "builder": "BOWE ELECTRICAL",
+      "jobdir": "HG250030 24 BAYVIEW STREET WELLINGTON POINT"
+    }
+  },
+  {
+    "id": "HG250057__GF-CP-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CASA PARADISO CONSTRUCTIONS\\HG250057 SE25 LOT 99 RATNAM ROAD REDBANK PLAINS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250057 SE25 LOT 99 RATNAM ROAD REDBANK PLAINS-U2-GF-CP-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250057_GF-CP-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250057",
+      "plan_name": "GF-CP-70.075",
+      "builder": "CASA PARADISO CONSTRUCTIONS",
+      "jobdir": "HG250057 SE25 LOT 99 RATNAM ROAD REDBANK PLAINS"
+    }
+  },
+  {
+    "id": "HG250057__GF-LBW-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CASA PARADISO CONSTRUCTIONS\\HG250057 SE25 LOT 99 RATNAM ROAD REDBANK PLAINS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250057 SE25 LOT 99 RATNAM ROAD REDBANK PLAINS-U2-GF-LBW-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250057_GF-LBW-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250057",
+      "plan_name": "GF-LBW-70.075",
+      "builder": "CASA PARADISO CONSTRUCTIONS",
+      "jobdir": "HG250057 SE25 LOT 99 RATNAM ROAD REDBANK PLAINS"
+    }
+  },
+  {
+    "id": "HG250057__GF-MH-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CASA PARADISO CONSTRUCTIONS\\HG250057 SE25 LOT 99 RATNAM ROAD REDBANK PLAINS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250057 SE25 LOT 99 RATNAM ROAD REDBANK PLAINS-U2-GF-MH-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250057_GF-MH-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250057",
+      "plan_name": "GF-MH-70.075",
+      "builder": "CASA PARADISO CONSTRUCTIONS",
+      "jobdir": "HG250057 SE25 LOT 99 RATNAM ROAD REDBANK PLAINS"
+    }
+  },
+  {
+    "id": "HG250057__GF-NLBW-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CASA PARADISO CONSTRUCTIONS\\HG250057 SE25 LOT 99 RATNAM ROAD REDBANK PLAINS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250057 SE25 LOT 99 RATNAM ROAD REDBANK PLAINS-U2-GF-NLBW-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250057_GF-NLBW-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250057",
+      "plan_name": "GF-NLBW-70.075",
+      "builder": "CASA PARADISO CONSTRUCTIONS",
+      "jobdir": "HG250057 SE25 LOT 99 RATNAM ROAD REDBANK PLAINS"
+    }
+  },
+  {
+    "id": "HG250057__GF-NLBW-89.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CASA PARADISO CONSTRUCTIONS\\HG250057 SE25 LOT 99 RATNAM ROAD REDBANK PLAINS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250057 SE25 LOT 99 RATNAM ROAD REDBANK PLAINS-U2-GF-NLBW-89.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250057_GF-NLBW-89.075.rfy",
+    "_meta": {
+      "jobnum": "HG250057",
+      "plan_name": "GF-NLBW-89.075",
+      "builder": "CASA PARADISO CONSTRUCTIONS",
+      "jobdir": "HG250057 SE25 LOT 99 RATNAM ROAD REDBANK PLAINS"
+    }
+  },
+  {
+    "id": "HG250057__GF-TB2B-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CASA PARADISO CONSTRUCTIONS\\HG250057 SE25 LOT 99 RATNAM ROAD REDBANK PLAINS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250057 SE25 LOT 99 RATNAM ROAD REDBANK PLAINS-U2-GF-TB2B-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250057_GF-TB2B-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250057",
+      "plan_name": "GF-TB2B-70.075",
+      "builder": "CASA PARADISO CONSTRUCTIONS",
+      "jobdir": "HG250057 SE25 LOT 99 RATNAM ROAD REDBANK PLAINS"
+    }
+  },
+  {
+    "id": "HG250057__GF-TIN-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CASA PARADISO CONSTRUCTIONS\\HG250057 SE25 LOT 99 RATNAM ROAD REDBANK PLAINS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250057 SE25 LOT 99 RATNAM ROAD REDBANK PLAINS-U2-GF-TIN-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250057_GF-TIN-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250057",
+      "plan_name": "GF-TIN-70.075",
+      "builder": "CASA PARADISO CONSTRUCTIONS",
+      "jobdir": "HG250057 SE25 LOT 99 RATNAM ROAD REDBANK PLAINS"
+    }
+  },
+  {
+    "id": "HG250066__GF-CP-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CASA PARADISO CONSTRUCTIONS\\HG250066 SE29 LOT 70 SHARMAN STREET REDBANK PLAINS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250066 SE29 LOT 70 SHARMAN STREET REDBANK PLAINS - REV 5-GF-CP-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250066_GF-CP-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250066",
+      "plan_name": "GF-CP-70.075",
+      "builder": "CASA PARADISO CONSTRUCTIONS",
+      "jobdir": "HG250066 SE29 LOT 70 SHARMAN STREET REDBANK PLAINS"
+    }
+  },
+  {
+    "id": "HG250068__GF-CP-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CASA PARADISO CONSTRUCTIONS\\HG250068 SE28 LOT 71 SHARMAN STREET REDBANK PLAINS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250068 SE28 LOT 71 SHARMAN STREET REDBANK PLAINS - REV 5-GF-CP-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250068_GF-CP-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250068",
+      "plan_name": "GF-CP-70.075",
+      "builder": "CASA PARADISO CONSTRUCTIONS",
+      "jobdir": "HG250068 SE28 LOT 71 SHARMAN STREET REDBANK PLAINS"
+    }
+  },
+  {
+    "id": "HG250072__GF-LBW-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CASA PARADISO CONSTRUCTIONS\\HG250072 SE17 LOT 69 RATNAM ROAD REDBANK PLAINS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250072 SE17 LOT 69 RATNAM ROAD REDBANK PLAINS-U2-GF-LBW-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250072_GF-LBW-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250072",
+      "plan_name": "GF-LBW-70.075",
+      "builder": "CASA PARADISO CONSTRUCTIONS",
+      "jobdir": "HG250072 SE17 LOT 69 RATNAM ROAD REDBANK PLAINS"
+    }
+  },
+  {
+    "id": "HG250076__GF-CP-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CASA PARADISO CONSTRUCTIONS\\HG250076 SE21 LOT 72 SHARMAN STREET REDBANK PLAINS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250076 SE21 LOT 72 SHARMAN STREET REDBANK PLAINS-GF-CP-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250076_GF-CP-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250076",
+      "plan_name": "GF-CP-70.075",
+      "builder": "CASA PARADISO CONSTRUCTIONS",
+      "jobdir": "HG250076 SE21 LOT 72 SHARMAN STREET REDBANK PLAINS"
+    }
+  },
+  {
+    "id": "HG250076__GF-MH-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CASA PARADISO CONSTRUCTIONS\\HG250076 SE21 LOT 72 SHARMAN STREET REDBANK PLAINS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250076 SE21 LOT 72 SHARMAN STREET REDBANK PLAINS-GF-MH-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250076_GF-MH-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250076",
+      "plan_name": "GF-MH-70.075",
+      "builder": "CASA PARADISO CONSTRUCTIONS",
+      "jobdir": "HG250076 SE21 LOT 72 SHARMAN STREET REDBANK PLAINS"
+    }
+  },
+  {
+    "id": "HG250076__GF-Roof-70",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CASA PARADISO CONSTRUCTIONS\\HG250076 SE21 LOT 72 SHARMAN STREET REDBANK PLAINS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\Packed\\X-GF-Roof-70.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250076_GF-Roof-70.rfy",
+    "_meta": {
+      "jobnum": "HG250076",
+      "plan_name": "GF-Roof-70",
+      "builder": "CASA PARADISO CONSTRUCTIONS",
+      "jobdir": "HG250076 SE21 LOT 72 SHARMAN STREET REDBANK PLAINS"
+    }
+  },
+  {
+    "id": "HG250076__GF-TIN-70",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CASA PARADISO CONSTRUCTIONS\\HG250076 SE21 LOT 72 SHARMAN STREET REDBANK PLAINS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\Packed\\X-GF-TIN-70.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250076_GF-TIN-70.rfy",
+    "_meta": {
+      "jobnum": "HG250076",
+      "plan_name": "GF-TIN-70",
+      "builder": "CASA PARADISO CONSTRUCTIONS",
+      "jobdir": "HG250076 SE21 LOT 72 SHARMAN STREET REDBANK PLAINS"
+    }
+  },
+  {
+    "id": "HG250085__GF-CL-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CASA PARADISO CONSTRUCTIONS\\HG250085 SE07 LOT 74 SHARMAN STREET REDBANK PLAINS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250085 SE07 LOT 74 SHARMAN STREET REDBANK PLAINS - REV 6-GF-CL-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250085_GF-CL-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250085",
+      "plan_name": "GF-CL-70.075",
+      "builder": "CASA PARADISO CONSTRUCTIONS",
+      "jobdir": "HG250085 SE07 LOT 74 SHARMAN STREET REDBANK PLAINS"
+    }
+  },
+  {
+    "id": "HG250086__GF-CP-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CASA PARADISO CONSTRUCTIONS\\HG250086 SE02 LOT 76 SHARMAN STREET REDBANK PLAINS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250086 SE02 LOT 76 SHARMAN STREET REDBANK PLAINS Rev 4-GF-CP-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250086_GF-CP-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250086",
+      "plan_name": "GF-CP-70.075",
+      "builder": "CASA PARADISO CONSTRUCTIONS",
+      "jobdir": "HG250086 SE02 LOT 76 SHARMAN STREET REDBANK PLAINS"
+    }
+  },
+  {
+    "id": "HG250086__GF-MH-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CASA PARADISO CONSTRUCTIONS\\HG250086 SE02 LOT 76 SHARMAN STREET REDBANK PLAINS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250086 SE02 LOT 76 SHARMAN STREET REDBANK PLAINS Rev 4-GF-MH-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250086_GF-MH-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250086",
+      "plan_name": "GF-MH-70.075",
+      "builder": "CASA PARADISO CONSTRUCTIONS",
+      "jobdir": "HG250086 SE02 LOT 76 SHARMAN STREET REDBANK PLAINS"
+    }
+  },
+  {
+    "id": "HG250089__GF-CP-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CASA PARADISO CONSTRUCTIONS\\HG250089 SE06 LOT 75 SHARMAN STREET REDBANK PLAINS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250089 SE06 LOT 75 SHARMAN STREET REDBANK PLAINS - REV 4-GF-CP-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250089_GF-CP-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250089",
+      "plan_name": "GF-CP-70.075",
+      "builder": "CASA PARADISO CONSTRUCTIONS",
+      "jobdir": "HG250089 SE06 LOT 75 SHARMAN STREET REDBANK PLAINS"
+    }
+  },
+  {
+    "id": "HG250093__GF-CP-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CASA PARADISO CONSTRUCTIONS\\HG250093 SE10 LOT 83 SHARMAN STREET REDBANK PLAINS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250093 SE10 LOT 83 SHARMAN STREET REDBANK PLAINS-U1-GF-CP-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250093_GF-CP-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250093",
+      "plan_name": "GF-CP-70.075",
+      "builder": "CASA PARADISO CONSTRUCTIONS",
+      "jobdir": "HG250093 SE10 LOT 83 SHARMAN STREET REDBANK PLAINS"
+    }
+  },
+  {
+    "id": "HG250093__GF-LBW-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CASA PARADISO CONSTRUCTIONS\\HG250093 SE10 LOT 83 SHARMAN STREET REDBANK PLAINS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250093 SE10 LOT 83 SHARMAN STREET REDBANK PLAINS-U1-GF-LBW-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250093_GF-LBW-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250093",
+      "plan_name": "GF-LBW-70.075",
+      "builder": "CASA PARADISO CONSTRUCTIONS",
+      "jobdir": "HG250093 SE10 LOT 83 SHARMAN STREET REDBANK PLAINS"
+    }
+  },
+  {
+    "id": "HG250093__GF-MH-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CASA PARADISO CONSTRUCTIONS\\HG250093 SE10 LOT 83 SHARMAN STREET REDBANK PLAINS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250093 SE10 LOT 83 SHARMAN STREET REDBANK PLAINS-U1-GF-MH-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250093_GF-MH-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250093",
+      "plan_name": "GF-MH-70.075",
+      "builder": "CASA PARADISO CONSTRUCTIONS",
+      "jobdir": "HG250093 SE10 LOT 83 SHARMAN STREET REDBANK PLAINS"
+    }
+  },
+  {
+    "id": "HG250093__GF-NLBW-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CASA PARADISO CONSTRUCTIONS\\HG250093 SE10 LOT 83 SHARMAN STREET REDBANK PLAINS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250093 SE10 LOT 83 SHARMAN STREET REDBANK PLAINS-U1-GF-NLBW-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250093_GF-NLBW-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250093",
+      "plan_name": "GF-NLBW-70.075",
+      "builder": "CASA PARADISO CONSTRUCTIONS",
+      "jobdir": "HG250093 SE10 LOT 83 SHARMAN STREET REDBANK PLAINS"
+    }
+  },
+  {
+    "id": "HG250093__GF-NLBW-89.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CASA PARADISO CONSTRUCTIONS\\HG250093 SE10 LOT 83 SHARMAN STREET REDBANK PLAINS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250093 SE10 LOT 83 SHARMAN STREET REDBANK PLAINS-U1-GF-NLBW-89.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250093_GF-NLBW-89.075.rfy",
+    "_meta": {
+      "jobnum": "HG250093",
+      "plan_name": "GF-NLBW-89.075",
+      "builder": "CASA PARADISO CONSTRUCTIONS",
+      "jobdir": "HG250093 SE10 LOT 83 SHARMAN STREET REDBANK PLAINS"
+    }
+  },
+  {
+    "id": "HG250093__GF-RP-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CASA PARADISO CONSTRUCTIONS\\HG250093 SE10 LOT 83 SHARMAN STREET REDBANK PLAINS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250093 SE10 LOT 83 SHARMAN STREET REDBANK PLAINS-U1-GF-RP-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250093_GF-RP-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250093",
+      "plan_name": "GF-RP-70.075",
+      "builder": "CASA PARADISO CONSTRUCTIONS",
+      "jobdir": "HG250093 SE10 LOT 83 SHARMAN STREET REDBANK PLAINS"
+    }
+  },
+  {
+    "id": "HG250093__GF-TB2B-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CASA PARADISO CONSTRUCTIONS\\HG250093 SE10 LOT 83 SHARMAN STREET REDBANK PLAINS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250093 SE10 LOT 83 SHARMAN STREET REDBANK PLAINS-U1-GF-TB2B-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250093_GF-TB2B-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250093",
+      "plan_name": "GF-TB2B-70.075",
+      "builder": "CASA PARADISO CONSTRUCTIONS",
+      "jobdir": "HG250093 SE10 LOT 83 SHARMAN STREET REDBANK PLAINS"
+    }
+  },
+  {
+    "id": "HG250093__GF-TIN-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CASA PARADISO CONSTRUCTIONS\\HG250093 SE10 LOT 83 SHARMAN STREET REDBANK PLAINS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250093 SE10 LOT 83 SHARMAN STREET REDBANK PLAINS-U1-GF-TIN-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250093_GF-TIN-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250093",
+      "plan_name": "GF-TIN-70.075",
+      "builder": "CASA PARADISO CONSTRUCTIONS",
+      "jobdir": "HG250093 SE10 LOT 83 SHARMAN STREET REDBANK PLAINS"
+    }
+  },
+  {
+    "id": "HG250093__GF-CP-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CASA PARADISO CONSTRUCTIONS\\HG250093 SE10 LOT 83 SHARMAN STREET REDBANK PLAINS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250093 SE10 LOT 83 SHARMAN STREET REDBANK PLAINS-U2-GF-CP-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250093_GF-CP-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250093",
+      "plan_name": "GF-CP-70.075",
+      "builder": "CASA PARADISO CONSTRUCTIONS",
+      "jobdir": "HG250093 SE10 LOT 83 SHARMAN STREET REDBANK PLAINS"
+    }
+  },
+  {
+    "id": "HG250093__GF-LBW-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CASA PARADISO CONSTRUCTIONS\\HG250093 SE10 LOT 83 SHARMAN STREET REDBANK PLAINS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250093 SE10 LOT 83 SHARMAN STREET REDBANK PLAINS-U2-GF-LBW-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250093_GF-LBW-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250093",
+      "plan_name": "GF-LBW-70.075",
+      "builder": "CASA PARADISO CONSTRUCTIONS",
+      "jobdir": "HG250093 SE10 LOT 83 SHARMAN STREET REDBANK PLAINS"
+    }
+  },
+  {
+    "id": "HG250093__GF-NLBW-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CASA PARADISO CONSTRUCTIONS\\HG250093 SE10 LOT 83 SHARMAN STREET REDBANK PLAINS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250093 SE10 LOT 83 SHARMAN STREET REDBANK PLAINS-U2-GF-NLBW-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250093_GF-NLBW-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250093",
+      "plan_name": "GF-NLBW-70.075",
+      "builder": "CASA PARADISO CONSTRUCTIONS",
+      "jobdir": "HG250093 SE10 LOT 83 SHARMAN STREET REDBANK PLAINS"
+    }
+  },
+  {
+    "id": "HG250093__GF-NLBW-89.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CASA PARADISO CONSTRUCTIONS\\HG250093 SE10 LOT 83 SHARMAN STREET REDBANK PLAINS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250093 SE10 LOT 83 SHARMAN STREET REDBANK PLAINS-U2-GF-NLBW-89.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250093_GF-NLBW-89.075.rfy",
+    "_meta": {
+      "jobnum": "HG250093",
+      "plan_name": "GF-NLBW-89.075",
+      "builder": "CASA PARADISO CONSTRUCTIONS",
+      "jobdir": "HG250093 SE10 LOT 83 SHARMAN STREET REDBANK PLAINS"
+    }
+  },
+  {
+    "id": "HG250093__GF-RP-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CASA PARADISO CONSTRUCTIONS\\HG250093 SE10 LOT 83 SHARMAN STREET REDBANK PLAINS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250093 SE10 LOT 83 SHARMAN STREET REDBANK PLAINS-U2-GF-RP-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250093_GF-RP-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250093",
+      "plan_name": "GF-RP-70.075",
+      "builder": "CASA PARADISO CONSTRUCTIONS",
+      "jobdir": "HG250093 SE10 LOT 83 SHARMAN STREET REDBANK PLAINS"
+    }
+  },
+  {
+    "id": "HG250093__GF-TB2B-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CASA PARADISO CONSTRUCTIONS\\HG250093 SE10 LOT 83 SHARMAN STREET REDBANK PLAINS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250093 SE10 LOT 83 SHARMAN STREET REDBANK PLAINS-U2-GF-TB2B-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250093_GF-TB2B-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250093",
+      "plan_name": "GF-TB2B-70.075",
+      "builder": "CASA PARADISO CONSTRUCTIONS",
+      "jobdir": "HG250093 SE10 LOT 83 SHARMAN STREET REDBANK PLAINS"
+    }
+  },
+  {
+    "id": "HG250093__GF-TIN-70.0.75",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CASA PARADISO CONSTRUCTIONS\\HG250093 SE10 LOT 83 SHARMAN STREET REDBANK PLAINS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250093 SE10 LOT 83 SHARMAN STREET REDBANK PLAINS-U2-GF-TIN-70.0.75.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250093_GF-TIN-70.0.75.rfy",
+    "_meta": {
+      "jobnum": "HG250093",
+      "plan_name": "GF-TIN-70.0.75",
+      "builder": "CASA PARADISO CONSTRUCTIONS",
+      "jobdir": "HG250093 SE10 LOT 83 SHARMAN STREET REDBANK PLAINS"
+    }
+  },
+  {
+    "id": "HG250093__GF-TIN-70.115",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CASA PARADISO CONSTRUCTIONS\\HG250093 SE10 LOT 83 SHARMAN STREET REDBANK PLAINS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250093 SE10 LOT 83 SHARMAN STREET REDBANK PLAINS-U2-GF-TIN-70.115.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250093_GF-TIN-70.115.rfy",
+    "_meta": {
+      "jobnum": "HG250093",
+      "plan_name": "GF-TIN-70.115",
+      "builder": "CASA PARADISO CONSTRUCTIONS",
+      "jobdir": "HG250093 SE10 LOT 83 SHARMAN STREET REDBANK PLAINS"
+    }
+  },
+  {
+    "id": "HG250095__GF-CP-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CASA PARADISO CONSTRUCTIONS\\HG250095 SE20 LOT 73 SHARMAN STREET REDBANK PLAINS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250095 SE20 LOT 73 SHARMAN STREET REDBANK PLAINS-GF-CP-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250095_GF-CP-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250095",
+      "plan_name": "GF-CP-70.075",
+      "builder": "CASA PARADISO CONSTRUCTIONS",
+      "jobdir": "HG250095 SE20 LOT 73 SHARMAN STREET REDBANK PLAINS"
+    }
+  },
+  {
+    "id": "HG250095__GF-MH-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CASA PARADISO CONSTRUCTIONS\\HG250095 SE20 LOT 73 SHARMAN STREET REDBANK PLAINS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250095 SE20 LOT 73 SHARMAN STREET REDBANK PLAINS-GF-MH-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250095_GF-MH-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250095",
+      "plan_name": "GF-MH-70.075",
+      "builder": "CASA PARADISO CONSTRUCTIONS",
+      "jobdir": "HG250095 SE20 LOT 73 SHARMAN STREET REDBANK PLAINS"
+    }
+  },
+  {
+    "id": "HG250095__GF-Roof-70",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CASA PARADISO CONSTRUCTIONS\\HG250095 SE20 LOT 73 SHARMAN STREET REDBANK PLAINS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\Packed\\X-GF-Roof-70.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250095_GF-Roof-70.rfy",
+    "_meta": {
+      "jobnum": "HG250095",
+      "plan_name": "GF-Roof-70",
+      "builder": "CASA PARADISO CONSTRUCTIONS",
+      "jobdir": "HG250095 SE20 LOT 73 SHARMAN STREET REDBANK PLAINS"
+    }
+  },
+  {
+    "id": "HG250095__GF-TIN-70",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CASA PARADISO CONSTRUCTIONS\\HG250095 SE20 LOT 73 SHARMAN STREET REDBANK PLAINS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\Packed\\X-GF-TIN-70.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250095_GF-TIN-70.rfy",
+    "_meta": {
+      "jobnum": "HG250095",
+      "plan_name": "GF-TIN-70",
+      "builder": "CASA PARADISO CONSTRUCTIONS",
+      "jobdir": "HG250095 SE20 LOT 73 SHARMAN STREET REDBANK PLAINS"
+    }
+  },
+  {
+    "id": "HG250096__GF-RP-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CASA PARADISO CONSTRUCTIONS\\HG250096 SE14 LOT 85 SHARMAN STREET REDBANK PLAINS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250096 SE14 LOT 85 SHARMAN STREET REDBANK PLAINS-U1-GF-RP-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250096_GF-RP-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250096",
+      "plan_name": "GF-RP-70.075",
+      "builder": "CASA PARADISO CONSTRUCTIONS",
+      "jobdir": "HG250096 SE14 LOT 85 SHARMAN STREET REDBANK PLAINS"
+    }
+  },
+  {
+    "id": "HG250096__GF-TB2B-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CASA PARADISO CONSTRUCTIONS\\HG250096 SE14 LOT 85 SHARMAN STREET REDBANK PLAINS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250096 SE14 LOT 85 SHARMAN STREET REDBANK PLAINS-U1-GF-TB2B-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250096_GF-TB2B-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250096",
+      "plan_name": "GF-TB2B-70.075",
+      "builder": "CASA PARADISO CONSTRUCTIONS",
+      "jobdir": "HG250096 SE14 LOT 85 SHARMAN STREET REDBANK PLAINS"
+    }
+  },
+  {
+    "id": "HG250096__GF-RP-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CASA PARADISO CONSTRUCTIONS\\HG250096 SE14 LOT 85 SHARMAN STREET REDBANK PLAINS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250096 SE14 LOT 85 SHARMAN STREET REDBANK PLAINS-U2-GF-RP-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250096_GF-RP-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250096",
+      "plan_name": "GF-RP-70.075",
+      "builder": "CASA PARADISO CONSTRUCTIONS",
+      "jobdir": "HG250096 SE14 LOT 85 SHARMAN STREET REDBANK PLAINS"
+    }
+  },
+  {
+    "id": "HG250096__GF-TB2B-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CASA PARADISO CONSTRUCTIONS\\HG250096 SE14 LOT 85 SHARMAN STREET REDBANK PLAINS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250096 SE14 LOT 85 SHARMAN STREET REDBANK PLAINS-U2-GF-TB2B-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250096_GF-TB2B-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250096",
+      "plan_name": "GF-TB2B-70.075",
+      "builder": "CASA PARADISO CONSTRUCTIONS",
+      "jobdir": "HG250096 SE14 LOT 85 SHARMAN STREET REDBANK PLAINS"
+    }
+  },
+  {
+    "id": "HG250106__GF-CP-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CASA PARADISO CONSTRUCTIONS\\HG250106 SE01 LOT 77 SHARMAN STREET REDBANK PLAINS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250106 SE01 LOT 77 SHARMAN STREET REDBANK PLAINS-GF-CP-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250106_GF-CP-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250106",
+      "plan_name": "GF-CP-70.075",
+      "builder": "CASA PARADISO CONSTRUCTIONS",
+      "jobdir": "HG250106 SE01 LOT 77 SHARMAN STREET REDBANK PLAINS"
+    }
+  },
+  {
+    "id": "HG250106__GF-LBW-90.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CASA PARADISO CONSTRUCTIONS\\HG250106 SE01 LOT 77 SHARMAN STREET REDBANK PLAINS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250106 SE01 LOT 77 SHARMAN STREET REDBANK PLAINS-GF-LBW-90.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250106_GF-LBW-90.075.rfy",
+    "_meta": {
+      "jobnum": "HG250106",
+      "plan_name": "GF-LBW-90.075",
+      "builder": "CASA PARADISO CONSTRUCTIONS",
+      "jobdir": "HG250106 SE01 LOT 77 SHARMAN STREET REDBANK PLAINS"
+    }
+  },
+  {
+    "id": "HG250106__GF-Roof-70",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CASA PARADISO CONSTRUCTIONS\\HG250106 SE01 LOT 77 SHARMAN STREET REDBANK PLAINS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\Packed\\X-GF-Roof-70.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250106_GF-Roof-70.rfy",
+    "_meta": {
+      "jobnum": "HG250106",
+      "plan_name": "GF-Roof-70",
+      "builder": "CASA PARADISO CONSTRUCTIONS",
+      "jobdir": "HG250106 SE01 LOT 77 SHARMAN STREET REDBANK PLAINS"
+    }
+  },
+  {
+    "id": "HG250106__GF-TIN-70",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CASA PARADISO CONSTRUCTIONS\\HG250106 SE01 LOT 77 SHARMAN STREET REDBANK PLAINS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\Packed\\X-GF-TIN-70.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250106_GF-TIN-70.rfy",
+    "_meta": {
+      "jobnum": "HG250106",
+      "plan_name": "GF-TIN-70",
+      "builder": "CASA PARADISO CONSTRUCTIONS",
+      "jobdir": "HG250106 SE01 LOT 77 SHARMAN STREET REDBANK PLAINS"
+    }
+  },
+  {
+    "id": "HG250035__GF-TB2B-89.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\COMPACT HOMES\\HG250035 11 DUNCAN ROAD NUMULGI\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250035 11 DUNCAN ROAD NUMULGI - REV1-GF-TB2B-89.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250035_GF-TB2B-89.075.rfy",
+    "_meta": {
+      "jobnum": "HG250035",
+      "plan_name": "GF-TB2B-89.075",
+      "builder": "COMPACT HOMES",
+      "jobdir": "HG250035 11 DUNCAN ROAD NUMULGI"
+    }
+  },
+  {
+    "id": "HG250136__GF-CP-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CONSTRUCTION UNITY GROUP\\HG250136 18 AGATE STREET CAMP HILL\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250136 18 AGATE STREET CAMP HILL-GF-CP-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250136_GF-CP-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250136",
+      "plan_name": "GF-CP-70.075",
+      "builder": "CONSTRUCTION UNITY GROUP",
+      "jobdir": "HG250136 18 AGATE STREET CAMP HILL"
+    }
+  },
+  {
+    "id": "HG250007__GF-TB2B-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250007 LOT 2 (10A) GLASSTAIL CRESCENT NARANGBA\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250007 LOT 2 (10A) GLASSTAIL CRESCENT NARANGBA - Rev1-GF-TB2B-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250007_GF-TB2B-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250007",
+      "plan_name": "GF-TB2B-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250007 LOT 2 (10A) GLASSTAIL CRESCENT NARANGBA"
+    }
+  },
+  {
+    "id": "HG250008__GF-TB2B-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250008 LOT 3 (56) HALL ROAD ELIMBAH\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250008 LOT 3 (56) HALL ROAD ELIMBAH Rev 1-GF-TB2B-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250008_GF-TB2B-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250008",
+      "plan_name": "GF-TB2B-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250008 LOT 3 (56) HALL ROAD ELIMBAH"
+    }
+  },
+  {
+    "id": "HG250011__GF-TB2B-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250011 LOT 57 (5) NEVIS COURT D'AGUILAR\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250011 LOT 57 (5) NEVIS COURT D AGUILAR Rev 1-GF-TB2B-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250011_GF-TB2B-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250011",
+      "plan_name": "GF-TB2B-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250011 LOT 57 (5) NEVIS COURT D'AGUILAR"
+    }
+  },
+  {
+    "id": "HG250012__GF-TB2B-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250012 LOT 531 (306) FRESHWATER DRIVE BANKSIA BEACH\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250012 LOT 531 (306) FRESHWATER DRIVE BANKSIA BEACH - Rev1-GF-TB2B-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250012_GF-TB2B-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250012",
+      "plan_name": "GF-TB2B-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250012 LOT 531 (306) FRESHWATER DRIVE BANKSIA BEACH"
+    }
+  },
+  {
+    "id": "HG250013__GF-TB2B-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250013 LOT 17 (17) GEORGIA STREET MORAYFIELD\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250013 LOT 17 (17) GEORGIA STREET MORAYFIELD - Rev1-GF-TB2B-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250013_GF-TB2B-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250013",
+      "plan_name": "GF-TB2B-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250013 LOT 17 (17) GEORGIA STREET MORAYFIELD"
+    }
+  },
+  {
+    "id": "HG250018__GF-TB2B-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250018 LOT 2 (15) CATALDO COURT MORAYFIELD\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250018 LOT 2 (16) CATALDO COURT MORAYFIELD - Rev1-GF-TB2B-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250018_GF-TB2B-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250018",
+      "plan_name": "GF-TB2B-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250018 LOT 2 (15) CATALDO COURT MORAYFIELD"
+    }
+  },
+  {
+    "id": "HG250020__GF-TB2B-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250020 LOT 4 (22) TURNER COURT CABOOLTURE\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250020 LOT 4 (22) TURNER COURT CABOOLTURE Rev 1-GF-TB2B-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250020_GF-TB2B-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250020",
+      "plan_name": "GF-TB2B-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250020 LOT 4 (22) TURNER COURT CABOOLTURE"
+    }
+  },
+  {
+    "id": "HG250022__GF-TB2B-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250022 LOT 5038 (2) IRONWOOD AVENUE NIRIMBA\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250022 LOT 5038 (2) IRONWOOD AVENUE NIRIMBA - Rev-GF-TB2B-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250022_GF-TB2B-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250022",
+      "plan_name": "GF-TB2B-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250022 LOT 5038 (2) IRONWOOD AVENUE NIRIMBA"
+    }
+  },
+  {
+    "id": "HG250029__GF-TB2B-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250029 LOT 31 (18) CENTRAL AVENUE SCARBOROUGH\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250029 LOT 31 (18) CENTRAL AVENUE SCARBOROUGH - Rev1-GF-TB2B-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250029_GF-TB2B-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250029",
+      "plan_name": "GF-TB2B-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250029 LOT 31 (18) CENTRAL AVENUE SCARBOROUGH"
+    }
+  },
+  {
+    "id": "HG250037__GF-TB2B-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250037 LOT 64 (15A) MARY STREET WOODFORD\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250037 LOT 64 (15A) MARY STREET WOODFORD - Rev2-GF-TB2B-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250037_GF-TB2B-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250037",
+      "plan_name": "GF-TB2B-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250037 LOT 64 (15A) MARY STREET WOODFORD"
+    }
+  },
+  {
+    "id": "HG250052__GF-TB2B-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250052 LOT (127) 13 ALMA ST MORAYFIELD\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250052 LOT (127) 13 ALMA ST MORAYFIELD-GF-TB2B-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250052_GF-TB2B-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250052",
+      "plan_name": "GF-TB2B-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250052 LOT (127) 13 ALMA ST MORAYFIELD"
+    }
+  },
+  {
+    "id": "HG250053__GF-TB2B-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250053 LOT 343 (4) CYPRESS CRESCENT BURPENGARY\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250053 LOT 343 (4) CYPRESS CRESCENT BURPENGARY - REV4-GF-TB2B-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250053_GF-TB2B-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250053",
+      "plan_name": "GF-TB2B-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250053 LOT 343 (4) CYPRESS CRESCENT BURPENGARY"
+    }
+  },
+  {
+    "id": "HG250054__GF-TB2B-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250054 LOT 9 (102) SCARBOROUGH ROAD CABOOLTURE\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250054 LOT 9 (102) SCARBOROUGH ROAD CABOOLTURE - Rev1-GF-TB2B-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250054_GF-TB2B-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250054",
+      "plan_name": "GF-TB2B-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250054 LOT 9 (102) SCARBOROUGH ROAD CABOOLTURE"
+    }
+  },
+  {
+    "id": "HG250062__GF-TB2B-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250062 LOT 2 (80) DORANS ROAD NORTH ARM\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250062 LOT 2 (80) DORANS ROAD NORTH ARM - Rev2-GF-TB2B-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250062_GF-TB2B-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250062",
+      "plan_name": "GF-TB2B-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250062 LOT 2 (80) DORANS ROAD NORTH ARM"
+    }
+  },
+  {
+    "id": "HG250063__GF-TB2B-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250063 LOT 147 (5) WARNING COURT D'AGUILAR\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250063 LOT 147 (5) WARNING COURT D AGUILAR-GF-TB2B-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250063_GF-TB2B-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250063",
+      "plan_name": "GF-TB2B-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250063 LOT 147 (5) WARNING COURT D'AGUILAR"
+    }
+  },
+  {
+    "id": "HG250065__GF-TB2B-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250065 LOT 2 STRONG ROAD DAYBORO\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250065 LOT 2 STRONG ROAD DAYBORO - ITM-GF-TB2B-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250065_GF-TB2B-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250065",
+      "plan_name": "GF-TB2B-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250065 LOT 2 STRONG ROAD DAYBORO"
+    }
+  },
+  {
+    "id": "HG250079__GF-TB2B-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250079 LOT 262 (19) GUMNUT COURT MORAYFIELD\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250079 LOT 262 (19) GUMNUT COURT MORAYFIELD-GF-TB2B-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250079_GF-TB2B-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250079",
+      "plan_name": "GF-TB2B-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250079 LOT 262 (19) GUMNUT COURT MORAYFIELD"
+    }
+  },
+  {
+    "id": "HG250079__GF-TB2B-70.095",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250079 LOT 262 (19) GUMNUT COURT MORAYFIELD\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250079 LOT 262 (19) GUMNUT COURT MORAYFIELD-GF-TB2B-70.095.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250079_GF-TB2B-70.095.rfy",
+    "_meta": {
+      "jobnum": "HG250079",
+      "plan_name": "GF-TB2B-70.095",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250079 LOT 262 (19) GUMNUT COURT MORAYFIELD"
+    }
+  },
+  {
+    "id": "HG250101__GF-TB2B-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250101 LOT 78 (21) LOMANDRA PLACE TEWANTIN\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250101 LOT 78 (21) LOMANDRA PLACE TEWANTIN - Rev2-GF-TB2B-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250101_GF-TB2B-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250101",
+      "plan_name": "GF-TB2B-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250101 LOT 78 (21) LOMANDRA PLACE TEWANTIN"
+    }
+  },
+  {
+    "id": "HG250101__GF-TB2B-70.095",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250101 LOT 78 (21) LOMANDRA PLACE TEWANTIN\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250101 LOT 78 (21) LOMANDRA PLACE TEWANTIN - Rev2-GF-TB2B-70.095.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250101_GF-TB2B-70.095.rfy",
+    "_meta": {
+      "jobnum": "HG250101",
+      "plan_name": "GF-TB2B-70.095",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250101 LOT 78 (21) LOMANDRA PLACE TEWANTIN"
+    }
+  },
+  {
+    "id": "HG250112__GF-CP-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250112 LOT 5156 (41) ARLINGTON DRIVE PELICAN WATERS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250112 LOT 5156 (41) ARLINGTON DRIVE PELICAN WATERS - Rev2-GF-CP-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250112_GF-CP-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250112",
+      "plan_name": "GF-CP-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250112 LOT 5156 (41) ARLINGTON DRIVE PELICAN WATERS"
+    }
+  },
+  {
+    "id": "HG250112__GF-MH-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250112 LOT 5156 (41) ARLINGTON DRIVE PELICAN WATERS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250112 LOT 5156 (41) ARLINGTON DRIVE PELICAN WATERS - Rev2-GF-MH-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250112_GF-MH-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250112",
+      "plan_name": "GF-MH-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250112 LOT 5156 (41) ARLINGTON DRIVE PELICAN WATERS"
+    }
+  },
+  {
+    "id": "HG250112__GF-Roof-70",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250112 LOT 5156 (41) ARLINGTON DRIVE PELICAN WATERS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\Packed\\X-GF-Roof-70.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250112_GF-Roof-70.rfy",
+    "_meta": {
+      "jobnum": "HG250112",
+      "plan_name": "GF-Roof-70",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250112 LOT 5156 (41) ARLINGTON DRIVE PELICAN WATERS"
+    }
+  },
+  {
+    "id": "HG250112__GF-TIN-70",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250112 LOT 5156 (41) ARLINGTON DRIVE PELICAN WATERS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\Packed\\X-GF-TIN-70.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250112_GF-TIN-70.rfy",
+    "_meta": {
+      "jobnum": "HG250112",
+      "plan_name": "GF-TIN-70",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250112 LOT 5156 (41) ARLINGTON DRIVE PELICAN WATERS"
+    }
+  },
+  {
+    "id": "HG250113__GF-TB2B-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250113 LOT 80 (25) HOTHAM COURT D'AGUILAR\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250113 LOT 80 (25) HOTHAM COURT D AGUILAR-GF-TB2B-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250113_GF-TB2B-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250113",
+      "plan_name": "GF-TB2B-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250113 LOT 80 (25) HOTHAM COURT D'AGUILAR"
+    }
+  },
+  {
+    "id": "HG250116__GF-CP-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250116 LOT 5 (22A) TURNER COURT CABOOLTURE\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250116 LOT 5 22A TURNER COURT CABOOLTURE 1-GF-CP-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250116_GF-CP-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250116",
+      "plan_name": "GF-CP-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250116 LOT 5 (22A) TURNER COURT CABOOLTURE"
+    }
+  },
+  {
+    "id": "HG250116__GF-MH-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250116 LOT 5 (22A) TURNER COURT CABOOLTURE\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250116 LOT 5 22A TURNER COURT CABOOLTURE 1-GF-MH-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250116_GF-MH-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250116",
+      "plan_name": "GF-MH-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250116 LOT 5 (22A) TURNER COURT CABOOLTURE"
+    }
+  },
+  {
+    "id": "HG250117__GF-CP-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250117 LOT 15 (29) PINE STREET POMONA\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250117 LOT 15 (29) PINE STREET POMONA-GF-CP-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250117_GF-CP-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250117",
+      "plan_name": "GF-CP-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250117 LOT 15 (29) PINE STREET POMONA"
+    }
+  },
+  {
+    "id": "HG250117__GF-MH-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250117 LOT 15 (29) PINE STREET POMONA\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250117 LOT 15 (29) PINE STREET POMONA-GF-MH-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250117_GF-MH-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250117",
+      "plan_name": "GF-MH-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250117 LOT 15 (29) PINE STREET POMONA"
+    }
+  },
+  {
+    "id": "HG250117__GF-Roof-70",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250117 LOT 15 (29) PINE STREET POMONA\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\Packed\\X-GF-Roof-70.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250117_GF-Roof-70.rfy",
+    "_meta": {
+      "jobnum": "HG250117",
+      "plan_name": "GF-Roof-70",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250117 LOT 15 (29) PINE STREET POMONA"
+    }
+  },
+  {
+    "id": "HG250117__GF-TIN-70",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250117 LOT 15 (29) PINE STREET POMONA\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\Packed\\X-GF-TIN-70.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250117_GF-TIN-70.rfy",
+    "_meta": {
+      "jobnum": "HG250117",
+      "plan_name": "GF-TIN-70",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250117 LOT 15 (29) PINE STREET POMONA"
+    }
+  },
+  {
+    "id": "HG250124__GF-CP-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250124 LOT 5153 (33) KEEL CRESCENT PELICAN WATERS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250124 LOT 5153 (33) KEEL CRESCENT PELICAN WATERS-GF-CP-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250124_GF-CP-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250124",
+      "plan_name": "GF-CP-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250124 LOT 5153 (33) KEEL CRESCENT PELICAN WATERS"
+    }
+  },
+  {
+    "id": "HG250124__GF-MH-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250124 LOT 5153 (33) KEEL CRESCENT PELICAN WATERS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250124 LOT 5153 (33) KEEL CRESCENT PELICAN WATERS-GF-MH-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250124_GF-MH-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250124",
+      "plan_name": "GF-MH-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250124 LOT 5153 (33) KEEL CRESCENT PELICAN WATERS"
+    }
+  },
+  {
+    "id": "HG250124__GF-Roof-70",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250124 LOT 5153 (33) KEEL CRESCENT PELICAN WATERS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\Packed\\X-GF-Roof-70.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250124_GF-Roof-70.rfy",
+    "_meta": {
+      "jobnum": "HG250124",
+      "plan_name": "GF-Roof-70",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250124 LOT 5153 (33) KEEL CRESCENT PELICAN WATERS"
+    }
+  },
+  {
+    "id": "HG250124__GF-TIN-70",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250124 LOT 5153 (33) KEEL CRESCENT PELICAN WATERS\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\Packed\\X-GF-TIN-70.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250124_GF-TIN-70.rfy",
+    "_meta": {
+      "jobnum": "HG250124",
+      "plan_name": "GF-TIN-70",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250124 LOT 5153 (33) KEEL CRESCENT PELICAN WATERS"
+    }
+  },
+  {
+    "id": "HG250125__GF-CP-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250125 LOT 2 (26) PENVY CLOSE UPPER CABOOLTURE\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250125 LOT 2 (26) PENVY CLOSE UPPER CABOOLTURE-GF-CP-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250125_GF-CP-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250125",
+      "plan_name": "GF-CP-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250125 LOT 2 (26) PENVY CLOSE UPPER CABOOLTURE"
+    }
+  },
+  {
+    "id": "HG250125__GF-MH-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250125 LOT 2 (26) PENVY CLOSE UPPER CABOOLTURE\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250125 LOT 2 (26) PENVY CLOSE UPPER CABOOLTURE-GF-MH-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250125_GF-MH-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250125",
+      "plan_name": "GF-MH-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250125 LOT 2 (26) PENVY CLOSE UPPER CABOOLTURE"
+    }
+  },
+  {
+    "id": "HG250125__GF-TB2B-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250125 LOT 2 (26) PENVY CLOSE UPPER CABOOLTURE\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250125 LOT 2 (26) PENVY CLOSE UPPER CABOOLTURE-GF-TB2B-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250125_GF-TB2B-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250125",
+      "plan_name": "GF-TB2B-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250125 LOT 2 (26) PENVY CLOSE UPPER CABOOLTURE"
+    }
+  },
+  {
+    "id": "HG250125__GF-Roof-70",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250125 LOT 2 (26) PENVY CLOSE UPPER CABOOLTURE\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\Packed\\X-GF-Roof-70.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250125_GF-Roof-70.rfy",
+    "_meta": {
+      "jobnum": "HG250125",
+      "plan_name": "GF-Roof-70",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250125 LOT 2 (26) PENVY CLOSE UPPER CABOOLTURE"
+    }
+  },
+  {
+    "id": "HG250125__GF-TIN-70",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250125 LOT 2 (26) PENVY CLOSE UPPER CABOOLTURE\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\Packed\\X-GF-TIN-70.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250125_GF-TIN-70.rfy",
+    "_meta": {
+      "jobnum": "HG250125",
+      "plan_name": "GF-TIN-70",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250125 LOT 2 (26) PENVY CLOSE UPPER CABOOLTURE"
+    }
+  },
+  {
+    "id": "HG250125__GF-TIN-89",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250125 LOT 2 (26) PENVY CLOSE UPPER CABOOLTURE\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\Packed\\X-GF-TIN-89.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250125_GF-TIN-89.rfy",
+    "_meta": {
+      "jobnum": "HG250125",
+      "plan_name": "GF-TIN-89",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250125 LOT 2 (26) PENVY CLOSE UPPER CABOOLTURE"
+    }
+  },
+  {
+    "id": "HG250129__GF-CP-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250129 LOT 206 (45) ZEUS STREET LILLYWOOD\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250129 LOT 206 (46) ZEUS STREET LILLYWOOD-GF-CP-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250129_GF-CP-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250129",
+      "plan_name": "GF-CP-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250129 LOT 206 (45) ZEUS STREET LILLYWOOD"
+    }
+  },
+  {
+    "id": "HG250129__GF-MH-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250129 LOT 206 (45) ZEUS STREET LILLYWOOD\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250129 LOT 206 (46) ZEUS STREET LILLYWOOD-GF-MH-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250129_GF-MH-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250129",
+      "plan_name": "GF-MH-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250129 LOT 206 (45) ZEUS STREET LILLYWOOD"
+    }
+  },
+  {
+    "id": "HG250131__GF-CP-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250131 LOT 41 (27) WATT STREET REDCLIFFE\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250131 LOT 41 (27) WATT STREET REDCLIFFE-GF-CP-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250131_GF-CP-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250131",
+      "plan_name": "GF-CP-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250131 LOT 41 (27) WATT STREET REDCLIFFE"
+    }
+  },
+  {
+    "id": "HG250131__GF-MH-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250131 LOT 41 (27) WATT STREET REDCLIFFE\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250131 LOT 41 (27) WATT STREET REDCLIFFE-GF-MH-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250131_GF-MH-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250131",
+      "plan_name": "GF-MH-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250131 LOT 41 (27) WATT STREET REDCLIFFE"
+    }
+  },
+  {
+    "id": "HG250132__GF-CP-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250132 LOT 83 (37) HOTHAM COURT D'AGUILAR\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250132 LOT 83 (37) HOTHAM COURT D AGUILAR-GF-CP-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250132_GF-CP-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250132",
+      "plan_name": "GF-CP-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250132 LOT 83 (37) HOTHAM COURT D'AGUILAR"
+    }
+  },
+  {
+    "id": "HG250132__GF-MH-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250132 LOT 83 (37) HOTHAM COURT D'AGUILAR\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250132 LOT 83 (37) HOTHAM COURT D AGUILAR-GF-MH-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250132_GF-MH-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250132",
+      "plan_name": "GF-MH-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250132 LOT 83 (37) HOTHAM COURT D'AGUILAR"
+    }
+  },
+  {
+    "id": "HG250134__GF-CP-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250134 LOT 62 (42) WARNING COURT DAGUILAR\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250134 LOT 62 (42) WARNING COURT DAGUILAR-GF-CP-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250134_GF-CP-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250134",
+      "plan_name": "GF-CP-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250134 LOT 62 (42) WARNING COURT DAGUILAR"
+    }
+  },
+  {
+    "id": "HG250134__GF-MH-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250134 LOT 62 (42) WARNING COURT DAGUILAR\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250134 LOT 62 (42) WARNING COURT DAGUILAR-GF-MH-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250134_GF-MH-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250134",
+      "plan_name": "GF-MH-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250134 LOT 62 (42) WARNING COURT DAGUILAR"
+    }
+  },
+  {
+    "id": "HG250134__GF-Floor-89",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250134 LOT 62 (42) WARNING COURT DAGUILAR\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\Packed\\X-GF-Floor-89.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250134_GF-Floor-89.rfy",
+    "_meta": {
+      "jobnum": "HG250134",
+      "plan_name": "GF-Floor-89",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250134 LOT 62 (42) WARNING COURT DAGUILAR"
+    }
+  },
+  {
+    "id": "HG250134__GF-Roof-70",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250134 LOT 62 (42) WARNING COURT DAGUILAR\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\Packed\\X-GF-Roof-70.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250134_GF-Roof-70.rfy",
+    "_meta": {
+      "jobnum": "HG250134",
+      "plan_name": "GF-Roof-70",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250134 LOT 62 (42) WARNING COURT DAGUILAR"
+    }
+  },
+  {
+    "id": "HG250134__GF-TIN-70",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250134 LOT 62 (42) WARNING COURT DAGUILAR\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\Packed\\X-GF-TIN-70.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250134_GF-TIN-70.rfy",
+    "_meta": {
+      "jobnum": "HG250134",
+      "plan_name": "GF-TIN-70",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250134 LOT 62 (42) WARNING COURT DAGUILAR"
+    }
+  },
+  {
+    "id": "HG250134__GF-TIN-89",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250134 LOT 62 (42) WARNING COURT DAGUILAR\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\Packed\\X-GF-TIN-89.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250134_GF-TIN-89.rfy",
+    "_meta": {
+      "jobnum": "HG250134",
+      "plan_name": "GF-TIN-89",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250134 LOT 62 (42) WARNING COURT DAGUILAR"
+    }
+  },
+  {
+    "id": "HG250135__GF-TB2B-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250135 LOT 80 (42) CAMBRIDGE CIRCUIT LAWNTON\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250135 LOT 80 (42) CAMBRIDGE CIRCUIT LAWNTON-GF-TB2B-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250135_GF-TB2B-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250135",
+      "plan_name": "GF-TB2B-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250135 LOT 80 (42) CAMBRIDGE CIRCUIT LAWNTON"
+    }
+  },
+  {
+    "id": "HG250135__GF-TB2B-70.095",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250135 LOT 80 (42) CAMBRIDGE CIRCUIT LAWNTON\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250135 LOT 80 (42) CAMBRIDGE CIRCUIT LAWNTON-GF-TB2B-70.095.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250135_GF-TB2B-70.095.rfy",
+    "_meta": {
+      "jobnum": "HG250135",
+      "plan_name": "GF-TB2B-70.095",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250135 LOT 80 (42) CAMBRIDGE CIRCUIT LAWNTON"
+    }
+  },
+  {
+    "id": "HG250138__GF-CP-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250138 LOT 107 (1) ROXBY PLACE LILYWOOD\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250138 LOT 107 (1) ROXBY PLACE LILYWOOD-GF-CP-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250138_GF-CP-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250138",
+      "plan_name": "GF-CP-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250138 LOT 107 (1) ROXBY PLACE LILYWOOD"
+    }
+  },
+  {
+    "id": "HG250138__GF-LBW-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250138 LOT 107 (1) ROXBY PLACE LILYWOOD\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250138 LOT 107 (1) ROXBY PLACE LILYWOOD-GF-LBW-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250138_GF-LBW-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250138",
+      "plan_name": "GF-LBW-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250138 LOT 107 (1) ROXBY PLACE LILYWOOD"
+    }
+  },
+  {
+    "id": "HG250138__GF-LBW-89.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250138 LOT 107 (1) ROXBY PLACE LILYWOOD\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250138 LOT 107 (1) ROXBY PLACE LILYWOOD-GF-LBW-89.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250138_GF-LBW-89.075.rfy",
+    "_meta": {
+      "jobnum": "HG250138",
+      "plan_name": "GF-LBW-89.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250138 LOT 107 (1) ROXBY PLACE LILYWOOD"
+    }
+  },
+  {
+    "id": "HG250138__GF-MH-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250138 LOT 107 (1) ROXBY PLACE LILYWOOD\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250138 LOT 107 (1) ROXBY PLACE LILYWOOD-GF-MH-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250138_GF-MH-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250138",
+      "plan_name": "GF-MH-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250138 LOT 107 (1) ROXBY PLACE LILYWOOD"
+    }
+  },
+  {
+    "id": "HG250138__GF-NLBW-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250138 LOT 107 (1) ROXBY PLACE LILYWOOD\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250138 LOT 107 (1) ROXBY PLACE LILYWOOD-GF-NLBW-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250138_GF-NLBW-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250138",
+      "plan_name": "GF-NLBW-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250138 LOT 107 (1) ROXBY PLACE LILYWOOD"
+    }
+  },
+  {
+    "id": "HG250138__GF-NLBW-89.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250138 LOT 107 (1) ROXBY PLACE LILYWOOD\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250138 LOT 107 (1) ROXBY PLACE LILYWOOD-GF-NLBW-89.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250138_GF-NLBW-89.075.rfy",
+    "_meta": {
+      "jobnum": "HG250138",
+      "plan_name": "GF-NLBW-89.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250138 LOT 107 (1) ROXBY PLACE LILYWOOD"
+    }
+  },
+  {
+    "id": "HG250138__GF-RP-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250138 LOT 107 (1) ROXBY PLACE LILYWOOD\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250138 LOT 107 (1) ROXBY PLACE LILYWOOD-GF-RP-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250138_GF-RP-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250138",
+      "plan_name": "GF-RP-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250138 LOT 107 (1) ROXBY PLACE LILYWOOD"
+    }
+  },
+  {
+    "id": "HG250138__GF-TB2B-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250138 LOT 107 (1) ROXBY PLACE LILYWOOD\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250138 LOT 107 (1) ROXBY PLACE LILYWOOD-GF-TB2B-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250138_GF-TB2B-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250138",
+      "plan_name": "GF-TB2B-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250138 LOT 107 (1) ROXBY PLACE LILYWOOD"
+    }
+  },
+  {
+    "id": "HG250138__GF-TIN-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250138 LOT 107 (1) ROXBY PLACE LILYWOOD\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250138 LOT 107 (1) ROXBY PLACE LILYWOOD-GF-TIN-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250138_GF-TIN-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250138",
+      "plan_name": "GF-TIN-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250138 LOT 107 (1) ROXBY PLACE LILYWOOD"
+    }
+  },
+  {
+    "id": "HG250138__GF-TIN-70.095",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250138 LOT 107 (1) ROXBY PLACE LILYWOOD\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250138 LOT 107 (1) ROXBY PLACE LILYWOOD-GF-TIN-70.095.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250138_GF-TIN-70.095.rfy",
+    "_meta": {
+      "jobnum": "HG250138",
+      "plan_name": "GF-TIN-70.095",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250138 LOT 107 (1) ROXBY PLACE LILYWOOD"
+    }
+  },
+  {
+    "id": "HG250138__GF-TIN-70.115",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250138 LOT 107 (1) ROXBY PLACE LILYWOOD\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250138 LOT 107 (1) ROXBY PLACE LILYWOOD-GF-TIN-70.115.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250138_GF-TIN-70.115.rfy",
+    "_meta": {
+      "jobnum": "HG250138",
+      "plan_name": "GF-TIN-70.115",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250138 LOT 107 (1) ROXBY PLACE LILYWOOD"
+    }
+  },
+  {
+    "id": "HG250138__GF-Roof-70",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250138 LOT 107 (1) ROXBY PLACE LILYWOOD\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\Packed\\X-GF-Roof-70.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250138_GF-Roof-70.rfy",
+    "_meta": {
+      "jobnum": "HG250138",
+      "plan_name": "GF-Roof-70",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250138 LOT 107 (1) ROXBY PLACE LILYWOOD"
+    }
+  },
+  {
+    "id": "HG250138__GF-TIN-70",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250138 LOT 107 (1) ROXBY PLACE LILYWOOD\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\Packed\\X-GF-TIN-70.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250138_GF-TIN-70.rfy",
+    "_meta": {
+      "jobnum": "HG250138",
+      "plan_name": "GF-TIN-70",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250138 LOT 107 (1) ROXBY PLACE LILYWOOD"
+    }
+  },
+  {
+    "id": "HG250142__GF-CP-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250142 LOT 338 (41) TREELINE CIRCUIT MOOLOOLAH VALLEY\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250142 LOT 338 (41) TREELINE CIRCUIT MOOLOOLAH VALLEY (1)-GF-CP-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250142_GF-CP-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250142",
+      "plan_name": "GF-CP-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250142 LOT 338 (41) TREELINE CIRCUIT MOOLOOLAH VALLEY"
+    }
+  },
+  {
+    "id": "HG250142__GF-MH-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250142 LOT 338 (41) TREELINE CIRCUIT MOOLOOLAH VALLEY\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250142 LOT 338 (41) TREELINE CIRCUIT MOOLOOLAH VALLEY (1)-GF-MH-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250142_GF-MH-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250142",
+      "plan_name": "GF-MH-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250142 LOT 338 (41) TREELINE CIRCUIT MOOLOOLAH VALLEY"
+    }
+  },
+  {
+    "id": "HG250142__GF-TB2B-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250142 LOT 338 (41) TREELINE CIRCUIT MOOLOOLAH VALLEY\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250142 LOT 338 (41) TREELINE CIRCUIT MOOLOOLAH VALLEY (1)-GF-TB2B-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250142_GF-TB2B-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250142",
+      "plan_name": "GF-TB2B-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250142 LOT 338 (41) TREELINE CIRCUIT MOOLOOLAH VALLEY"
+    }
+  },
+  {
+    "id": "HG250142__GF-TB2B-70.095",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250142 LOT 338 (41) TREELINE CIRCUIT MOOLOOLAH VALLEY\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250142 LOT 338 (41) TREELINE CIRCUIT MOOLOOLAH VALLEY (1)-GF-TB2B-70.095.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250142_GF-TB2B-70.095.rfy",
+    "_meta": {
+      "jobnum": "HG250142",
+      "plan_name": "GF-TB2B-70.095",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250142 LOT 338 (41) TREELINE CIRCUIT MOOLOOLAH VALLEY"
+    }
+  },
+  {
+    "id": "HG250142__GF-Roof-70",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250142 LOT 338 (41) TREELINE CIRCUIT MOOLOOLAH VALLEY\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\Packed\\X-GF-Roof-70.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250142_GF-Roof-70.rfy",
+    "_meta": {
+      "jobnum": "HG250142",
+      "plan_name": "GF-Roof-70",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250142 LOT 338 (41) TREELINE CIRCUIT MOOLOOLAH VALLEY"
+    }
+  },
+  {
+    "id": "HG250142__GF-TIN-70",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250142 LOT 338 (41) TREELINE CIRCUIT MOOLOOLAH VALLEY\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\Packed\\X-GF-TIN-70.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250142_GF-TIN-70.rfy",
+    "_meta": {
+      "jobnum": "HG250142",
+      "plan_name": "GF-TIN-70",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250142 LOT 338 (41) TREELINE CIRCUIT MOOLOOLAH VALLEY"
+    }
+  },
+  {
+    "id": "HG250143__GF-CP-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250143 LOT 333 (25) ELKHORN STREET MORAYFIELD\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250143 LOT 333 (25) ELKHORN STREET MORAYFIELD-GF-CP-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250143_GF-CP-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250143",
+      "plan_name": "GF-CP-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250143 LOT 333 (25) ELKHORN STREET MORAYFIELD"
+    }
+  },
+  {
+    "id": "HG250143__GF-MH-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250143 LOT 333 (25) ELKHORN STREET MORAYFIELD\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250143 LOT 333 (25) ELKHORN STREET MORAYFIELD-GF-MH-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250143_GF-MH-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250143",
+      "plan_name": "GF-MH-70.075",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250143 LOT 333 (25) ELKHORN STREET MORAYFIELD"
+    }
+  },
+  {
+    "id": "HG250143__GF-Roof-70",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250143 LOT 333 (25) ELKHORN STREET MORAYFIELD\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\Packed\\X-GF-Roof-70.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250143_GF-Roof-70.rfy",
+    "_meta": {
+      "jobnum": "HG250143",
+      "plan_name": "GF-Roof-70",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250143 LOT 333 (25) ELKHORN STREET MORAYFIELD"
+    }
+  },
+  {
+    "id": "HG250143__GF-TIN-70",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\CORAL HOMES\\HG250143 LOT 333 (25) ELKHORN STREET MORAYFIELD\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\Packed\\X-GF-TIN-70.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250143_GF-TIN-70.rfy",
+    "_meta": {
+      "jobnum": "HG250143",
+      "plan_name": "GF-TIN-70",
+      "builder": "CORAL HOMES",
+      "jobdir": "HG250143 LOT 333 (25) ELKHORN STREET MORAYFIELD"
+    }
+  },
+  {
+    "id": "HG250118__GF-CP-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\HARMONIOUS CONSTRUCTION\\HG250118 LOT 3 (9) MYE PLACE STOCKLEIGH\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250118 LOT 3 (9) MYE PLACE STOCKLEIGH Rev 4-GF-CP-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250118_GF-CP-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250118",
+      "plan_name": "GF-CP-70.075",
+      "builder": "HARMONIOUS CONSTRUCTION",
+      "jobdir": "HG250118 LOT 3 (9) MYE PLACE STOCKLEIGH"
+    }
+  },
+  {
+    "id": "HG250118__GF-MH-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\HARMONIOUS CONSTRUCTION\\HG250118 LOT 3 (9) MYE PLACE STOCKLEIGH\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250118 LOT 3 (9) MYE PLACE STOCKLEIGH Rev 4-GF-MH-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250118_GF-MH-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250118",
+      "plan_name": "GF-MH-70.075",
+      "builder": "HARMONIOUS CONSTRUCTION",
+      "jobdir": "HG250118 LOT 3 (9) MYE PLACE STOCKLEIGH"
+    }
+  },
+  {
+    "id": "HG250014__GF-TB2B-70.0.75",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\Q COAST HOMES PTY LTD\\HG250014 LOT 174 VOLKER CIRCUIT BAHRS SCRUB\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250014 LOT 174 VOLKER CIRCUIT BAHRS SCRUB Rev 1-GF-TB2B-70.0.75.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250014_GF-TB2B-70.0.75.rfy",
+    "_meta": {
+      "jobnum": "HG250014",
+      "plan_name": "GF-TB2B-70.0.75",
+      "builder": "Q COAST HOMES PTY LTD",
+      "jobdir": "HG250014 LOT 174 VOLKER CIRCUIT BAHRS SCRUB"
+    }
+  },
+  {
+    "id": "HG250127__FF-LBW-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\RAYSUN BUILDERS\\HG250127 176 FORT ROAD OXLEY\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250127 176 FORT ROAD OXLEY Rev 3-FF-LBW-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250127_FF-LBW-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250127",
+      "plan_name": "FF-LBW-70.075",
+      "builder": "RAYSUN BUILDERS",
+      "jobdir": "HG250127 176 FORT ROAD OXLEY"
+    }
+  },
+  {
+    "id": "HG250127__FF-LBW-70.095",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\RAYSUN BUILDERS\\HG250127 176 FORT ROAD OXLEY\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250127 176 FORT ROAD OXLEY Rev 3-FF-LBW-70.095.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250127_FF-LBW-70.095.rfy",
+    "_meta": {
+      "jobnum": "HG250127",
+      "plan_name": "FF-LBW-70.095",
+      "builder": "RAYSUN BUILDERS",
+      "jobdir": "HG250127 176 FORT ROAD OXLEY"
+    }
+  },
+  {
+    "id": "HG250127__FF-MH-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\RAYSUN BUILDERS\\HG250127 176 FORT ROAD OXLEY\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250127 176 FORT ROAD OXLEY Rev 3-FF-MH-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250127_FF-MH-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250127",
+      "plan_name": "FF-MH-70.075",
+      "builder": "RAYSUN BUILDERS",
+      "jobdir": "HG250127 176 FORT ROAD OXLEY"
+    }
+  },
+  {
+    "id": "HG250127__FF-NLBW-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\RAYSUN BUILDERS\\HG250127 176 FORT ROAD OXLEY\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250127 176 FORT ROAD OXLEY Rev 3-FF-NLBW-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250127_FF-NLBW-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250127",
+      "plan_name": "FF-NLBW-70.075",
+      "builder": "RAYSUN BUILDERS",
+      "jobdir": "HG250127 176 FORT ROAD OXLEY"
+    }
+  },
+  {
+    "id": "HG250127__FF-NLBW-89.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\RAYSUN BUILDERS\\HG250127 176 FORT ROAD OXLEY\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250127 176 FORT ROAD OXLEY Rev 3-FF-NLBW-89.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250127_FF-NLBW-89.075.rfy",
+    "_meta": {
+      "jobnum": "HG250127",
+      "plan_name": "FF-NLBW-89.075",
+      "builder": "RAYSUN BUILDERS",
+      "jobdir": "HG250127 176 FORT ROAD OXLEY"
+    }
+  },
+  {
+    "id": "HG250127__FF-TB2B-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\RAYSUN BUILDERS\\HG250127 176 FORT ROAD OXLEY\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250127 176 FORT ROAD OXLEY Rev 3-FF-TB2B-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250127_FF-TB2B-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250127",
+      "plan_name": "FF-TB2B-70.075",
+      "builder": "RAYSUN BUILDERS",
+      "jobdir": "HG250127 176 FORT ROAD OXLEY"
+    }
+  },
+  {
+    "id": "HG250127__GF-LBW-89.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\RAYSUN BUILDERS\\HG250127 176 FORT ROAD OXLEY\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250127 176 FORT ROAD OXLEY Rev 3-GF-LBW-89.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250127_GF-LBW-89.075.rfy",
+    "_meta": {
+      "jobnum": "HG250127",
+      "plan_name": "GF-LBW-89.075",
+      "builder": "RAYSUN BUILDERS",
+      "jobdir": "HG250127 176 FORT ROAD OXLEY"
+    }
+  },
+  {
+    "id": "HG250082__GF-TB2B-89.115",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\ROHRIG\\HG250082 FLAGSTONE OSHC\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250082 FLAGSTONE OSHC LGS_Rev2-2-PLY-TRUSSES-GF-TB2B-89.115.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250082_GF-TB2B-89.115.rfy",
+    "_meta": {
+      "jobnum": "HG250082",
+      "plan_name": "GF-TB2B-89.115",
+      "builder": "ROHRIG",
+      "jobdir": "HG250082 FLAGSTONE OSHC"
+    }
+  },
+  {
+    "id": "HG250082__GF-TIN-89.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\ROHRIG\\HG250082 FLAGSTONE OSHC\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250082 FLAGSTONE OSHC LGS_Rev2-CLADDING-GF-TIN-89.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250082_GF-TIN-89.075.rfy",
+    "_meta": {
+      "jobnum": "HG250082",
+      "plan_name": "GF-TIN-89.075",
+      "builder": "ROHRIG",
+      "jobdir": "HG250082 FLAGSTONE OSHC"
+    }
+  },
+  {
+    "id": "HG250082__GF-TB2B-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\ROHRIG\\HG250082 FLAGSTONE OSHC\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250082 FLAGSTONE OSHC LGS_Rev2-VERANDAH-GF-TB2B-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250082_GF-TB2B-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250082",
+      "plan_name": "GF-TB2B-70.075",
+      "builder": "ROHRIG",
+      "jobdir": "HG250082 FLAGSTONE OSHC"
+    }
+  },
+  {
+    "id": "HG250082__GF-TB2B-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\ROHRIG\\HG250082 FLAGSTONE OSHC\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250082 FLAGSTONE OSHC LGS_Rev3-FACILITIES-GF-TB2B-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250082_GF-TB2B-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250082",
+      "plan_name": "GF-TB2B-70.075",
+      "builder": "ROHRIG",
+      "jobdir": "HG250082 FLAGSTONE OSHC"
+    }
+  },
+  {
+    "id": "HG250103__GF-TB2B-70.075",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\WLC GROUP\\HG250103 FLAGSTONE STATE SCHOOL\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250103 FLAGSTONE STATE SCHOOL [A]-GF-TB2B-70.075.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250103_GF-TB2B-70.075.rfy",
+    "_meta": {
+      "jobnum": "HG250103",
+      "plan_name": "GF-TB2B-70.075",
+      "builder": "WLC GROUP",
+      "jobdir": "HG250103 FLAGSTONE STATE SCHOOL"
+    }
+  },
+  {
+    "id": "HG250103__GF-TB2B-70.095",
+    "xml_path": "Y:\\(14) 2025 HYTEK PROJECTS\\WLC GROUP\\HG250103 FLAGSTONE STATE SCHOOL\\03 DETAILING\\03 FRAMECAD DETAILER\\01 XML OUTPUT\\HG250103 FLAGSTONE STATE SCHOOL [A]-GF-TB2B-70.095.xml",
+    "rfy_out": "C:\\Users\\ScottTextor\\OneDrive - Textor Metal Industries\\CLAUDE DATA FILE\\detailer-oracle-cache\\_auto-cache-tmp\\HG250103_GF-TB2B-70.095.rfy",
+    "_meta": {
+      "jobnum": "HG250103",
+      "plan_name": "GF-TB2B-70.095",
+      "builder": "WLC GROUP",
+      "jobdir": "HG250103 FLAGSTONE STATE SCHOOL"
+    }
+  }
+]
