@@ -225,6 +225,24 @@ export default function Page() {
         <ConverterCard mode="forge-encode" />
       </div>
 
+      <h3 className="text-xs uppercase tracking-wider text-yellow-400 mt-10 mb-3">Forge — Operator Review</h3>
+      <a
+        href="/forge/review"
+        className="block rounded-xl border border-zinc-700 bg-zinc-900/50 hover:border-yellow-400 hover:bg-zinc-900 p-5 transition-colors"
+      >
+        <h4 className="text-lg font-semibold text-yellow-400 mb-1">/forge/review — confidence-flagged review</h4>
+        <p className="text-sm text-zinc-400">
+          Drop a FrameCAD <code>.xml</code>; the codec runs and each stick is
+          scored against 66,262 historical Detailer-stamped sticks. Red rows
+          deviate ≥2σ from typical or are missing common op types — review
+          these before sending the RFY to the rollformer.
+        </p>
+        <p className="text-xs text-zinc-500 mt-2">
+          Use this when /api/forge/encode misses the cache and you want to
+          double-check the codec output before it cuts steel.
+        </p>
+      </a>
+
       <section className="mt-10 rounded-xl border border-zinc-700 bg-zinc-900/50 p-5 text-sm text-zinc-400">
         <h3 className="font-semibold text-zinc-200 mb-2">Which format should I edit?</h3>
         <ul className="space-y-2">
