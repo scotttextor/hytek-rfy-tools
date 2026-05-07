@@ -177,6 +177,14 @@ def cache_put(
                 if m:
                     plan_name = f"{m.group(1)}-{m.group(2)}"
 
+    # Normalize whitespace — Windows can't mkdir a path that ends in a space,
+    # and trailing/leading whitespace in the source data (e.g. estimating
+    # spreadsheets) was causing 3 cache entries to fail with WinError 2.
+    if jobnum:
+        jobnum = jobnum.strip()
+    if plan_name:
+        plan_name = plan_name.strip()
+
     if not jobnum or not plan_name:
         raise ValueError(
             f"could not derive (jobnum, plan_name) for {xml_p.name}: "
@@ -232,6 +240,10 @@ def cache_get(
             jobnum = scanned_job
         if plan_name is None and len(scanned_plans) == 1:
             plan_name = scanned_plans[0]
+    if jobnum:
+        jobnum = jobnum.strip()
+    if plan_name:
+        plan_name = plan_name.strip()
     if not jobnum or not plan_name:
         return None
 
